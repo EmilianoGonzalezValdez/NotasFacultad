@@ -1,6 +1,6 @@
 ## Introducción
 
-El software => Colección de programas,procedimientos,documentación y datos asociados que determinan la operación de un sistema de computación 
+El software => Colección de programas, procedimientos, documentación y datos asociados que determinan la operación de un sistema de computación  
 
 Las fallas de software siempre estuvieron presentes desde su desarrollo. No así las fallas mecánicas o eléctricas que son por el deterioro del tiempo. Es decir que la falla de software estuvo presente desde el principio, solo que nunca se había manifestado
 
@@ -8,13 +8,13 @@ El mantenimiento del software suele costar mas que el desarrollo y su motivo es 
 - Corregir errores residuales (Updates) => Mantenimiento Correctivo
 - Mejorar funcionalmente el software y adaptarlo a los cambios del entorno (Upgrades) => Mantenimiento Adaptativo
 
-La *Ingeniería del Software* es una aplicación de un enfoque sistemático,disciplinado y cuantificable al desarrollo,operación y mantenimiento del software
+La *Ingeniería del Software* es una aplicación de un enfoque sistemático, disciplinado y cuantificable al desarrollo, operación y mantenimiento del software
 Un **Enfoque Sistemático** es una metodología y practicas existentes para solucionar un problema dentro de un dominio determinado. De esta forma podemos repetir dicho procedimiento y estimar los resultados
 
 
 #### Enfoque
 
-El enfoque de la *Ingeniería del Software* viene del problema de producir un software determinado por la idea de satisfacer las necesidades del cliente. El objetivo básico de la *IS* es buscar el **CYP**(calidad y productividad), los cuales estan rodeados del triangulo de hierro formado por la tecnología, la gente y el proceso. Pero tenemos otros factores que también modifican este enfoque:
+El enfoque de la *Ingeniería del Software* viene del problema de producir un software determinado por la idea de satisfacer las necesidades del cliente. El objetivo básico de la *IS* es buscar el **CYP**(calidad y productividad), los cuales están rodeados del triangulo de hierro formado por la tecnología, la gente y el proceso. Pero tenemos otros factores que también modifican este enfoque:
 1. Escala
 2. Calidad
 3. Productividad
@@ -27,7 +27,7 @@ La *Ingeniería del software* debe tener en cuenta la escala del software a desa
 - Administración del Proyecto
 Los cuales en sistemas pequeños ambos pueden ser informales, pero al tratarse de un sistema grande, ambos deben ser formales 
 
-**¿Que es un sistema grande o chico?**
+**¿Qué es un sistema grande o chico?**
 
 | Pequeño   | Mediano         | Grande            | Muy Grande  |
 | --------- | --------------- | ----------------- | ----------- |
@@ -62,7 +62,7 @@ La *IS* se enfoca mayormente en el proceso para conseguir los objetivos de calid
 La *IS* separa el proceso para desarrollar software del producto en si desarrollado. El proceso es quien determina en gran medida la **CYP**. Diseñar el proceso apropiado y su control es el desafió clave de la *IS*
 
 #### El proceso de desarrollo en fases
-El proceso de desarrollo consiste en varias fases, las cuales tienen una salida definida. Estas fases se realizan en el orden especificado por el modelo de procesos que se elija seguir. EL motivo de separar el desarrollo en fases es la *separación de incumbencias*: donde cada fase manipula distintos aspectos del desarrollo de software. Ademas cada fase permite verificar la calidad y el progreso al terminar. Este enfoque de desarrollo en fases es central en el enfoque de la *IS* para solucionar la solucionar la crisis de software
+El proceso de desarrollo consiste en varias fases, las cuales tienen una salida definida. Estas fases se realizan en el orden especificado por el modelo de procesos que se elija seguir. EL motivo de separar el desarrollo en fases es la *separación de incumbencias*: donde cada fase manipula distintos aspectos del desarrollo de software. Además cada fase permite verificar la calidad y el progreso al terminar. Este enfoque de desarrollo en fases es central en el enfoque de la *IS* para solucionar la solucionar la crisis de software
 
 Estas fases en general son:
 1. Análisis y especificación de los requerimientos
@@ -151,8 +151,116 @@ La transición del análisis a la especificación es complicada. La especificaci
 
 El uso del análisis y las estructuras que lo construyen puede ser indirecto, ayudando a comprender en lugar de asistir a la especificación 
 
-#### Análisis
-El análisis se enfoca en la comprensión del sistema deseado y sus requerimientos. Normalmente se aplica un *Divide y vencerás*, es decir se divide el problema en partes mas pequeñas y se intenta comprender estas mini partesitas y su relación entre ellas
-Normalmente se generan grandes cantidades de información, la cual debe ser organizada para su entendimiento; para ello se suelen usar métodos como diagrama de flujo de datos, diagrama de objetos,etc.
+#### Análisis de los requerimientos 
+El análisis se enfoca en la comprensión del sistema deseado y sus requerimientos. Normalmente se aplica un *Divide y vencerás*, es decir se divide el problema en partes mas pequeñas y se intenta comprender estas mini partecitas y su relación entre ellas
+Normalmente se generan grandes cantidades de información, la cual debe ser organizada para su entendimiento; para ello se suelen usar métodos como diagrama de flujo de datos, diagrama de objetos, etc.
 
-obsidian sync: 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
+El análisis incluye: 
+- Entrevistas con clientes y usuarios 
+- Lecturas de manuales 
+- Estudio del sistema actual
+- Ayudar al cliente/usuario a comprender nuevas posibilidades 
+
+El analista no solo se encarga de recolectar información, sino también como consultor. Debe tener muy buenas habilidades  comunicativas para construir relaciones interpersonales.  Otras cuestiones importantes que debe hacer el analista :
+- Obtener la información necesaria 
+- Brainstorming: Interactuar con el cliente para establecer las propiedades deseadas 
+- Organizar información dado que recolecta gran cantidad de esta 
+- Asegurar completitud
+- Asegurar consistencia 
+- Evitar diseño interno 
+
+Hay 3 enfoques/métodos para analizar los subproblemas y sus relaciones:
+1. Funciones: análisis estructural
+2. Objetos: análisis orientado a objetos 
+3. Eventos del sistema: particionado en eventos
+
+###### Enfoque Informal 
+Además se nos presenta el *Enfoque informal* en el cual no hay una metodología definida, la información se obtiene mediante el análisis, el dialogo, la observación, etc y se plasma y organiza en la *SRS* sin formalidades. Puede ser útil en muchos casos pero se sostiene completamente en la experiencia del analista y el feedback provisto por el cliente 
+
+###### Modelado de flujo de datos 
+
+- Es ampliamente utilizado
+- Se centra en las funcionalidades del sistema, no en lo que no hace
+- Ve al sistema como una red de transformadores de datos
+- Para el modelado se utilizan diagramas de flujo de datos
+
+Un *DFD* o diagrama de flujo de datos es una representación grafica del flujo de datos atraves de un sistema, es un gráfico lógico del plan de trabajo que se ejecutará para la solución de un determinado problema. Se enfoca en que hacen los transformadores y no en como lo hacen, por lo que normalmente se muestran las entradas y salidas mas importante, obviando algunas. No hay loops ya que no presenta la noción de control de flujo de datos, no hay *IF's* por ejemplo.
+
+Estos *DFD* presentan un diccionario de datos, el cual es simplemente una forma de describir mas detalladamente los datos que fluyen entre los transformadores, en estos se pueden usar expresiones regulares  
+
+Los pasos del **Método de análisis estructurado** son:
+1. Dibujar el diagrama del contexto
+2. Dibujar el DFD del sistema existente
+3. Dibujar el DFD del sistema propuesto e identificar la frontera hombre-máquina
+
+###### Modelado Orientado a objetos 
+Ventajas:
+- Mas fácil de hacer y entender 
+- La transición del análisis orientado a objetos al diseño orientado a objetos parece ser mas simple
+- Es mas resistente/adaptable a cambios ya que los objetos son mas estables que las funciones 
+
+En este método el sistema es visto como un conjunto de objetos interactuando entre si, o con el usuario a través de servicios(métodos) que cada objeto provee. Lo que buscamos es:
+1. Identificar las clases del dominio 
+2. Definir dichas clases identificando sus atributos y métodos
+3. Identificar las relaciones entre dichas clases sea a través de jerarquías o de los métodos
+
+###### Prototipado 
+
+Se construye un sistema parcial prototípico. Lo desarrolladores, clientes y usuarios lo utilizan para comprender mejor el problema y las necesidades sirviendo de ayuda visual al sistema final. Este prototipo puede ser descartable o evolutivo, siendo el primero de estos el mas utilizado 
+
+#### Especificación de los requerimientos 
+
+Al terminar la etapa de especificación nuestra salida es la *SRS*, construida en base al conocimiento adquirido durante la etapa de Análisis pero enfocado en el comportamiento externo del sistema . Cabe aclarar que l *SRS* no es una formalización del modelo anterior, sino que se construye en base a este. 
+
+**Características de una SRS:**
+- Correcta
+	- Cada requerimiento representa precisamente alguna característica deseada por el cliente en el sistema final.
+- Completa
+	- Todas las características deseadas por el cliente están descriptas. La característica más difícil de lograr, para conseguirla uno debe detectar las ausencias en la especificación. Corrección y completitud están fuertemente relacionadas.
+- No ambigua 
+	- Si para cada requerimiento existe un solo significado. Si es ambigua los errores se colarán fácilmente. La no ambigüedad es esencial para verificabilidad. Como la verificación es usualmente hecha a través de revisiones, la SRS debe ser comprensible, al menos por el desarrollador, el usuario y el cliente. Particular atención si se usa lenguaje natural. Los lenguajes formales ayudan a “desambiguar”.
+- Consistente
+	- Ningún requerimiento contradice a otro
+- Verificable 
+	- Si existe para cada requerimiento algún proceso efectivo que puede asegurar que el software final satisface el requerimiento.
+- Rastreable
+	- Se debe poder determinar el origen de cada requerimiento y cómo éste se relaciona a los elementos del software. Hacia adelante: dado un requerimiento se debe poder detectar en qué elementos de diseño o código tiene impacto. Hacia atrás: dado un elemento de diseño o código se debe poder rastrear que requerimientos está atendiendo.
+- Modificable
+	- Si la estructura y estilo de la SRS es tal que permite incorporar cambios fácilmente preservando completitud y consistencia. La redundancia es un gran estorbo para modificabilidad, puede resultar en inconsistencia.
+- Ordenada en aspectos de importancia y estabilidad
+	- Los requerimientos pueden ser críticos, importantes pero no críticos, deseables pero no importantes. Algunos requerimientos son esenciales y difícilmente cambien con el tiempo. Otros son propensos a cambiar. => Se necesita definir un orden de prioridades en la construcción para reducir riesgos debido a cambios de requerimientos
+
+**¿Que debe tener una SRS?**
+- Requerimientos de Funcionalidad
+- Requerimientos de desempeño
+- Restricciones de diseño
+- Requerimientos de interfaces externas
+###### Requerimientos de Funcionalidad
+Es el corazón de la *SRS*, conforma la mayor parte de la especificación. Especifica toda las funcionalidades que el sistema debe proveer. Las salidas que se deben producir para cada entrada dada y las relaciones entre ellas. También describe todas las operaciones que el sistema debe realizar, las entradas validas y las verificaciones de validez para entrada y salida. Y especifica el comportamiento del sistema en caso de entradas invalidas, errores de calculo, es decir de situaciones anormales o situaciones normales con imposibilidades de seguir operando por x razón 
+###### Requerimientos de desempeño
+Se dividen en *Requerimientos dinámicos* los cuales especifican restricciones sobre la ejecución como:
+- Tiempo de respuesta
+- Tasa de transferencia o rendimiento
+- etc.
+En general se especifican los rangos aceptables de distintos parámetros, en casos normales y extremos
+
+Y en los *Requerimientos estáticos* o de capacidad los cuales no imponen restricción en la ejecución como:
+- Cantidad de terminales admitidas
+- Cantidad de usuarios en simultaneo
+- Etc.
+Todos estos requisitos se especifican en términos medibles para ser verificados 
+
+###### Restricciones de diseño
+Existen factores en el entorno del cliente que pueden restringir las elecciones de diseño como limitaciones de hardware por ejemplo. 
+###### Restricciones de interfaces externas 
+Todas las interacciones del software con gente, hardware, y otro software debe especificarse claramente. Cabe recalcar que la interfaz del usuario debe recibir atención adecuada creando un manual preliminar indicando los comandos del usuario, los formatos de las pantallas, etc. Estos requerimientos también deben ser precisos para asegurar la verificabilidad.
+
+###### Lenguajes de especificación 
+
+
+
+
+
+
+
+
