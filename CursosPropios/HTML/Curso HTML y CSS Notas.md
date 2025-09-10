@@ -9,7 +9,7 @@ Pepefrog amen salud
 </p>
 
 ```
-Se usan para describir algo sobre el tema que estamos abarcando. Tienen que tener un motivo de dexistencia donde la idea deba empezar y terminar en el mismo
+Se usan para describir algo sobre el tema que estamos abarcando. Tienen que tener un motivo de  existencia donde la idea deba empezar y terminar en el mismo
 
 
 El ```<h1>```se utiliza una sola vez, tiene una importancia muy grande en la búsqueda y posicionamiento web. Es la etiqueta mas importante que le dice a Google de que trata la pagina. Y el ```<h2>  ``` se utiliza mas que nada para los subtitulo
