@@ -257,10 +257,85 @@ Todas las interacciones del software con gente, hardware, y otro software debe e
 
 ###### Lenguajes de especificación 
 
-Los lenguajes de especificación deben facilitar la escritura y entendimiento de la *SRS*, a la vez de ser fáciles de aprender. Normalmente se utiliza el lenguaje natura apoyado en documentos estructurados para reducir imprecisiones y ambigüedades, ya que este mismo, si bien es entendido por el cliente como por el desarrollador, puede ser muy ambiguo. Las notaciones formales se utilizan en propiedades especificas del sistema o en sistemas críticos  
+Los lenguajes de especificación deben facilitar la escritura y entendimiento de la *SRS*, a la vez de ser fáciles de aprender. Normalmente se utiliza el lenguaje natura apoyado en documentos estructurados para reducir imprecisiones y ambigüedades, ya que este mismo, si bien es entendido por el cliente como por el desarrollador, puede ser muy ambiguo. Las notaciones formales se utilizan en propiedades especificas del sistema o en sistemas críticos 
 
+###### Casos de Uso 
 
+Un caso de uso captura un contrato entre el usuario y el comportamiento del sistema como *interacción*. Útil en la recolección de requerimientos ya que a los usuarios les agrada, comprenden el formato y reaccionan a este fácilmente. Son colecciones de muchos escenarios donde estos escenarios pueden llamar a otros casos de uso, organizando así jerárquicamente los casos de uso. Los casos de uso solo forman la parte funcional de la *SRS*
+**Conceptos Básicos:** 
+- Actor: Una persona o sistema diferente que interactúan con el sistema propuesto para alcanzar un objetivo. Los actores son entidades lógicas, por lo cual un actor transmisor y uno receptor son diferentes, aun si hacen referencia al mismo individuo
+	- Actor primario: Es quien inicia el Caso de Uso, y este debe satisfacer su objetivo
+	- Actor secundario: Es alguien que puede realizar la ejecución real en vez del actor primario, pero no tiene relación directa con el objetivo del caso de uso
+- Escenario: Es un conjunto de acciones realizadas con el fin de alcanzar un objetivo bajo determinadas condiciones. Un paso es una acción lógicamente completa realizada tanto por el actor como por el sistema (Es una interacción entre el usuario y el sistema)
+	- Escenario exitoso principal:  cuando todo funciona correctamente y se alcanza el objetivo
+	- Escenario alternativo/excepcional: Cuando algo sale mal y el objetivo no puede ser alcanzado 
 
+**Elaboración de casos de uso:**
+1. Actores y objetivos:
+	- Preparar una lista de actores y objetivos
+	- proveer un breve resumen de cada caso
+2. Escenarios exitosos principales:
+	- Por cada cado de uso extender el escenario principal, proveyendo el comportamiento principal del sistema con este (puede revisarse para ver que satisface el interés de los participantes y actores)
+3. Condiciones de falla:
+	- Identificar y listar condiciones de falla para cada caso de uso
+4. Manipulación de Fallas (maybe lo mas dificil):
+	- Especificar el comportamiento del sistema para cada condición de falla
 
+**Errores comunes:**
+- Debe haber *interacción* entre los escenarios exitosos (Entre cada paso)
+- Un caso de uso nunca puede ser iniciado por el sistema
+- Los escenario excepcionales siempre deben hacer referencia a un punto del exitoso donde el sistema chequea algo 
+- Las precondiciones de casos generales deben implicar las de los casos que se referencias adentro
+- Seguir sintaxis dada en clase
+- No hay lógica de programación (If's, loops, etc.)
 
+###### Validación de requerimientos
+
+Debido a la misma naturaleza de esta etapa, hay muchas posibilidades de malentendidos. Mientras mas se avanza en el desarrollo mas caro es corregir y encontrar dichos errores, por lo cual arreglarlos en esta etapa es crucial 
+La *SRS* se revisa por un grupo de personas conformado por: autor, cliente, representantes de usuarios y de desarrolladores, donde deben estar los *clientes* y *usuarios*.
+Existen herramientas para el modelado y análisis de especificaciones 
+
+###### Métricas
+
+Para poder estimar costos y tiempos y  planear el proyecto se necesita "medir" el esfuerzo que demandará. Este depende de muchos factores; principalmente el *tamaño*. Al principio el tamaño solo puede ser estimado. 
+Una métrica es importante sólo si es útil para el seguimiento o control de costos, calendario o calidad. Por ende necesitamos una unidad de tamaño que se pueda computar a partir de los requerimientos: ¿El tamaño de la SRS?, no, ya que depende mucho del autor. 
+
+Por lo cual se utiliza: **Punto Función**, siendo una estimación similar a la métrica por LOC que se determina sólo con la SRS definiendo el tamaño en términos de la "Funcionalidad":
+- Entradas externas a la aplicación
+- Salidas externas que deja el sistema
+- Archivos lógicos internos
+- Archivos de interfaz externa 
+- Transacciones externas 
+
+|    ==Tipo de Funciones==     | ==Simp== | ==Prom.== | ==Comp-== |
+| :--------------------------: | :------: | :-------: | :-------: |
+|      Entradas Externas       |    3     |     4     |     6     |
+|       Salidas externas       |    4     |     5     |     7     |
+|  Archivos lógicos internos   |    7     |    10     |    15     |
+| Archivos de interfaz externa |    5     |     7     |    10     |
+|    Transacciones externas    |    3     |     4     |     6     |
+
+Debemos contar cada tipo de función diferenciando según sea compleja, promedio o simple teniendo en cuanta que $C_{ij}$ denota la cantidad de funciones tipo $i$ con complejidad $j$ en la formula de Punto función no ajustado (UFP):$$\sum^5_{i=1}{\sum^3_{j=1}w_{ij}C_{ij}}$$
+Luego debemos ajustar UFP de acuerdo a la complejidad del entorno. Se evalúa según las siguientes características:
+1. comunicación de datos 
+2. procesamiento distribuido 
+3. objetivos de desempeño 
+4. carga en la configuración de operación 
+5. tasa de transacción 
+6. ingreso de datos online 
+7. eficiencia del usuario final 
+8. actualización online 
+9. complejidad del procesamiento lógico 
+10. reusabilidad 
+11. facilidad para la instalación 
+12. facilidad para la operación 
+13. múltiples sitios 
+14. intención de facilitar cambios
+
+El factor de ajuste de complejidad (CAF) se calcula como $$0.65+0.01*\sum^{14}_{i=1}{p_i}$$
+Y los Puntos función = CAF * UFP
+
+Hay que recalcar que la calidad de la *SRS* tiene impacto directo en los costos del proyecto. Por lo cual tener buenas métricas para evaluar es algo necesario. Existen:
+- Métricas de *calidad directa*: Evalúan la calidad del documento estimando el valor de los atributos de calidad de la *SRS*
+- Métricas de *calidad indirecta*: Evalúan la efectividad de las métricas del control de calidad usadas en el proceso en la fase de requerimientos
 
