@@ -339,3 +339,7 @@ Hay que recalcar que la calidad de la *SRS* tiene impacto directo en los costos 
 - Métricas de *calidad directa*: Evalúan la calidad del documento estimando el valor de los atributos de calidad de la *SRS*
 - Métricas de *calidad indirecta*: Evalúan la efectividad de las métricas del control de calidad usadas en el proceso en la fase de requerimientos
 
+
+## Arquitectura del Software 
+
+
