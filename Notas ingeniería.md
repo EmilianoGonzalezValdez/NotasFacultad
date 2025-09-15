@@ -570,3 +570,75 @@ El desarrollo se realiza iterativamente en "cajas temporizadas" de igual duraci�
 - Hay flexibilidad en agrupar características 
 
 ![[Pasted image 20250915101719.png]]
+
+
+## Diseño del Software
+
+Esta etapa comienza una vez los requerimientos están definidos pero se realiza antes de la implementación. El resultado del diseño se utilizara para implementar el sistema 
+
+El diseño es una actividad *creativa*, su objetivo es crear un "plano del sistema" que satisfaga los requerimientos. Tiene un gran impacto en el testing y mantenimiento 
+
+Tiene 3 niveles:
+- **Diseño arquitectónico:** Identifica los componentes necesarios del sistema, su comportamiento y relaciones 
+- **Diseño de alto nivel:** es la vista de módulos del sistema, es decir, cuales son los módulos del sistema, que hacen y como se organizan 
+- **Diseño detallado o diseño lógico:** Establece como se implementan las componentes de manera que satisfagan sus especificaciones. Es muy cercano al código  
+
+###### Diseño de alto nivel
+
+Claramente nuestro objetivo es encontrar el mejor diseño posible explorando varios diseños alternativos. Existen 3 **criterios para evaluar el diseño:**
+- Corrección
+- Eficiencia
+- Simplicidad
+
+**Corrección:** Es fundamental y busca que el diseño sea factible dadas las restricciones y que este implemente todos los requerimientos
+
+**Eficiencia:** Le compete el uso apropiado de los recursos del sistema. Debido al abaratamiento del hardware no es tan importante como los demás salvo en sistemas muy específicos como sistemas integrados o de tiempo real
+
+**Simplicidad:** Tiene impacto directo en el mantenimiento, el cual recordemos que es caro. Un diseño simple facilita la comprensión del sistema lo cual hace que el software sea mantenible. Facilita el testing, el descubrimiento y corrección de bugs y la modificación del código
+
+Eficiencia y simplicidad no son independientes, por lo que el diseñador debe encontrar el balance entre estos
+
+Existen **Principios fundamentales** los cuales nos guían en el proceso del diseño:
+- Partición y jerarquía
+- Abstracción
+- Modularidad
+
+**Partición y Jerarquía:**  Se basa en "divide y conquistarás", trata de dividir el problema en pequeñas partes manejables, donde cada una de estas debe poder solucionarse y modificarse separadamente del resto. no tiene que ser completamente independientes, puesto que deben comunicarse para solucionar un problema mayor, lo cual, agrega complejidad. Claramente a medida que la cantidad de los componentes aumenta el costo también. Aún así debemos tratar de mantener la mayor independencia posible entre las distintas partes, simplificando el diseño y facilitando su mantenimiento. Este particionado del problema determina una jerarquía de componentes en el diseño
+
+**Abstracción:** La abstracción de un componente describe el comportamiento externo sin dar detalles de cómo se produce dicho comportamiento, representando a los componentes como cajas negras; lo cual es muy útil para comprender el sistema existente, para el mantenimiento y para determinar el diseño del sistema existente. Hay 2 mecanismos comunes en abstracción: 
+	-  Abstracción Funcional
+	- Abstracción de Datos
+	**Abstracción funcional:** Especifica el comportamiento funcional de un módulo, tratando  estos como funciones de entrada y salida, forma la base de las metodologías orientadas a funciones 	
+	**Abstracción de datos:**  Se esperan ciertas operaciones de un objeto de dato, los detalles internos no son relevantes. Los datos se tratan como objetos junto a sus operaciones, las operaciones definidas para un objeto sólo pueden realizarse sobre este objeto. Desde fuera, los detalles internos de los objetos permaneces ocultos y sólo sus operaciones son visibles
+
+**Modularidad:** Un sistema se dice modular si consiste de componentes discretas tal que puedan implementarse separadamente  un cambio a una de ellas tenga un mínimo impacto sobre las otras. Teniendo como beneficios:
+- Provee la abstracción en el software
+- Es el soporte de la estructura jerárquica de los programas
+- Mejora la claridad del diseño y facilita la implementación 
+- Reduce el costo de testing, debugging y el mantenimiento 
+Cabe aclarar que no se consigue simplemente recortando el programa en módulos, necesita criterios de descomposición
+
+###### Estrategias top-down y bottom-up
+
+Enfoque Top-Down:
+**Refinamiento paso a paso:**
+- El diseño comienza con la especificación del sistema
+- Define el módulo que implementará la especificación
+- Especifica los módulos subordinados
+- Luego, iterativamente, trata cada uno de estos módulos especificados cómo el nuevo problema
+- El refinamiento procede hasta alcanzar un nivel donde el diseño pueda ser implementado directamente 
+**Ventajas:**
+- En cada paso existe una clara imagen del diseño
+- Enfoque más natural para manipular problemas complejos
+- La mayoría de las metodologías de diseño se basan en este enfoque
+**Desventajas**
+- La factibilidad es desconocida hasta el final
+- Top-Down o Bottom-Up puros no son prácticos
+
+En general se utiliza una combinación de ambos
+
+###### Diseño Orientado a Funciones 
+
+Un módulo es una parte lógicamente separable de un programa, es discreta e identificable respecto a la compilación y carga. Los criterios utilizados para seleccionar módulos que soporten abstracciones bien definidas y solucionables separadamente son:
+- Acoplamiento
+- Cohesión
