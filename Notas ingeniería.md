@@ -642,3 +642,335 @@ En general se utiliza una combinación de ambos
 Un módulo es una parte lógicamente separable de un programa, es discreta e identificable respecto a la compilación y carga. Los criterios utilizados para seleccionar módulos que soporten abstracciones bien definidas y solucionables separadamente son:
 - Acoplamiento
 - Cohesión
+
+Dos módulos son independientes si cada uno puede funcionar completamente sin la presencia del otro. Esto es deseable ya que ayuda a modificar los módulos y testearlos separadamente. Pero en un sistema no existe la noción de dependencia entre todos los módulos, estos deben cooperar entre si. Mientras mas conexiones hay entre dos módulos, mas dependientes son uno del otro
+
+###### Acoplamiento 
+
+**Acoplamiento:** El acoplamiento es un concepto inter-modular que captura esta noción de dependencia. Nuestro objetivo seria tener el menor acoplamiento posible. Siempre que se pueda, tener módulos independientes , ya que este acoplamiento no puede reducirse durante la implementación. Este acoplamiento es influido por conceptos como:
+- Tipo de conexiones entre módulos
+- Complejidad de las interfaces 
+- Tipo de flujo de información entre módulos
+La complejidad y oscuridad de las interfaces de un módulo incrementan el acoplamiento, ya que normalmente se usa más de lo necesario. Es cierto que se necesita un nivel de complejidad en las interfaces para soportar la comunicación requerida con el módulo, por lo cual se debe encontrar un balance, para que estos es mas fácil lo mejor es mantener las interfaces de los módulos lo mas simple que sea posible
+El acoplamiento depende del *tipo de flujo de información*, la cual puede ser:
+- Información de Control
+- Información de Datos
+
+**Transferencia de información de Control:** Las acciones de los módulos dependen de la información, hace que los módulos sean más difíciles de comprender
+
+**Transferencia de información de Datos:** Los módulos se pueden ver simplemente como funciones de entrada/salida
+
+Para tener un bajo acoplamiento se necesitaría que las interfaces sólo contengan información de datos. Mientras que las interfaces que contienen comunicación de información hibrida (datos+ control) tienen mas acoplamiento 
+![[Pasted image 20250915155908.png]]
+
+###### Cohesión
+
+**Cohesión:** La cohesión considera caracteriza el vínculo intra-modular. Con esta intentamos capturar cuan cercanamente están relacionados los elementos de un modulo entre sí
+***Buscamos menor acoplamiento y mayor cohesión*** 
+Hay una correlación entre la cohesión y el acoplamiento, aunque no es perfecta dicha relación, se entiende que a mayor cohesión, menor acoplamiento
+Hay varios niveles de cohesión, los cuales ordenados de mas débil a mas fuerte serian:
+- **Casual:** La relación entre los elementos del módulo no tiene significado per se 
+- **Lógico:** Existe alguna relación lógica entre los elementos del módulo. Los elementos realizan acciones dentro de la misma clase lógica
+- **Temporal:** Parecido a cohesión lógica pero los elementos están relacionados en el tiempo y se ejecutan juntos
+- **Procedural:** Contiene elementos que pertenecen a una misma unidad procedural
+- **Comunicacional:** Tiene elementos que están relacionados por una referencia al mismo dato, es decir que están juntos porque operan al mismo dato
+- **Secuencial:** Los elementos están juntos porque la salida de uno corresponde a la entrada del otro
+- **Funcional:** Es la mas fuerte de todas las cohesiones, donde todos los elementos del módulo están relacionados para llevar a cabo una función 
+
+Para determinar la cohesión de un modulo vamos a:
+1. Describir el propósito del módulo con una oración
+2. Luego veremos si:
+	- La oración es *compuesta, tiene comas o mas de un verbo*. Entonces el módulo probablemente está realizando mas de una función. Probablemente tenga cohesión **Secuencial** o **comunicacional** 
+	- La oración contiene palabras relacionadas con el *tiempo*. Probablemente el módulo tenga cohesión **secuencial** o **temporal** 
+	- El predicado *no contiene un único objeto específico* a continuación del verbo. Probablemente tenga cohesión **lógica**
+	- Tiene palabras como *inicializar/limpiar/...* implican cohesión **temporal**
+Los módulos funcionalmente cohesivos siempre pueden describirse con una **oración simple**
+
+###### Notación y especificación del diseño
+
+Hay 2 aspectos de sumo interés en la fase de diseño:
+- El diseño del sistema
+- El proceso que lleva a cabo el diseño 
+
+Una vez satisfecho con el diseño producido, éste debe especificarse en un documento de forma precisa, con anotaciones graficas para auxilio para la comprensión
+
+Todo programa tiene estructura, para ello se utiliza el: *Diagrama de estructura*, el cual presenta una notación gráfica para tal estructura estática del software. Representa módulos y sus interconexiones. Además la invocación de un modulo A a B se representa con una flecha etiquetada con los ítems que se pasan y hacia que lado
+
+Hay varios tipos de módulos:
+- Módulo de entrada: Simplemente salen datos desde este módulo hacia el módulo invocador
+- Módulo de salida: Simplemente entran datos desde el módulo invocador
+- Módulo transformador: Transforma datos enviados por el módulo invocador
+- Módulo coordinador: Coordina datos entre módulos invocadores
+- Módulo compuesto: Hace todo junto
+
+También se pueden indicar las iteraciones y decisiones. Aunque no es intención de los diagramas de estructura mostrar la lógica de programa, sólo la estructura
+
+###### Metodología de Diseño Estructurado
+
+La estructura se decide durante el diseño. La implementación no debe cambiar la estructura. La ***metodología del diseño estructurado***(SDM) apunta a controlar la estructura a través de pautas para auxiliar al diseñador en el proceso del diseño. No reduce al diseño una secuencia de pasos mecánicos
+Una SDM ve al software como una función de transformación que convierte una entrada dada en la salida esperada. SDM es una metodología orientada a funciones. Utiliza abstracción funcional y descomposición funcional. Su objetivo es especificar módulos de funciones y sus conexiones siguiente una estructura jerárquica con bajo acoplamiento y alta cohesión
+
+Los módulos con módulos subordinados no realizan mucha computación, son estos últimos quienes realizan casi todo el trabajo, mientras que le módulo principal se encarga de la coordinación. La factorización es el proceso de descomponer un módulo de manera que el grueso de la computación quede en sus subordinados. SDM apunta a acercarse a la factorización completa 
+
+Pasos principales de esta metodología:
+1. Reformular el problema como un DFD
+2. Identificar las entradas y salidas más abstractas
+3. Realizar el primer nivel de factorización
+4. Factorizar los módulos de entrada, de salida y transformadores 
+5. Mejorar la estructura (heurísticas, análisis de transacciones)
+
+***Paso 1: Reformular problema con DFDs:***
+El diseño estructurado comienza con un DFD que capture el flujo de datos del sistema propuesto que enfatiza el flujo de datos a través del sistema ignorando los aspectos procedurales.***EL PROPOSITO DE ESTE DFD ES DISTINTO AL DE ANÁLISIS DE REQUERIMIENTOS***
+
+Luego identificamos las entradas, salidas, fuentes , sumideros del sistema. Luego trabajamos consistentemente desde la entrada hacia la salida o al revés, etiquetamos cada flecha y burbuja. Normalmente queremos dibujar varios DFD antes de quedarnos con uno. Hay que hacer el DFD entero, marcando la frontera hombre maquina
+
+***Paso 2: Identificar las entradas/salidas más abstractas:***
+Generalmente los sistemas realizan una función básica, pero usualmente no se realiza sobre la entrada directamente, ya que esta debe convertirse a un formato adecuado. De igual forma con las salidas. Por ello el objetivo de este paso es separar tales transformadores de los que realizan las transformaciones reales. De esta forma definimos:
+- Entradas mas abstractas **(MAI):** Los elementos de datos del DFD que están más distantes de la entrada real, pero que aún pueden considerarse como entrada
+- Salidas mas abstractas **(MAO):** Los elementos de datos del DFD que están mas distantes de la salida real pero aún pueden considerarse como salida 
+Si bien podrían tener poca semejanza con la entrada/salida real, en general son ítems de datos obtenidos luego de un chequeo de errores, formateo, validación de datos, conversión, etc.
+Representan un juicio de valor, aunque normalmente la elección es bastante obvia. Las burbujas entre la MAI y la MAO corresponden a los transformadores centrales y son los que realizan la transformación básica. Con estos conceptos podemos dividir el sistema en 3 partes:
+- Subsistema que realiza principalmente la entrada
+- Subsistema que realiza principalmente las transformaciones 
+- Subsistema que realiza principalmente la presentación de la salida
+
+***Paso 3: Realizar el primer nivel de factorización:***
+
+Primer paso para obtener el diagrama de estructura:
+Primero debemos especificar el módulo principal. Luego especificamos un módulo de entrada subordinado a este por cada ítem de dato de la MAI (Por cada entrada distinta). Luego hacemos lo mismo con la MAO y lo mismo con los transformadores centrales.
+Luego el primer nivel de factorización es sencillo. El módulo principal será un módulo coordinador. Los módulos subordinados serán responsables de hacer las entradas lógicas, de transformar estas entradas en salidas lógicas y de consumir dichas salidas lógicas dependiendo que módulo subordinado sea (depende si anteriormente eras parte de la MAO, MAI o transformador central). De esta forma separamos el problema en 3 partes separadas donde cada uno de los tres tipos de modulo se pueden diseñar separadamente ya que son independientes 
+
+***Paso 4: Factorizar los módulos de entrada:***
+
+El transformador que produce el dato de MAI se trata ahora como un transformador central. Se repite el proceso del primer nivel de factorización considerando al módulo de entrada como si fuese el módulo principal. Se crea un módulo subordinado por cada ítem de dato que llega a este nuevo transformador central. Se crea un nuevo módulo subordinado para el nuevo transformador central y los nuevos módulos de entrada se factorizan hasta llegar a la entrada física 
+
+ **Definiciones**
+* **Heurísticas de Diseño**: Conjunto de "*Rules of Thumb*" que generalmente son útiles.
+* **Tamaño del modulo**: Indicador de la complejidad del modulo.
+* **Alcance del control de un módulo**: Todos los subordinados.
+* “***Rule of thumb***”: Por cada módulo, el alcance del efecto debe ser un subconjunto del de control.
+* **Estabilidad de un módulo**: la cantidad de suposiciones por otros módulos sobre éste.
+* **Métrica de red**: Parte de la hipótesis que si la impuridad del grafo se incrementa => el acoplamiento se incrementa.
+
+***Paso 4.2: Factorizar los módulos de salida***
+
+La factorización de la salida es simétrica:
+* Módulos subordinados: Un transformador y módulos de salida.
+* Usualmente no debería haber módulos de entrada.
+
+***Paso 4.3: Factorizar los transformadores centrales***
+
+La factorización de los módulos de entrada y salida es simple si el DFD es detallado.
+* No hay reglas para factorizar los módulos transformadores.
+* Utiliza proceso de refinamiento top-down.
+    * **Objetivo**: determinar los subtransformadores que compuestos conforman el transformador.
+* Repetir el proceso para los nuevos transformadores encontrados.
+* Tratar al transformador como un nuevo problema en sí mismo.
+* Graficar DFD.
+* Luego repetir el proceso de factorización.
+* Repetir hasta alcanzar los módulos atómicos.
+
+###### Heurísticas de diseño
+
+* El objetivo siempre es lograr bajo acoplamiento y alta cohesión.
+    * Se utilizan heurísticas de diseño para modificar el diseño inicial.
+* **Heurísticas de Diseño**: Conjunto de "*Rules of Thumb*" que generalmente son útiles.
+* **Tamaño del modulo**: Indicador de la complejidad del modulo.
+* Se examinan cuidadosamente los módulos con pocas líneas o +100 líneas.
+* La cantidad de flechas de salida no deberían exceder las 5 o 6 líneas, y de llegada debería maximizarse.
+* **Alcance del control de un módulo**: Todos los subordinados.
+* “***Rule of thumb***”: Por cada módulo, el alcance del efecto debe ser un subconjunto del de control.
+
+###### Verificación del diseño
+
+Objetivo principal: Asegurar que el diseño implemente los requerimientos (corrección).
+
+* Se realizan análisis de desempeño, eficiencia, etc.
+* La revisión del diseño es la forma mas común de realizar la verificación, las listas de control son muy útiles.
+* La calidad del diseño se completa con una buena modularidad.
+
+###### Métricas
+
+Propósito: Proveer una evaluación cuantitativa del diseño, así el producto final puede mejorarse.
+
+***Tamaño y Complejidad***
+* El tamaño **Siempre** es una métrica, la complejidad es otra métrica de interés.
+    * Ejemplo: Cantidad de módulos + tamaño estimado de cada uno.
+
+***Métrica de red***
+
+Se enfoca en la estructura del diagrama de estructuras; se considera un buen diagrama aquel en el cual cada modulo tiene solo un modulo invocador (ya que se reduce el acoplamiento).
+* Cuantos mas se desvié de esta forma de árbol, mas impuro es el diagrama:
+    * Impureza del grafo = `n - e - 1`, donde `n` son los nodos del grafo, `e` son las aristas del grafo. Esta métrica no tiene en cuenta el uso común de rutina.
+    * Impureza = 0 => árbol.
+* A medida que este valor se hace mas negativo, se incrementa la impureza.
+
+***Métrica de estabilidad***
+
+La **Estabilidad** trata de capturar el impacto de los cambios de diseño.
+* Cuanto mayor estabilidad, mejor.
+* **Estabilidad de un módulo**: la cantidad de suposiciones por otros módulos sobre éste.
+    * Dependen de la interfaz del modulo y del uso de datos globales.
+
+***Métricas de flujo de información***
+
+* **Métrica de red**: Parte de la hipótesis que si la impuridad del grafo se incrementa => el acoplamiento se incrementa. Pero, el acoplamiento también se incrementa con la complejidad de la interfaz.
+
+La métricas de flujo de información tiene en cuenta:
+* La complejidad intra-modulo, que se estima con el tamaño del modulo en LOC.
+* La complejidad inter-modulo que se estima con:
+    - **Inflow**: flujo de información entrante al modulo.
+    - **Outflow**: flujo de información saliente del modulo.
+* La complejidad del diseño del modulo C se define como:
+    * $$DC = tamaño * (inflow * outflow)^2$$
+    * El cuadrado representa la importancia de la interconexion entre modulos con respecto a la complejidad interna, o sea el tamaño.
+    * $(inflow * outflow)$ representa el total de combinaciones de entradas y salidas.
+
+Esta metrica define la complejidad solo en la cantidad de informacion que fluye hacia adentro, hacia afuera y el tamaño del modulo. Tambien vimos que en la metrica de red es importante la cantidad de modulos, y hacia donde fluye la informacion.
+* En base a esto, el impacto del modulo empieza a resultar insignificante.
+* La complejidad del diseño del modulo C se puede definir como:
+	* $DC = fan_{in} * fan_{out} + inflow * outflow$.
+	* Donde $fan_{in}$ representa la cantidad de módulos que llaman al modulo C, y $fan_{out}$ los llamados por C.
+
+*¿Cómo utilizamos esta métrica?*
+
+Se usa el promedio de los módulos y su desviación estándar para identificar los módulos complejos y los propenso a error.
+* Propenso a error si:
+    * $$DC > Complej_{media} + desv_{std}$$
+    * Notar que esta evaluacion se realiza chequeando contra datos del mismo sistema y no contra datos historicos.
+* Complejo si:
+    * $$Complej_{media} < DC < Complej_{media} + desv_{std}$$
+* Normal en caso contrario.
+
+## Diseño orientado a objetos
+
+Los sistemas procedurales tradicionales separan los datos de procedimientos; modela a ambos separadamente. El propósito del diseño OO es el de definir las clases del sistema a construir y las relaciones entre éstas
+
+Las técnicas OO pueden utilizarse tanto para el análisis del requerimiento como para el diseño. Pero el análisis OO modela el problema mientras que el diseño OO modela la solución a dicho problema. Los objetos del AOO(análisis OO) son objetos semánticos, mientras que DOO no tiene solo objetos semánticos, también tiene objetos de interfaces, objetos de aplicaciones y objetos de utilidad. Además el DOO hace mas incapié en el comportamiento dinámico del sistema
+
+###### Relaciones Entre Objetos
+
+Si un objeto esta vinculado durante mucho tiempo con otro hay una asociación entre ellos. Si un objeto es parte de otra clase hay una agregación. En general es una colección y sus ciclos de vida no están relacionados. Es una relación unidireccional. Si un objeto está compuesto por otros se dice que hay una composición donde el ciclo de vida de ambos está muy relacionados
+
+***Herencia:*** La herencia es una relación entre cases que permite la definición e implementación de una clase basada en la definición de una clase existente.:
+- **Herencia estricta:** Una subclase toma todas las características de su superclase, y solo agrega cosas para especializarla
+- **Herencia no estricta:** La subclase redefine alguna de las características. La herencia estricta representa limpiamente la relación "es-un" y tiene muchos menos efectos colaterales
+***La herencia induce polimorfismo:*** un objeto puede ser de distintos tipos o pertenecer a diferentes clases. Un objeto tiene un tipo estático y un tipo dinámico 
+
+###### Conceptos de Diseño 
+
+Durante el diseño la actividad clave es la especificación de clases del sistema a construir. La corrección de este diseño es fundamental para que este sea "bueno": eficiente, modificable, estable, etc.
+Este diseño se puede evaluar usando:
+- Acoplamiento
+- Cohesión
+- Principio abierto-cerrado
+
+Tenemos tres tipos de ***Acoplamiento:***
+- Acoplamiento por interacción
+- Acoplamiento de componentes
+- Acoplamiento de herencia 
+
+**Acoplamiento por Interacción:** Ocurre debido a métodos de una clase que invocan a métodos de otra clase. Mayor acoplamiento su los métodos acceden a partes *internas de otros métodos, manipulan variables de otras clases, la información se pasa a través de variables temporales*. Hay menor acoplamiento si los métodos se comunican directamente a través de los parámetros pasando solo datos con la menor cantidad de información posible (mientras menos parámetros también mejor)
+
+**Acoplamiento de componentes:** Ocurre cuando una clase A tiene variables de otra clase C, en particular:
+- Si A tiene variables de instancia de tipo C
+- Si A tiene parámetros de tipo C
+- Si A tiene un método con variables locales de tipo C
+Si A está acoplado con C, también lo esta con todas sus subclases. Menor acoplamiento su las variables de C en A son, o atributos o parámetros de un método
+
+**Acoplamiento de herencia:** Dos clases están acopladas si una es subclase de otra. Es la peor forma de acoplamiento si las subclases modifican la signatura de un método o eliminan un método, o si se mantiene la signatura pero se cambia el comportamiento de este método. Menor acoplamiento si la subclase sólo agrega variables de instancia y métodos pero no modifica los existentes en la superclase
+
+**Cohesión de método:** La cohesión es mayor si cada método implementa una única función claramente definida con todos sus elementos contribuyendo a implementar esta función. Se debería poder describir en una oración simple que es lo que el método hace  
+
+**Cohesión de clase:** Una clase debería representar un único concepto con todos sus elementos contribuyendo a este concepto. Si una clase encapsula múltiples conceptos, la clase pierde cohesión 
+
+**Cohesión de la herencia:** Hay dos razones para definir subclases:
+- Generalización-Especialización
+- Reúso
+La cohesión es mas alta si la jerarquía se produce como consecuencia de la generalización-especialización
+
+###### Principio Abierto-Cerrado (OCP)
+
+> [!quote] ***Las entidades de software deben ser abiertas para extenderlas y cerradas para modificarlas***
+
+Este principio minimiza el riesgo de "dañar" la funcionalidad existente al ingresar cambios, lo cual es una consideración muy importante al modificar código.
+En OO este concepto es satisfecho si se usa apropiadamente la herencia y el polimorfismo
+
+###### Principio de sustitución de Liskov (LSP)
+
+
+> [!quote] ***Un programa que utiliza un objeto O con clase C debería permanecer inalterado si O se remplaza por cualquier objeto de una subclase de C***
+
+Si las jerarquías de un programa siguen este principio, entonces el programa responde al principio abierto-cerrado
+
+###### Principio de Responsabilidad Única 
+
+> [!quote] ***Una clase debe tener sólo una razón para cambiar, lo que significa que sólo debe tener un trabajo o responsabilidad***
+
+
+Más fácil de probar: las clases con una sola responsabilidad son más sencillas de entender y probar. Complejidad reducida: limita el impacto de los cambios, ya que cada clase solo se centra en una tarea
+
+###### Principio de segregación de interfaces (ISP)
+
+> [!quote] ***Las interfaces deben ser especificas y enfocarse en los requerimientos de los clientes que las utilizan ***
+
+Este principio sugiere dividir las interfaces grandes en otras más pequeñas.
+Flexibilidad: Los clientes sólo necesitan conocer los métodos que les interesan
+Mantenibilidad: Es mas fácil realizar cambios ya que es menor probable que los cambios en una parte del sistemas afecten a otras partes 
+
+###### Principio de inversión de dependencia (DIP)
+
+> [!quote] ***Las clases deben depender de las abstracciones/interfaces y no de implementaciones concretas. Los módulos de alto nivel no deberían depender de módulos de bajo nivel. Ambos deberían depender de abstracciones. Además, las abstracciones no deberían depender de los detalles, pero los detalles deberían depender de las abstracciones.***
+
+Desacopla: al reduce la dependencia entre diferentes partes del código. Permite flexibilidad haciendo más fácil de refactorizar, cambiar e implementar
+
+Estos 5 principios forman el principio de ***SOLID***
+
+
+###### Una Metodología de Diseño
+
+El punto de partida de un diseño OO es el modelo obtenido durante el análisis OO, usando este modelo se debe producir un modelo detallado final. La tecnología ***OMT (Object Modeling Technique)*** involucra los siguientes pasos:
+1. Producir el diagrama de clases (es el diagrama obtenido durante el análisis)
+2. Producir el modelo dinámico y usarlo para definir operaciones de las clases
+3. Producir el modelo funcional y usarlo para definir operaciones de las clases
+4. Identificar las clases internas y sus operaciones 
+5. Optimizar y empaquetar
+
+***2. Producir el modelo dinámico***
+
+El modelo dinámico apunta a especificar cómo cambia el estado de los distintos objetos cuando ocurre un evento
+*Evento:* Desde el punto de vista de un objeto, es una solicitud de operación
+*Escenario:* Secuencia de eventos que ocurre en una ejecución particular del sistemas, recordar casos de uso
+Comenzar por los escenarios iniciados por eventos externos. Primero modelar los escenarios exitosos, luego los excepcionales
+Una vez modelados los escenarios se reconocerán eventos de los distintos objetos. Esta información se utilizara para ampliar el diagrama de clases. En general para cada evento en el diagrama de secuencia habrá una operación en el objeto sobre el cual el evento es invocado.
+Por lo tanto, los diagramas de secuencias nos permiten refinar nuestra visión de un objeto y agregar las operaciones necesarias que pueden no haber sido identificadas previamente
+
+***3. Producir el modelo funcional***
+
+El modelo funcional describe las operaciones que toman lugar en el sistema. Especifica cómo computar los valores de salida a partir de los valores de entrada. Los transformadores del DFD representan esas operaciones, debiendo aparecer en alguna clase como una sola operación, o como múltiples operaciones en varias clases 
+
+***4. Definir las clases y operaciones internas***
+
+Hasta ahora las clases provienen del dominio del problema, sin embargo el diseño debe ser un plano de la implementación. Hay que evaluar críticamente cada clase para ver si es necesaria en su forma actual, puede que algunas clases innecesarias para la implementación se descarten. Puede ser que necesiten operaciones de más bajo nivel sobre clases auxiliares más simples. Estas clases se denominan clases contenedoras 
+
+***5. Optimizar***
+- Agregar asociaciones redundantes con el fin de optimizar acceso a datos
+- Guardar atributos derivados con el fin de evitar cálculos complejos repetidos
+- Usar tipos genéricos, permitiendo reusabilidad de código
+- Ajustar herencia, considerar subir en la jerarquía las operaciones comunes
+
+###### Métricas
+
+***Métodos pesados por clases (WMC)*** : La complejidad de la clase depende de la cantidad de métodos en la misma y su complejidad. Sean $M_1,...,M_n$ los métodos de la clase C, entonces $C(M_i)$  es la complejidad del método $i$. Luego: $$WMC = \sum^n_{i=1}{C(M_i)}$$
+Si WMC es alto, entonces la clase es más propensa a errores 
+
+***Profundidad del árbol de herencia (DIT):*** Una clase muy por debajo en la jerarquía de clases puede heredar muchos métodos, lo cual dificulta la predicción de su comportamiento. Entonces DIT = longitud máxima desde la raíz a la clase C (si hay herencia múltiple, se elige el camino mas largo)
+
+***Cantidad de hijos (NOC):*** Cantidad de subclases inmediatas de C. Da una idea del reúso. También da la idea de la influencia directa de la clase C sobre otros elementos de diseño 
+
+***Acoplamiento entre Clases (CBC):*** Cantidad de clases a las cuales esta clase está acoplada:
+- Dos clases están acopladas si los métodos de una usan métodos o atributos de la otra
+- Usualmente se puede determinar fácilmente desde el código, aunque existen formas indirectas de acoplamiento que no se pueden determinar estáticamente 
+
+***Respuesta para una clase (RFC):*** CBC computa el número de clases a la cual una clase C esta acoplada, sin embargo no captura la fuerza de las conexiones
+RFC captura el grado de conexión de los métodos de una clase con otra clases. Concretamente RFC de una clase C es la cantidad de métodos que pueden ser invocados como respuesta de un mensaje recibido por un objeto de clase C. Es decir, la cantidad de todos los métodos de C mas los métodos de otras clases que reciben un mensaje de un método de C. Es mas probable que sea mas difícil testear clases con RFC alto. Muy significativo en la predicción de clases propensas a errores
