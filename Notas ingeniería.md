@@ -442,3 +442,131 @@ El **ATAM** evalúa las consecuencias de las decisiones arquitectónicas en rela
 5. *Identificar puntos sensitivos y de compromisos:*
 	- Análisis de sensibilidad: ver el impacto de un elemento sobre un atributo de calidad, los que mas afectan los atributos son los puntos de sensibilidad
 	- Análisis de compromiso: Los puntos de compromiso son los elementos que son puntos de sensibilidad para varios atributos
+
+## Modelos de Proceso de Desarrollo
+
+Un **Modelo de proceso** especifica un proceso general, usualmente como un conjunto de etapas adecuado para una clase de proyectos, es decir, provee una estructura genérica de los procesos que pueden seguirse en algunos proyectos con el fin de alcanzar sus objetivos 
+
+Normalmente si se elige un modelo para un proyecto, es necesario adecuarlo al proyecto en si, especificando el proceso del proyecto. De esta forma tenemos:
+
+ - **Modelo de proceso:** especificación genérica del proceso
+ - **Especificación del proceso:** plan de lo que debe ejecutarse 
+ - **Proceso:** lo que realmente se ejecuta 
+
+Los modelos mas comunes son 
+1. **Cascada**(el mas viejo, bastante usado)
+2. **Prototipado**
+3. **Iterativo**(ampliamente usado en la actualidad)
+4. **Timeboxing**
+
+###### Cascada
+
+Tiene 6 faces muy parecidas a las vistas anteriormente:
+1. Análisis de requerimientos
+2. Diseño de alto nivel
+3. Diseño detallado
+4. Codificación
+5. Testing
+6. Instalación
+Una fase comienza sólo cuando la anterior finaliza, en principio no hay feedback con el cliente ni con otras fases(existe el modelo de cascada con feedback, pero este solo permite el feedback a fases con distancia de uno, es decir, solo con la fase anterior). Normalmente se hace un testing de cada fase antes de pasar a la siguiente para ver que todo ande bien
+
+**Ventajas:**
+- Conceptualmente simple: divide el problema en fases que se pueden realizar independientemente 
+- Enfoque natural a la solución de problemas (intuitivo y lógico)
+- Fácil de administrar y ejecutar en un contexto contractual: existen fronteras bien definidas entre cada fase
+**Uso:**
+- Muy adecuado para proyectos donde los requerimiento son bien comprendidos y las decisiones sobre tecnología son tempranas
+- Es adecuado para proyectos donde los desarrolladores están muy familiarizados con el problema a solucionar y el proceso a seguir 
+- Proyectos de corta duración
+- Automatización de procesos manuales existentes 
+
+**Debilidades:**
+- Todo o nada: muy riesgoso 
+- Los requisitos se congelan muy temprano(no hay feedback con cliente)
+- Puede escoger hardware de tecnologías viejas
+- No permite cambios
+- No hay Feedback con el usuario
+
+![[Pasted image 20250915095850.png]]
+
+###### Prototipo
+
+El prototipo intenta abordar las debilidades de cascada en la especificación de los requerimientos de forma que en vez de construir los requerimiento sólo basado en charlas y debates, se construye un prototipo que permita comprender los requerimientos. Así el cliente tiene mas idea de lo que sería el Software obteniendo mejor feedback de él disminuyendo los riesgos de requerimientos. *La etapa de análisis de requerimientos es remplazada por una "mini cascada"*
+
+El prototipo solo incluye características que necesitan mejor comprensión o no fueron entendidas correctamente. Luego el cliente "juega" con el prototipo y provee feedback, este proceso se repite hasta que el costo supere el beneficio del proceso. **El prototipo debe descartarse**. El costo del prototipo debe mantenerse bajo:
+- Construir sólo aspectos que se necesiten aclarar
+- "Quick and Dirty": no importa la calidad
+- Omitir manejo de excepciones
+- Reducir testing
+
+**Ventajas:**
+- Mayor estabilidad en los requerimientos 
+- Los requerimientos se congelan mas tarde
+- La experiencia en la construcción del prototipo ayuda al desarrollo principal
+- Sistemas finales mejores y más estables 
+
+**Desventajas:**
+- Potencial impacto en costo y tiempo
+- No permite cambios tardíos
+- Comienzo pesado 
+
+**Aplicación:**
+- Cuando los requerimientos son difíciles de determinar y la confianza en ellos es baja
+- Sistemas con usuarios novatos 
+- Cuando las interfaces con el usuario no son muy importantes 
+
+
+![[Pasted image 20250915095907.png]]
+
+
+###### Iterativo
+
+Logra abordar el problema del "todo o nada" del modelo de cascada combinando beneficios del Prototipado y del Cascada desarrollando el software incrementalmente, donde cada incremento es completo en si mismo testeando luego de cada uno. Puede verse como una *secuencia de cascadas*. El feedback de una iteración se puede usar en iteraciones futuras
+
+Primero se crea la **Lista de control del proyecto(LCP)** la cual contiene en orden las tareas que se deben realizar para lograr la implementación final. Cada iteración consiste en eliminar la siguiente tarea de la lista haciendo *diseño, implementación y análisis* del sistema parcial y actualizar la **LCP**, repitiendo este proceso hasta vaciar la lista 
+
+**Ventajas:**
+- Pagos y entregas incrementales
+- Feedback para mejorar desarrollo entre iteraciones 
+- Entregas regulares y rápidas
+- Reduce riesgo
+- Prioriza requisitos y acepta cambios 
+
+
+**Desventajas:**
+- La Arquitectura y el diseño se ven perjudicados 
+- La revisión del trabajo hecho puede incrementarse 
+- El costo total suele ser mayor 
+- Sobrecarga de planeamiento en cada iteración
+- El trabajo de una iteración puede deshacerse en otra
+
+**Aplicación:**
+- Cuando el tiempo de respuesta es importante
+- Cuando no se puede tomar el riesgo de proyectos largos
+- Cuando no se conocen todos los requerimientos 
+
+![[Pasted image 20250915101210.png]]
+
+###### Timeboxing 
+
+Timeboxing primero fija la duración de las iteraciones y luego determina la especificación, dividiendo la iteración en partes iguales usando pipelining para ejecutar iteraciones en paralelo  
+
+El desarrollo se realiza iterativamente en "cajas temporizadas" de igual duración, cada una de estas se divide en etapas de duración fijas desarrollando una tarea bien definida independiente a las demás. Hay un equipo en cada etapa. El cronograma tiene un alto compromiso con este modelo
+
+**Ventajas:**
+- Todas las del iterativo
+- Menor tiempo de entrega
+- Ejecución del proyecto distribuida
+- Planeamiento y negociación un poco más fácil
+
+**Desventajas:**
+- Grandes equipos de trabajo
+- Administración de proyecto mucho mas compleja 
+- Se necesita mucha sincronización
+- Es posible el incremento de los costos
+
+**Aplicación:**
+- Cuando los tiempos de entrega son muy importantes
+- Hay flexibilidad en agrupar características 
+
+![[Pasted image 20250915101719.png]]
