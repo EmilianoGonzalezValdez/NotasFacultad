@@ -384,3 +384,61 @@ Sistemas distintos tienen estructuras CyC(Componentes y conectores) distintas, a
 - Un tubo es un canal de redirección unidireccional que transporta un flujo de un filtro a otro
 - Un tubo sólo conecta 2 componentes
 - Lo filtros deben hacer "buffering" y sincronización para asegurar el correcto funcionamiento como productor y consumidor 
+- Cada filtro debe trabajar sin conocer la identidad de los filtros productores o consumidores 
+- Un tubo debe conectar un puerto de salida de un filtro a un puerto de entrada de otro filtro
+- Un sistema *puro* de tubos y filtros usualmente requiere que cada filtro tenga su propio hilo de control
+![[Pasted image 20250915091124.png]]
+
+**Estilo de datos compartidos:** Hay 2 tipos de componentes, el repositorio de datos y usuario de datos. El primero provee almacenamiento permanente confiable, mientras que los usuarios acceden a los datos en el repositorio, realizan cálculos y luego ponen esos datos en el repositorio. De esta forma solo hay 1 tipo de conector de lectura/escritura. Tiene 2 variantes, el *estilo pizarra* donde cuando hay un cambio en el repositorio se les notifica a todos los usuarios de dicho repositorio, y el *estilo repositorio* donde el repositorio es pasivo
+
+![[Pasted image 20250915091107.png]]
+
+**Estilo cliente servidor:** Hay 2 tipos de componentes, los clientes y los servidores, donde los primeros solo se comunican con el servidor de forma asincrónica, ya que también son los clientes quienes deben iniciar dicha comunicación. El único tipo de conector que hay es request/reply. Normalmente este estilo tiene una estructura multi-nivel
+
+![[Pasted image 20250915091050.png]]
+**Otros estilos:**
+	- *Estilo publicar-suscribir:* hay 2 tipos de componentes, los publicadores y las que se suscriben a eventos de modo que cada vez que se publica algo, se invoca a las componentes suscriptas 
+	- *Estilo peer to peer:* Un único tipo de componente donde cada uno puede pedirle servicios a otro
+	- *Estilo de procesos que se comunican :* Procesos que se comunican entre si
+
+###### Documentación del diseño arquitectónico
+
+Si bien los diagramas son un medio adecuado para discutir y crear diseños, no son suficientes para documentarlo. Por eso existe el *Documento arquitectónico*, el cual debe especificar precisamente las vistas y las relaciones entre éstas. Se organiza de la siguiente manera:
+1. Contexto del sistema y la arquitectura
+2. Descripción de las vistas de la arquitectura 
+	1. Presentación principal de la vista
+	2. Catálogo de elementos
+	3. Fundamento de la arquitectura 
+	4. Comportamiento
+	5. Otra información 
+3. Documentación transversal a las vistas
+
+###### Arquitectura VS Diseño 
+
+Tanto la arquitectura como el diseño dividen el problema en partes y dicen como éstas se organizan. Aunque la arquitectura *ES* un diseño de muy alto nivel que se enfoca en las componentes principales encontrándose en el dominio de la solución y no en el dominio del problema. Ambos definen donde acaba una tarea y empieza otra, pero la arquitectura no considera la estructura interna y solo se enfoca en identificar las partes necesarias para evaluar propiedades deseadas
+
+###### Preservación de la integridad de la arquitectura
+
+Si bien muchos diseñadores/desarrolladores solo usan la arquitectura para comprender el sistema, esta impone restricciones que deben preservarse inclusive en la implementación. Para que la arquitectura tenga sentido ésta debe acompañar el diseño y el desarrollo del sistema, por mas fácil que sea ignorarla
+
+###### Evaluación de las Arquitecturas
+
+Como la arquitectura tiene *impacto* sobre los *atributos no funcionales* (como modificabilidad, desempeño, confiabilidad, portabilidad, etc.) debe ser evaluada con respecto a estas propiedades en la arquitectura propuesta . Si bien podría hacerse con técnicas formales, vamos a estudiar el método **ATAM**(Architecture Tradeoff Analysis Method)
+
+El **ATAM** evalúa las consecuencias de las decisiones arquitectónicas en relación a los atributos de calidad. Sus principales pasos son:
+1. *Recolectar escenarios:*
+	- Los escenarios describen interacciones del sistema
+	- Elegir los escenarios de interés para el análisis
+	- Incluir escenario excepcionales sólo si son importantes 
+2. *Recolectar requerimientos y/o restricciones:* 
+	- Definir lo que se espera del sistema en tales escenarios
+	- Deben especificar los niveles deseados para los atributos de interés
+3. *Describir las vistas arquitectónicas:*
+	- Las vistas del sistema que serán evaluadas son recolectadas
+	- Distintas vistas pueden ser necesarias para distintos análisis 
+4. *Análisis especifico a cada atributo:*
+	- Se analizan vistas bajo distintos escenarios separadamente para cada atributo de interés distinto
+	- Esto para comparar los niveles deseados con los obtenidos con cada atributo
+5. *Identificar puntos sensitivos y de compromisos:*
+	- Análisis de sensibilidad: ver el impacto de un elemento sobre un atributo de calidad, los que mas afectan los atributos son los puntos de sensibilidad
+	- Análisis de compromiso: Los puntos de compromiso son los elementos que son puntos de sensibilidad para varios atributos
