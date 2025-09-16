@@ -64,7 +64,7 @@ La *IS* se enfoca mayormente en el proceso para conseguir los objetivos de calid
 La *IS* separa el proceso para desarrollar software del producto en si desarrollado. El proceso es quien determina en gran medida la **CYP**. Diseñar el proceso apropiado y su control es el desafió clave de la *IS*
 
 #### El proceso de desarrollo en fases
-El proceso de desarrollo consiste en varias fases, las cuales tienen una salida definida. Estas fases se realizan en el orden especificado por el modelo de procesos que se elija seguir. EL motivo de separar el desarrollo en fases es la *separación de incumbencias*: donde cada fase manipula distintos aspectos del desarrollo de software. Además cada fase permite verificar la calidad y el progreso al terminar. Este enfoque de desarrollo en fases es central en el enfoque de la *IS* para solucionar la solucionar la crisis de software
+El proceso de desarrollo consiste en varias fases, las cuales tienen una salida definida. Estas fases se realizan en el orden especificado por el modelo de procesos que se elija seguir. EL motivo de separar el desarrollo en fases es la *separación de incumbencias*: donde cada fase manipula distintos aspectos del desarrollo de software. Además cada fase permite verificar la calidad y el progreso al terminar. Este enfoque de desarrollo en fases es central en el enfoque de la *IS* para solucionar la crisis de software
 
 Estas fases en general son:
 1. Análisis y especificación de los requerimientos
@@ -112,7 +112,7 @@ Estos requerimientos son difíciles de entender/discernir ya que visualizar el f
 Principalmente por las siguientes 5 razones:
 1. Ayuda al usuario a comprender sus necesidades
 2. Los usuarios no siempre saben lo que quieren o necesitan. Deben analizar y comprender el potencial del sistema
-3. EL proceso de requerimientos ayuda a aclarar las necesidades 
+3. El proceso de requerimientos ayuda a aclarar las necesidades 
 4. La SRS provee una referencia para la validación del producto final
 5. Debería dar una clara comprensión de lo que se espera
 
@@ -212,7 +212,7 @@ Se construye un sistema parcial prototípico. Lo desarrolladores, clientes y usu
 
 #### Especificación de los requerimientos 
 
-Al terminar la etapa de especificación nuestra salida es la *SRS*, construida en base al conocimiento adquirido durante la etapa de Análisis pero enfocado en el comportamiento externo del sistema . Cabe aclarar que l *SRS* no es una formalización del modelo anterior, sino que se construye en base a este. 
+Al terminar la etapa de especificación nuestra salida es la *SRS*, construida en base al conocimiento adquirido durante la etapa de Análisis pero enfocado en el comportamiento externo del sistema . Cabe aclarar que la *SRS* no es una formalización del modelo anterior, sino que se construye en base a este. 
 
 **Características de una SRS:**
 - Correcta
@@ -825,10 +825,10 @@ La métricas de flujo de información tiene en cuenta:
     - **Outflow**: flujo de información saliente del modulo.
 * La complejidad del diseño del modulo C se define como:
     * $$DC = tamaño * (inflow * outflow)^2$$
-    * El cuadrado representa la importancia de la interconexion entre modulos con respecto a la complejidad interna, o sea el tamaño.
+    * El cuadrado representa la importancia de la interconexión entre módulos con respecto a la complejidad interna, o sea el tamaño.
     * $(inflow * outflow)$ representa el total de combinaciones de entradas y salidas.
 
-Esta metrica define la complejidad solo en la cantidad de informacion que fluye hacia adentro, hacia afuera y el tamaño del modulo. Tambien vimos que en la metrica de red es importante la cantidad de modulos, y hacia donde fluye la informacion.
+Esta métrica define la complejidad solo en la cantidad de información que fluye hacia adentro, hacia afuera y el tamaño del modulo. También vimos que en la métrica de red es importante la cantidad de módulos, y hacia donde fluye la información.
 * En base a esto, el impacto del modulo empieza a resultar insignificante.
 * La complejidad del diseño del modulo C se puede definir como:
 	* $DC = fan_{in} * fan_{out} + inflow * outflow$.
@@ -839,7 +839,7 @@ Esta metrica define la complejidad solo en la cantidad de informacion que fluye 
 Se usa el promedio de los módulos y su desviación estándar para identificar los módulos complejos y los propenso a error.
 * Propenso a error si:
     * $$DC > Complej_{media} + desv_{std}$$
-    * Notar que esta evaluacion se realiza chequeando contra datos del mismo sistema y no contra datos historicos.
+    * Notar que esta evaluación se realiza chequeando contra datos del mismo sistema y no contra datos históricos.
 * Complejo si:
     * $$Complej_{media} < DC < Complej_{media} + desv_{std}$$
 * Normal en caso contrario.
@@ -976,3 +976,7 @@ Si WMC es alto, entonces la clase es más propensa a errores
 
 ***Respuesta para una clase (RFC):*** CBC computa el número de clases a la cual una clase C esta acoplada, sin embargo no captura la fuerza de las conexiones
 RFC captura el grado de conexión de los métodos de una clase con otra clases. Concretamente RFC de una clase C es la cantidad de métodos que pueden ser invocados como respuesta de un mensaje recibido por un objeto de clase C. Es decir, la cantidad de todos los métodos de C mas los métodos de otras clases que reciben un mensaje de un método de C. Es mas probable que sea mas difícil testear clases con RFC alto. Muy significativo en la predicción de clases propensas a errores
+
+
+
+
