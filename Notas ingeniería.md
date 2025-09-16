@@ -1,3 +1,5 @@
+
+---
 ## Introducción
 
 El software => Colección de programas, procedimientos, documentación y datos asociados que determinan la operación de un sistema de computación  
@@ -42,15 +44,15 @@ Claramente desarrollar software de alta calidad es otra motivación de la *Ingen
 2. Confiabilidad: Capacidad de realizar las funciones necesitadas en un tiempo determinado 
 3. Usabilidad: Capacidad de ser comprendido, aprendido y usado
 4. Eficiencia: Capacidad de proveer desempeño apropiado en base a la cantidad  de recursos usados 
-5. Mantenibilidad: Capacidad de ser modificado con el propósito de corregir,mejorar o adaptar
+5. Mantenibilidad: Capacidad de ser modificado con el propósito de corregir, mejorar o adaptar
 6. Potabilidad: Capacidad de ser adaptado a otro entorno sin necesidad de realizar muchos cambios
 
-Este concepto de realidad tiene muchas dimensiones como para reducirlo a un solo número, por ello cada en proyecto se elige que sera calidad para este, enfocándose en uno de los aspectos anteriores como principal. Normalmente se elige Confiabilidad. Se tienen 2 formas de medir la Confiabilidad
+Este concepto de realidad tiene muchas dimensiones como para reducirlo a un solo número, por ello en cada proyecto se elige que será calidad para este, enfocándose en uno de los aspectos anteriores como principal. Normalmente se elige Confiabilidad. Se tienen 2 formas de medir la Confiabilidad
 1. $\text{+fallas} = -\text{confiable}$
 2. $\text{Calidad} = \text{Cantidad de defectos en software}/\text{tamaño}$
 
 Normalmente el calculo seria  < 1 defecto /KLOC
-
+x
 #### Consistencia y repetitividad
 Algunas veces un grupo puede desarrollar un software de buena calidad. Un objetivo clave de la *Ingeniería del software* es la sucesiva producción de sistemas de alta calidad y con alta productividad. Esta consistencia es la que nos permite predecir el resultado del proyecto con certeza razonable. Sin esta consistencia seria imposible estimar costos 
 
