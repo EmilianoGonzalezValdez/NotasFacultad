@@ -72,7 +72,7 @@ Estas fases en general son:
 3. Diseño
 4. Codificación
 5. Testing
-6. Entrega y instalación 
+6. Entrega, mantenimiento y instalación 
 
 Los enfoques sistemáticos necesitan que cada etapa se realice de forma rigurosa y formalmente
 
@@ -881,6 +881,11 @@ Tenemos tres tipos de ***Acoplamiento:***
 Si A está acoplado con C, también lo esta con todas sus subclases. Menor acoplamiento su las variables de C en A son, o atributos o parámetros de un método
 
 **Acoplamiento de herencia:** Dos clases están acopladas si una es subclase de otra. Es la peor forma de acoplamiento si las subclases modifican la signatura de un método o eliminan un método, o si se mantiene la signatura pero se cambia el comportamiento de este método. Menor acoplamiento si la subclase sólo agrega variables de instancia y métodos pero no modifica los existentes en la superclase
+
+Tenemos tres tipos de ***Cohesión:***
+- Cohesión de método
+- Cohesión de clase
+- Cohesión de la herencia
 
 **Cohesión de método:** La cohesión es mayor si cada método implementa una única función claramente definida con todos sus elementos contribuyendo a implementar esta función. Se debería poder describir en una oración simple que es lo que el método hace  
 
