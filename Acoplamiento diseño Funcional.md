@@ -1,0 +1,4 @@
+Concepto inter-modular que captura la noción de dependencia. Nuestro objetivo seria tener el menor acoplamiento posible. Hay 3 tipos:
+- Tipo de conexiones entre módulos: El acoplamiento disminuye si sólo las entradas definidas en un módulo son utilizadas por otros. La información se pasa exclusivamente a través de parámetros. Y este aumenta cuando se utilizan interfaces oscuras e indirectas, cuando se usan directamente operaciones y atributos internos al módulo y cuando Se utilizan variables compartidas
+- Complejidad de las interfaces: Si bien cierto nivel de complejidad es necesario en las interfaces para la comunicación requerida del módulo, hay que encontrar un balance en que la interfaz sea lo suficientemente simple 
+- Tipo de flujo de información entre módulos: Se da cuando transferimos información de control o hibrida,
