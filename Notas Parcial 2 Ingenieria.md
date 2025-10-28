@@ -274,3 +274,158 @@ CMM tiene 5 niveles, en cada nivel se dan ciertas capacidades y se establecen la
 	- Administración de cambio de proceso
 	- Administración de cambio de Tecnología 
 	- Prevención de defectos
+
+# Planeamiento del Proyecto del Software
+Un tercio de los proyectos se desbocan con costos superiores al 125% de los estipulados. Normalmente hay 5 razones que conllevan a esto:
+1. Objetivos poco claros
+2. Mal planeamiento
+3. Administración del proyecto sin metodología
+4. Nueva tecnología 
+5. Personal insuficiente.
+Todas estas razones están relacionadas con la administración del proyecto
+
+###### Estimación del esfuerzo 
+Dado un conjunto de requerimientos es deseable/necesario saber cuanto costara en tiempo y dinero el desarrollo del software. Normalmente el esfuerzo se mide en Persona/Mes. Lamentablemente no hay una forma fácil de estimar, normalmente la estimación mejora a medida que se incrementa la información sobre el proyecto.
+**Un modelo intenta determinar la estimación del esfuerzo a partir de valores de ciertos parámetros**, los cuales dependen del proyecto. De esta forma el modelo reduce el problema de estimar el esfuerzo del proyecto al de estimar ciertos **parámetros claves** del proyecto, los cuales deben poder medirse en etapas muy tempranas del proyecto. Hay 2 enfoques:
+
+- Estimación Top-Down: Se intenta determinar el esfuerzo total y luego calcular el esfuerzo de cada parte del proyecto. Primero se estima el tamaño global del proyecto en KLOC, luego se calcula $\text{esfuerzo} = a * \text{tamaño}^b$ donde a y b se determinan a través de análisis de regresión sobre proyectos pasados
+- Estimación Bottom-Up: Primero identificamos los módulos del sistema y los clasificamos como simples, medios o complejos. Luego determinamos el esfuerzo total de codificación para cada tipo de módulo, obtenemos el esfuerzo total de codificaciones en base a la clasificación anterior y al conteo de cada tipo. Utilizamos la distribución de esfuerzos de proyectos similares para estimar el esfuerzo de cara tarea y por ultimo refinamos los estimadores anteriores en base a factores específicos del proyecto
+- COCOMO:
+	- Tiene enfoque top-down
+	- Utiliza tamaño ajustado con algunos factores 
+	- Procedimiento:
+		- Obtener el estimador inicial usando el tamaño
+		- Determinar un conjunto de  factores de multiplicación representando distintos tributos
+		- Ajustar el estimador de esfuerzo escalándolo según el factor de multiplicación final
+		- Calcular el estimador de esfuerzo de cada fase principal
+
+Los factores de ajuste son:
+- Atributos del software:
+	- RELY: confiabilidad
+	- DATA: tamaño de la base de datos
+	- CPLX: complejidad de las funciones, datos, interfaces...
+- Atributos del hardware:
+	- TIME: limitaciones en el porcentaje del uso de la CPU
+	- STOR: limitaciones en el porcentaje en el uso de la memoria
+	- VIRT: volatilidad de la maquina virtual
+	- TURN: frecuencia de cambio en el modelo de explotación 
+- Atributos del personal 
+	- ACAP: calificación de los analistas
+	- AEXP: experiencia del personal en aplicaciones similares
+	- PCAP: CALIFICACIÓN DE LOS PROGRAMADORES
+	- VEXP: experiencia del personal en la maquina virtual 
+	- LEXP: experiencia en el lenguaje de programación a usar
+- Atributos del Proyecto:
+	- MODP: uso de practicas modernas de programación 
+	- TOOL: uso de herramientas de desarrollo de software
+	- SCED: limitaciones en el cumplimiento de la planificación 
+
+###### Planificación y recursos humanos
+Hay 2 niveles de planificación:
+- Planificación global
+- Planificación detallada 
+
+La *planificación global* depende fuertemente del esfuerzo estimado, hay una cierta flexibilidad ,dependiendo de los recursos asignados, para una cierta estimación. Un método es estimar el tiempo programado del proyecto en meses como una función del esfuerzo en personas/mes
+$\text{Rule of thumb:} \space M =  \sqrt{esfuerzo}$
+
+Seguidamente determinar la duración de cada meta parcial principal del proyecto. Luego distribuir los recursos, aunque la distribución de los RRHH no es homogénea, sigue aproximadamente una curva de Rayleigh. Con dicha curva y la distribución de esfuerzos se puede determinar el tiempo de las metas parciales. Cabe aclarar que la distribución de esfuerzo y la distribución de los tiempos en las fases son 2 cosas distintas
+
+En la *planificación detallada*  se pueden utilizar herramientas como ayuda. En la teoría cualquier actividad a realizarse debe quedar reflejada en la planificación detallada, donde cada tarea tiene asignado un nombre, esfuerzo, fecha, duración, recursos, etc. Esta planificación debe ser consistente con las metas, dado que las tareas son subactividades de las actividades a nivel de metas, así que el esfuerzo individual sebe sumar apropiadamente preservando la duración total de la meta 
+
+###### Estructura del equipo de trabajo
+Para asignar las tareas en la planificación detallada es necesario un equipo de trabajo estructurado.
+- Organización Jerárquica:
+	- Es la más común
+	- Hay un administrador de proyecto con la responsabilidad global, realiza diseño, asigna recursos, etc.
+	- Tiene programadores, testers y administrador de configuración para ejecutar las tareas detalladas 
+	- Una persona podría cumplir mas de un rol
+- Equipos democráticos:
+	- Funciona en pequeños grupos
+	- El liderazgo es rotativo
+	- ALTERNATIVA:
+		- Reconoce tres tareas principales: Desarrollo, testing y administración del programa
+		- Cada una tiene su propio equipo y cada equipo su líder
+		- Todos reportan a un líder general
+		- Se utiliza para el desarrollo de grandes productos 
+
+###### Planeamiento de la administración de la configuración del software
+
+Se deben identificar los ítems de configuración y especificar los procedimientos a usar para controlar e implementar los cambios de estos ítems. El planeamiento de la administración de configuración se realiza cuando el proyecto ha sido iniciado y ya se conoce la especificación de los requerimientos y el entorno de operación 
+
+###### Planeamiento del Control de Calidad
+Objetivo básico: entregar un software de alta calidad .
+
+Defecto: Algo que causa que el software se comporte de manera inconsistente, con respecto a los requerimientos o necesidades del cliente
+
+El desarrollo de software es una actividad altamente dependiente de personas, por lo cual es propensa a errores. Estos defectos se pueden introducir en cualquier etapa. Como el objetivo de calidad es la baja densidad de defectos, los defectos deben eliminarse. Normalmente esto se hace mediante las actividades de control de calidad incluyendo revisiones y testing
+
+Hay varios enfoques para la administración del Control de Calidad
+- Enfoque ad-hoc:
+	- Se hacen test y revisiones de acuerdo a cuando y como se necesitan
+- Enfoque de procedimiento:
+	- El plan define que tareas de Control de calidad se realizarán y cuando
+	- Principales tareas del control de calidad: revisión y testing
+	- Provee procedimientos y lineamientos a seguir en el testing y en la revisión 
+	- Durante la ejecución del proyecto se asegura el seguimiento del plan y los procedimientos
+- Enfoque Cuantitativo:
+	- Va mas allá de requerir que se ejecute ejecute el procedimiento 
+	- Analiza los datos recolectados de los defectos y establece juicios sobre la calidad: métricas, densidad de defectos 
+	- La información del pasado es muy importante para predicciones de defectos
+	- Parámetros claves: tasas de introducción y eliminación de defectos
+
+El **plan de calidad** establece qué actividades deber realizarse. El nivel del plan depende de los modelos de predicción disponibles. De mínima debe definir las tareas del control de calidad que deben realizarse durante el proyecto, aunque también puede especificar los niveles esperados de defectos que cada tarea de control de calidad debe encontrar 
+
+###### Administración de Riesgos 
+Cualquier evento puede fallar debido a eventos no previstos. La administración de riesgo es un intento de minimizar las chances de fallas, pero que es el riesgo?
+Riesgo: Cualquier condición o evento de ocurrencia incierta que puede causar la falla del proyecto. El objetivo de la **administración del riesgo** es minimizar el impacto de la materialización de los riesgos 
+
+Durante el planeamiento del proyecto se realiza una *Evaluación de Riesgos*. Esta esta compuesta por 3 tareas, la Identificación de riesgos, la Definición de prioridades de los riesgos y el análisis de riesgos. Mientras que durante la realización del proyecto se realiza el *Control de Riesgos*, el cual esta compuesto por el Planeamiento de la Administración de riesgos, la Resolución de riesgos y el Seguimiento de riesgos. Ahora veremos estas tareas una a una
+
+*Tareas de Evaluación de Riesgos*
+
+**Identificación del riesgo**: Se identifican los posibles riesgos del proyecto, es decir, aquellos eventos que podrían ocurrir y causar la falla del proyecto. Los 9 factores de riesgo más importantes: 
+1. Personal: insuficiente o inapropiadamente entrenado
+2. Tiempos y costos irreales
+3. Componentes externas: incompatibles o de baja calidad
+4. Discrepancia con la interfaz del usuario
+5. Discrepancia con los requerimientos
+6. Arquitectura, desempeño, calidad: inadecuada o insuficiente evaluación
+7. Flujo continuo en los cambios de requerimientos
+8. Software legado
+9. Tareas desarrolladas externamente: inadecuadas o demoradas
+
+La cantidad de riesgos puede ser grande, por ello se deben priorizar para enfocar la atención en las áreas de alto riesgo 
+
+**Definición de prioridades y Análisis de los riesgos**: Establecer la probabilidad de materialización de los riesgos identificados y la pérdida que éstos originarían. Ordenas de acuerdo al "valor de exposición al riesgo (RE)"
+Es decir, RE es el valor esperado de la perdida debido a un riesgo. Siempre queremos realizar planes para tratar con los riesgos de mayor RE, clasificando las probabilidades de ocurrencia como Bajas, Medias o Altas, luego clasificar los impactos de los riesgos como Bajos, Medios o Altos para poder enfocarnos solamente en todos los riesgos AA y AM/MA
+
+*Tareas de Control de Riesgos*
+
+Si es posible evitar el riesgo, lo evitamos. En los casos que no se puedan evitar se debe planear y ejecutar los pasos necesarios para mitigar los riesgos y que su impacto sea mínimo, esto claramente, involucra costo extra
+
+**Plan de mitigación de riesgos**
+La mitigación de riesgos incluye los pasos a  realizar, en consecuencia, a costo extra. Estos pasos deben planificarse en el tiempo y ejecutarse, además estos son distintos de los que se deben realizar si el riesgo se materializa, los cuales se efectúan solo si es necesario. Los riesgos deben revisarse periódicamente
+
+###### Planificación del seguimiento del proyecto 
+El plan de administración del proyecto es meramente un documento que sirve como guía. Este debe ejecutarse para asegurar que la ejecución se realiza como se planeó, ésta debe seguirse y controlarse. Este seguimiento requiere mediciones y métodos que las interpreten. El plan de seguimiento incluye:
+- Planificar qué medir, como y cuando 
+- Como analizar y reportar estos datos
+**Principales medidas:**
+- Tiempo: es la mas importante de las medidas
+- Esfuerzo: Es el principal recurso
+- Defectos: Determinan calidad
+- Tamaño:: Mucha información se normaliza respecto al tamaño
+
+El objetivo del seguimiento del proyecto es hacer visible la ejecución del proyecto de manera de realizar acciones correctivas cuando sea necesario con el fin de asegurar el éxito del proyecto. hay distintos niveles de seguimientos:
+- Nivel de actividad:
+	- Asegura que cada actividad se realiza apropiadamente y a tiempo
+	- Realizado diariamente por los administradores de proyecto 
+	- Una tarea realizada se marca con un %100
+- Reportes de estado
+	- Usualmente se prepara semanalmente
+	- Contiene un resumen de actividades completadas y pendientes desde el ultimo reporte y cuestiones que necesitan atención o deben ser resueltas
+- Análisis de metas parciales:
+	- Se realiza una mayor revisión con cada meta parcial
+	- Análisis de esfuerzos y tiempos reales vs estimados
+	- Si la desviación es amplia se realizan medidas correctivas
+	- Revisión de los riesgos
