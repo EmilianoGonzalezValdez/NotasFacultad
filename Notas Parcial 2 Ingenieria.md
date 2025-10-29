@@ -429,3 +429,194 @@ El objetivo del seguimiento del proyecto es hacer visible la ejecución del proy
 	- Análisis de esfuerzos y tiempos reales vs estimados
 	- Si la desviación es amplia se realizan medidas correctivas
 	- Revisión de los riesgos
+
+
+# Testing 
+
+###### Defecto y Desperfecto 
+
+Desperfecto(failure) =  Un desperfecto de software ocurre si el comportamiento de éste es distinto del esperado/especificado 
+
+Defecto(Fault) = Es la causa del desperfecto = BUG
+
+Un desperfecto implica la presencia del defecto, pero la existencia de un defecto no implica la ocurrencia de un desperfecto 
+
+Las revisiones son procesos humanos, no pueden encontrar todos los defectos. En consecuencia habrán defectos en los requerimientos, en el diseño y en la codificación, los cuales deben identificarse por medio del testing. Por esto mismo, el testing juega un rol critico a la hora de garantizar la calidad
+
+Durante el testing un programa se ejecuta siguiendo un conjunto de casos de tests, si hay algún desperfecto en los test entonces hay algún defecto en el software. Si no aparecen desperfectos aumenta la confianza en el software, pero esto no nos garantiza que no haya algún defecto. Para detectar los defectos debemos causar desperfectos durante el testing y para identificar el defecto real que causa el desperfecto, debemos recurrir al debugging 
+
+###### Conceptos fundamentales 
+Para verificar la ocurrencia de un desperfecto en la ejecución de un caso de test, necesitamos conocer el comportamiento correcto para este caso, por ende necesitamos un *oráculo de test*. Esto oráculo de test es un ente el cual pretendemos que siempre dé el resultado correcto. Muchas veces el oráculo puede generarse directamente desde la especificación
+
+Si existen diferentes defectos, queremos tener varios casos de tests que los evidencien a través de fallas tal que la correcta ejecución de dicha "suit" de test, implique la ausencia de defectos. Como el testing es costoso queremos que este conjunto de casos sea lo mínimo posible. Por ello usamos *criterios de selección de tests*, el cual especifica las condiciones que el conjunto de casos de test debe satisfacer con respecto al programa y/o a la especificación. Normalmente siempre esperamos de los criterios de test Confiabilidad y Validez (con estas podríamos decir que el test es exhaustivo), lo cual es prácticamente imposible si le sumamos que queremos una cantidad manejable de tests 
+
+Como queremos sacar a la luz los defectos mediante tests, estos deben ser destructivos. Hay 2 enfoques de tests:
+- Testing caja Negra
+- Testing caja Blanca
+
+##### Testing Caja Negra
+
+El software a testear se trata como una caja negra, donde la especificación de esta es dada y para testear se utiliza el comportamiento esperado del sistema. Es decir que los casos de test se seleccionan solo a partir de la especificación de la caja negra
+Como solo tenemos la especificación, el testing funcional mas minucioso es el mas exhaustivo, puesto que como el software esta diseñado para trabajar sobre ciertas entradas, lo mas exhaustivo que se puede ser es testearlo junto a todos sus elementos de entrada. Lo cual es muy costoso, si es que no es imposible. A cusa de esto veremos mejores métodos de selección de tests
+
+###### Particionado por clase de equivalencia 
+
+Se intenta dividir el espacio de entrada en clases de equivalencia. Este método parte de la idea de que si el software funciona para un caso de test en una clase, entonces muy probablemente funcione de la misma manera para todos los elementos de la misma clase. La base lógica de este método es que la especificación requiere el mismo comportamiento en todos los elementos de una misma clase. Cada condición especificada como entrada es una clase de equivalencia, para lograr robustez se deben armar clases de equivalencias para entradas invalidas.
+También se deben considerar las clases de equivalencia de los datos de salida. Generar los casos de test para estas clases eligiendo apropiadamente las entradas. Una vez elegidas las clases de equivalencia se deben seleccionar los casos de test:
+- Seleccionar cada caso de test cubriendo tantas clases como sea posible
+- O dar un caso de test que cubra a lo sumo una clase válida por cada entrada
+
+En otras palabras, lo que hacemos es separar acada entrada del programa en clases, donde cada clase tiene una propiedad de esta entrada que el programa puede procesar sin problema(si mi programa suma 2 números positivos, una clase seria los números mayores o iguales a 0), luego hacer lo mismo pero con las que no puede procesar, y en base a esto elegir los casos de test
+
+###### Análisis de valores límites 
+
+Muchos de los programas generalmente fallan sobre valores especiales los cuales se encuentran normalmente en los limites de las clases de equivalencia, por ello vamos a hacer un caso de test sobre los valores limites, los cuales simplemente son un conjunto de datos de entrada que se encuentran en el borde de las clases de equivalencias de la entrada o salida(testear casos borde).Para el caso de múltiples entradas hay dos estrategias para combinarlas en un caso de test:
+- Para cada clase de equivalencia se elegirán 6 casos limite + 1 normal, de estos 6 tenemos:
+	- Los 2 casos de los limites
+	- 2 casos que estén apenas adentro de los limites
+	- 2 casos que estén apenas afuera de los limites
+- Ejecutar todas las combinaciones posibles de las distintas variables
+	- Por ende si tenemos n variables, tenemos $7^n$ casos de test
+
+###### Grafo de Causa Efecto
+
+Los análisis de clase de equivalencia y valores límites consideran cada entrada separadamente. Para manipular las entradas distintas combinaciones de las clases de equivalencia deben ser ejecutadas, cuya cantidad puede ser muy grande ya que si hay n condiciones distintas en la entrada que puedan hacerse validas o invalidas, entonces tenemos $2^n$ clases de equivalencia 
+
+El grafo de causa-efecto ayuda a seleccionar las combinaciones como condiciones de entrada. 
+Primero debemos identificar las Causas y Efectos y cuales causas pueden producir qué efectos(las causas se pueden combinar).
+- Causa: distintas condiciones en la entrada que pueden ser verdaderas o falsas
+- Efecto: distintas condiciones de salidas: verdaderas/falsas también 
+
+Las causas y efectos son nodos del grafo, y las aristas determinan dependencia. Hay aristas positivas y negativas, además existen nodos and y or para combinar causalidad.
+A partir del grado causa-efecto se puede armar una tabla de decisión, la cual lista las combinaciones de condiciones que hacen efectico cada efecto, esta puede usarcé para armar los distintos casos de test 
+
+###### Testing de a Pares
+
+Usualmente muchos parámetros determinan el comportamiento del sistema y muchos defectos involucran sólo una condición, esto se le llama defecto de modo simple
+Pero no todos los defectos son de modo simple, ya que el software puede fallar en combinaciones especificas de estos parámetros. Estos defectos se revelan con casos de test que contemplen combinaciones apropiadas. Esto se denomina test combinatorio, el cual por obvias razones no es factible, es muy costoso. Por ello se investigo que la mayoría de tales defectos se revelan con la interacción de pares de valores, por lo cual solo necesitamos testear cada par, esto se conoce como testing de a pares. Un caso de test consiste en algún seteo de los n parámetros, el menor conjunto de test se obtiene cuando cada par es cubierto solo una vez  
+
+###### Casos Especiales 
+
+Los programas usualetne fallan en casos especiales. Estos dependen de la naturaleza de la entrada, tipos de estructuras de datos, etcétera.
+No hay buenas regalas para identificarlos, una forma es adivinar cuando el software puede fallar y crear esos casos de test. Los casos especiales pueden ocurrir debido a suposiciones sobre la entrada, usuario, entorno operativo, negocio, etcétera 
+
+###### Testing Basado En Estados
+
+El test basado en estados se enfoca en el testing de estados y transiciones, se testean distintos escenarios que de otra manera podrían pasarse por alto. El modelo de estado se realiza usualmente luego de que la información de diseño se hace disponible, en este sentido, se habla a veces de testing de caja gris, dado que no es de caja negra puro.
+Estos test se originan debido a que en algunos programas el comportamiento y la salida depende tanto de la entrada como del estado actual del sistema.  Para lograr testear esto un sistema se modela como una maquina de estados, donde cada estado representa un estado lógico de interés del sistema. Un modelo de estado tiene 4 componentes :
+- Un conjunto de estados: son estados lógicos representando el impacto acumulativo del sistema
+- Un conjunto de transiciones: representa el cambio de estado en respuesta a algún evento de entrada
+- Un conjunto de eventos: son las entradas del sistema
+- Un conjunto de acciones: son las salidas producidas en respuesta a los eventos de acuerdo al estado actual
+
+##### Testing de Caja Blanca
+El testing de caja negra se enfoca solo en la funcionalidad, mientras que el testing de caja blanca se enfoca en el código, el objetivo es ejecutar las distintas estructuras del programa con el fin de descubrir errores. Por ende, los casos de test se derivan del código
+
+Tipos de testing estructural(test de caja blanca):
+- Criterio basado en el flujo de control: Observa la cobertura del grafo de control
+- Criterio basado en el flujo de datos: Observa la cobertura de la relación definición-uso en las variables 
+- Criterio basado en mutación
+
+###### **Criterio basado en flujo de control**
+Considerar el programa como un grafo de flujo de control donde los nodos representan bloques de código y las aristas representan posibles transferencia de control del nodo i al j. Presenta 3 criterios:
+- Criterio de cobertura de setnencia
+- Criterio de cobertura de ramificaciones
+- Criterio de cobertura de caminos 
+
+**Criterio de cobertura de sentencias:** Cada sentencia se ejecuta al menos una vez durante el testing, por ende el conjunto de caminos ejecutados debe recorrer todos los nodos. Su limitación es que puede no requerir que una decisión evalúe a falso en un if si no hay else. Puede haber nodos inalcanzables 
+
+**Criterio de cobertura de ramificaciones:** Cada arista debe ejecutarse al menos una vez en el testing, por ende cada decisión debe ejercitarse como verdadera y como falsa durante el testing. La cobertura de ramificaciones implica cobertura de sentencias. Si hay múltiples condiciones en una decisión no todas las condiciones se ejercitaran como verdadera y falsa
+
+**Criterio cobertura de caminos:** Todos los posibles caminos del estado inicial al final deben ser ejercitados, esta cobertura implica cobertura de bifurcación. El problema es que la cantidad de caminos puede ser infinita, además que puede haber caminos no realizables 
+
+###### Criterio basado en flujo de datos 
+
+Se construye un grafo de definición-uso etiquetando apropiadamente el grafo de flujo de control. Hay 3 tipos de sentencias en el grafo de control:
+- def: representa definiciones de una variable o reasignaciones 
+- uso-c: cuando una variable se usa para computo
+- usp-p: cuando una variable se usa en un predicado de transferencia de control
+
+El grafo de def-uso se construye asociando variables a nodos y aristas del grafo de flujo de control:
+- Por cada nodo i, def(i) es el conjunto de variables para el cual hay una definición en i
+- Por cada nodo i, c-use(i) es el conjunto de variables para el cual hay un uso-c  en i
+- Por cada arista (i,j),p-use(i,j) es el conjunto de variables para el cual hay un uso-p
+
+Un camino puede estar libre de definiciones con respecto a una variable x en un camino i a j
+
+Los criterios son bastante subjetivos ya que pueden ser del tipo:
+- Todas las definiciones
+- Todos los uso-p
+- Todos los usos-c
+- Algunos usos-c
+- Algunos usos-p
+
+##### Soporte con herramientas
+
+Una vez elegido el criterio surgen dos problemas:
+- ¿El test suite satisface el criterio?
+- ¿Cómo generar el test suite que asegure cobertura?
+
+Para determinar cobertura se pueden usar herramientas que normalmente son de asistencia, ayudando a visibilizar las sentencias o ramificaciones que quedan sin cubrir, por lo que el proceso de selección de caso de test sigue siendo mayormente manual 
+
+##### Comparación y uso
+
+Se deben utilizar tanto test funcionales de caja negra, como estructurales de caja blanca ya que ambas técnicas son complementarias:
+- Caja blanca: Bueno para detectar errores en la lógica del programa o errores estructurales
+- Caja negra: Bueno para detectar errores de entrada/salida o errores funcionales
+Hay que tener en cuenta igualmente que los métodos estructurales son útiles a bajo nivel solamente ya que el programa es "manejable". Mientras que los métodos funcionales son útiles a alto nivel, donde se busca analizar el comportamiento funcional del sistema o partes de éste 
+
+##### Testing Incremental
+
+Hay objetivos contrapuestos, ya que el objetivo del testing es detectar defectos con un bajo costo, pero el incrementarlo para encontrar aun mas defectos aumenta el costo. La idea es ir agregando test a partes no testeadas incrementalmente, siendo esto esencial para conseguir:
+- encontrar mas defectos
+- identificación y eliminación  de defectos
+En grandes empresas siempre se hace incrementalmente el testing 
+
+##### Niveles de Testing 
+
+Como dijimos anteriormente el código contiene defectos de requerimientos, diseño y codificación, donde la naturaleza de cada defecto es diferente dependiendo de en que etapa fue introducido. Por lo tanto se utilizan distintos niveles de testing para revelar los distintos tipos de defectos:
+
+- Testing de unidad: Los distintos módulos del programa se testean separadamente contra el diseño, que actúa como especificación del módulo. Se enfoca en los defectos inyectados durante la codificación. Normalmente realizado por el mismo programador que realizo el módulo 
+- Testing de integración: Se enfoca en la interacción de módulos de un subsistema, combinando módulos que ya fueron testeados unitariamente para formarlo, siendo este sujeto a testing de integración. Los casos de test deben generarse con el objeto de ejercitas de distinta maneta la interacción entre módulos 
+- Testing del sistema: El sistema completo es testeado verificando si el sistema implementa los requerimientos. Normalmente es la etapa final del testing antes de la entrega del software 
+- Testing de aceptación: Se enfoca en verificar que el software satisfaga las necesidades del usuario, Generalmente se realiza por el usuario en en su entorno y con datos reales. Solo después de que el testing de aceptación resulte satisfactorio, el software es puesto en ejecución
+- Testing de desempeño: Requiere herramientas para medir desempeño 
+- Testing de estrés: El sistema se sobrecarga al máximo, requiere herramientas de generación de cargas 
+- Testing de regresión: Se realiza cuando se introduce algún cambio al software, verificando que las funcionalidades previas no se rompieron con la nueva incorporación
+
+
+##### El Plan de Test:
+
+El testing usualmente comienza con la realización del plan de test y finaliza con el testing de aceptación.
+El plan de test es un documento general que define el alcance y el enfoque del testing para el proyecto completo, utilizando como entradas la SRS, el plan del proyecto y el diseño, e identificando que niveles de testing se realizaran, que unidades serán testeadas, etc. 
+
+Es necesario hacerlo para asegurar que el plan de test es consistente con el plan de calidad del proyecto y que el cronograma de testing es consistente con el del proyecto
+
+Usualmente contiene:
+- Especificación de la unidad de test: Que unidad necesita testearse separadamente
+- Características a testear: Esto incluye funcionalidad, desempeño, usabilidad, restricciones de diseño, etc.
+- Enfoque: Criterios a utilizarse, cuando detenerse, como evaluar, etc.
+- "Entregables": lista de casos de test utilizados, resultados detallados del testing, reporte resumido, etc.
+- Cronograma y asignación de tareas 
+
+##### Especificación de los casos de test
+
+El plan de test se enfoca en cómo proceder y que testear, pero no trata con los detalles del testeo manual de una unidad. La especificación de casos de test se tiene que realizar separadamente para cada unidad determinando los casos de test de acuerdo con el plan. Conjuntamente con cada caso de test se especifica (esta es la justificación del caso de test):
+- las entradas a utilizar
+- las condiciones que este testeara
+- el resultado esperado
+
+La efectividad y costo del testing dependen del conjunto de casos de test seleccionado. Normalmente los caso de test elegidos son revisados por expertos, lo cual es otra razón para tener especificaciones de casos de test ya definidas(para ello es importante la justificación del test)
+
+Para cada testeo se desarrolla una especificación de casos de test que se revisa y se ejecuta. La preparación de la especificación de los casos de test es una tarea exigente y que demanda tiempo ya que se pueden utilizar criterios para casos de test además de casos especiales y escenarios. Una vez especificados, la ejecución y verificación del resultado se pueden automatizar en scripts, lo cual es deseado si se necesita repetir el testing 
+
+##### Registro de defectos y seguimiento
+
+Un software grande puede tener miles de defectos, encontrados por muchas personas distintas, donde quien lo corrige no es necesariamente quien lo encontró. Debido a este gran alcance, el registro y la corrección de los defectos no puede realizarse informalmente. Normalmente los defectos encontrados se registran en un sistema seguidos de defectos que permite rastrearlos hasta que se cierren
+
+Los defectos tienen su ciclo de vida durante el cual se registra información sobre el defecto en sus distintas etapas para ayudar al debugging y al análisis. Además normalmente los defectos se categorizan  en alguno tipos junto con la severidad de este en términos de su impacto en el software en:
+- Critico: Puede demorar el proceso, afecta a muchos usuarios
+- Mayor: Tiene mucho impacto pero posee soluciones provisorias 
+- Menor: Defecto aislado que se manifiesta raramente y que tiene poco impacto
+- Cosmético: Pequeños errores sin impacto en el funcionamiento correcto del sistema
+Idealmente todos los defectos deben cerrarse, aunque algunas veces las organizaciones entregan software con defectos conocidos dependiendo de sus estándares de cuando un producto puede entregarse
