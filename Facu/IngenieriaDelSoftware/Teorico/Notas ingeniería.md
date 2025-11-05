@@ -384,8 +384,8 @@ Sistemas distintos tienen estructuras CyC(Componentes y conectores) distintas, a
 - Un filtro es una entidad independiente y asincrónica
 - Un filtro no necesita saber la identidad de los filtros que envían o reciben datos
 - Un tubo es un canal de redirección unidireccional que transporta un flujo de un filtro a otro
-- Un tubo sólo conecta 2 componentes
-- Lo filtros deben hacer "buffering" y sincronización para asegurar el correcto funcionamiento como productor y consumidor 
+- Un tubo sólo conecta 2 componentes 
+- Lo filtros deben hacer "buffering" y sincronización para asegurar el correcto funcionamiento como productor y consumidor [^2]
 - Cada filtro debe trabajar sin conocer la identidad de los filtros productores o consumidores 
 - Un tubo debe conectar un puerto de salida de un filtro a un puerto de entrada de otro filtro
 - Un sistema *puro* de tubos y filtros usualmente requiere que cada filtro tenga su propio hilo de control
@@ -981,6 +981,9 @@ Si WMC es alto, entonces la clase es más propensa a errores
 
 ***Respuesta para una clase (RFC):*** CBC computa el número de clases a la cual una clase C esta acoplada, sin embargo no captura la fuerza de las conexiones
 RFC captura el grado de conexión de los métodos de una clase con otra clases. Concretamente RFC de una clase C es la cantidad de métodos que pueden ser invocados como respuesta de un mensaje recibido por un objeto de clase C. Es decir, la cantidad de todos los métodos de C mas los métodos de otras clases que reciben un mensaje de un método de C. Es mas probable que sea mas difícil testear clases con RFC alto. Muy significativo en la predicción de clases propensas a errores
+
+
+
 
 
 
