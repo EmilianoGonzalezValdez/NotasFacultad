@@ -1,0 +1,3 @@
+**Remplazar condicionales con polimorfismos:** Si el comportamiento depende de algún indicador de tipo, no se esta explotando el poder de la OO, entonces se debe remplazar tal análisis de casos a través de una jerarquía de clases apropiada
+
+**Subir métodos/atributos:** Los elementos comunes deben pertenecer a la superclase para que las clases hijas no deban definir la misma funcionalidad muchas veces

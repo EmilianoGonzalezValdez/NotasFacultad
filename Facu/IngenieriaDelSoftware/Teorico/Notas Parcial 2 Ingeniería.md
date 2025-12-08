@@ -1,7 +1,7 @@
 # Diseño detallado 
 
-El diseño detallado tiene como objetivo especificar la lógica de los distintos módulos especificados en el diseño del sistemas . Para ello utilizamos una notación textual, el problema es que como queremos un documento formal y claro no podemos usar un Lenguaje Natural para esto, ya que este es impreciso, ambiguo y conduce a problemas de comprensión. Entonces uno pensaría que podríamos optar por un Lenguaje Formal...
-Bueno, no realmente ya que estos usualmente tienen mucho detalle sobre la implementación, la cual no es importante para comunicar el diseño, los cuales terminan siendo un estorbo para la comprensión.
+El diseño detallado tiene como objetivo especificar la lógica de los distintos módulos especificados en el diseño del sistemas . Para ello utilizamos una notación textual, el problema es que como queremos un documento formal, no podemos usar un Lenguaje Natural para esto, ya que este es impreciso, ambiguo y conduce a problemas de comprensión. Entonces uno pensaría que podríamos optar por un Lenguaje Formal...
+Bueno, no realmente ya que estos usualmente tienen mucho detalle para la implementación, la cual no es importante para comunicar el diseño, los cuales terminan siendo un estorbo para la comprensión.
 A causa de esta falta de un lenguaje optimo es que existe **PDL** . Este tiene la sintaxis externa de un lenguaje de programación estructurado, pero su vocabulario es de lenguaje natural, lo cual nos da la libertad de ser tan específicos como nos parezca con el grado de detalle. Ahora veamos concretamente:
 - Ventajas PDL:
 	- Se puede integrar con código fuente, por lo que es fácil de mantener
@@ -14,17 +14,18 @@ A causa de esta falta de un lenguaje optimo es que existe **PDL** . Este tiene l
 snipet de PDL:
 ```
 minmax (in file) ARRAY a 
-DO UNTIL end of input 
-	READ an item into a 
-ENDDO 
-max, min := first item of a 
-DO FOR each item in a 
-	IF max < item THEN set max to item 
-	IF min > item THEN set min to item 
-ENDDO END
+	DO UNTIL end of input 
+		READ an item into a 
+	ENDDO 
+	max, min := first item of a 
+	DO FOR each item in a 
+		IF max < item THEN set max to item 
+		IF min > item THEN set min to item 
+	ENDDO 
+END
 ```
 
-PDL logra capturar la lógica completa del procedimiento, pero revela pocos detalles de la implementación. Para llevarlo a una implementación necesitamos que cada pseudo-sentencia de PDL sea convertida a una sentencia de lenguaje de programación. En PDL el diseño puede expresarse en el nivel de detalle mas adecuado para el problema, este permite un enfoque de refinamientos sucesivos 
+PDL logra capturar la lógica completa del procedimiento, pero revela pocos detalles de la implementación. Para llevarlo a una implementación necesitamos que cada pseudo-sentencia de PDL sea convertida a una sentencia de lenguaje de programación. En PDL el diseño puede expresarse en el nivel de detalle mas adecuado para el problema, este permite un enfoque de refinamientos sucesivos.
 A este método se lo llama **Refinamiento Paso a Paso**, donde en cada paso descomponemos una sentencia o mas del algoritmo actual en instrucciones mas detalladas hasta que todas las instrucciones sean lo suficientemente detalladas como para llevarlas fácilmente al lenguaje de programación
 
 ###### ¿Cómo sabemos que el diseño detallado tiene sentido?
@@ -45,9 +46,9 @@ El diseño detallado provee muchos detalles de lógica de control y estructura d
 
 El objetivo de la codificación es *implementar el diseño de la mejor manera posible*, escribiendo código el cual logre reducir los costos de testing y mantenimiento  siendo fácil de leer y comprender, aunque no necesariamente de escribir 
 
-Dado que objetivo de un programador es escribir programas simples y fáciles de leer con la menor cantidad de bugs en el menor tiempo posible, existen principios y pautas para la programación que pueden ayudar a escribir de alta calidad
+Dado que objetivo de un programador es escribir programas simples y fáciles de leer con la menor cantidad de bugs en el menor tiempo posible, existen principios y pautas para la programación que pueden ayudar a escribir código de alta calidad
 
-###### Programación estructurada 
+##### Programación estructurada 
 La programación estructurada se origino en los '70 en contra del uso de constructores de control como los "gotos". Su objetivo es simplificar la estructura de los programas de manera que sea fácil razonar sobre ellos.
 
 Un programa tiene una **estructura estática**, la cual es el orden de las sentencias en el código y una **estructura dinámica** la cual es el orden en el cual las sentencias se ejecutan. 
@@ -55,11 +56,11 @@ Para mostrar que un programa es correcto debemos mostrar que su comportamiento d
 
 Los constructores de la programación estructurada son de una única entrada y una única salida, de esta forma la ejecución de las sentencias se realizan en el orden en el que aparecen en el código. Las soluciones de software contienen estructuras de datos donde se guarda la información en las cuales los programas trabajan para realizar ciertas funciones. En general solo ciertas operaciones se realizan sobre la información , de modo tal que esta información debería ocultarse de manera que solo quede expuesta a esas operaciones. Este ocultamiento de información reduce el acoplamiento.
 
-###### El proceso de codificación
+##### El proceso de codificación
 La codificación comienza ni bien está disponible la especificación del diseño de los módulos. Normalmente los módulos se asignan a programadores individuales. Acá también existe la noción de desarrollo Top-Down o Bottom-Up dependiendo de que nivel de módulo se desarrolla primero.
 
 Hay 2 principales procesos de codificación:
-1. Proceso Básico: 
+1. Proceso Básico o programación incremental: 
 	- Escribir el código del modulo
 	- Realizar test de unidad
 	- Si hay algún error, arreglar bugs y repetir tests
@@ -71,17 +72,18 @@ Hay 2 principales procesos de codificación:
 	- Lo ideal seria que los test no sean mockeados
 	- Selftesting code
 
-Otra practica del Extreme Programming (además del TDD) es la programación de a pares, donde el código se escribe por dos programadores en vez de uno solo, mientras uno tipea, el otro va revisando tipeado. Estos roles se alternan periódicamente.
+Otra practica del Extreme Programming (además del TDD) es la programación de a pares, donde el código se escribe por dos programadores en vez de uno solo, mientras uno tipea, el otro va revisando lo tipeado. Estos roles se alternan periódicamente.
 
-Otro paso esencial que los programadores deben realizar es el control de código fuente, donde normalmente se utilizan herramientas como SVN, CVS, VVS. Prácticamente esta herramienta es un repositorio donde se almacenan los archivos del código y de donde se construirá el sistema. Estas herramientas mantienen una historia completa de los cambios t todas las versiones viejas pueden recuperarse 
+Otro paso esencial que los programadores deben realizar es el control de código fuente, donde normalmente se utilizan herramientas como SVN, CVS, VVS. Prácticamente esta herramienta es un repositorio donde se almacenan los archivos del código y de donde se construirá el sistema. Estas herramientas mantienen una historia completa de los cambios, permitiendo que todas las versiones viejas pueden recuperarse 
 
-###### Refactorización
-Usualmente los códigos se modifican con el find e aumentar su funcionalidad, con el tiempo estos cambios deterioran el diseño del principio, lo cual provoca que el código comience a hacerse mas complicado de modificar y mas susceptible a errores(lo cual conduce a una disminución de la productividad y calidad). La **Refactorización** es una técnica para mejorar el diseño del código existente, se realiza durante la codificación, pero el propósito no es agregar nuevas características, sino mejorar el diseño 
+##### Refactorización
+Usualmente los códigos se modifican con el fin de aumentar su funcionalidad, con el tiempo estos cambios deterioran el diseño impuesto en un principio, lo cual provoca que el código comience a hacerse mas complicado de modificar y mas susceptible a errores(lo cual conduce a una disminución de la productividad y calidad). La **Refactorización** es una técnica para mejorar el diseño del código existente, se realiza durante la codificación, pero el propósito no es agregar nuevas características, sino mejorar el diseño actual
 La **Refactorización** es la tarea que permite realizar cambios en un programa con el fin de simplificarlo  mejorar su comprensión, hacerlo testeable y mantenible sin cambiar el comportamiento observacional de este. Es decir, la estructura interna del programa cambio, pero su comportamiento externo permanece igual. Esta intenta lograr una o mas de las siguientes cosas:
 - Reducir acoplamiento 
 - Incrementar cohesión
 - Mejorar respuesta del principio abierto-cerrado
-Estos cambios se realizan separadamente de la codificación normal. Esto es un gran riesgo, por ello, para disminuir esta posibilidad:
+
+Estos cambios se realizan separadamente de la codificación normal. Esto presenta un gran riesgo de romper la funcionalidad existente, por ello, para disminuir la posibilidad de que esto ocurra:
 - Se refactoriza de a pequeños pasos
 - Se dispone de scripts para test automatizados para testear la funcionalidad existente
 
@@ -106,7 +108,7 @@ Hay muchas formas para mejorar el diseño de los programas, pero todos se enfoca
 - Partes del código se extraen como nuevos métodos
 - Variables referenciadas en estas partes se transforman en parámetros 
 - Variables declaradas en esta parte pero utilizadas en otras partes deben definirse en el método original
-- También se realiza si hay un método que retorna un valor Y cambia ele estado del objeto
+- También se realiza si existe un método que retorna un valor y además cambia el estado del objeto
 
 **Agregar/eliminar parámetros:** Sirve para simplificar las interfaces donde sea posible:
 - Agregar sólo si los parámetros existentes no proveen toda la información necesaria 
@@ -124,7 +126,7 @@ Hay muchas formas para mejorar el diseño de los programas, pero todos se enfoca
 ###### Mejoras de Jerarquías 
 **Remplazar condicionales con polimorfismos:** Si el comportamiento depende de algún indicador de tipo, no se esta explotando el poder de la OO, entonces se debe remplazar tal análisis de casos a través de una jerarquía de clases apropiada
 
-**Subir métodos/atributos:** Los elementos comunes deben perteneces a la superclase para que las clases hijas no deban definir la misma funcionalidad muchas veces 
+**Subir métodos/atributos:** Los elementos comunes deben pertenecer a la superclase para que las clases hijas no deban definir la misma funcionalidad muchas veces 
 
 ###### Verificación 
 
@@ -149,7 +151,7 @@ Un proyecto exitoso es el que satisface las expectativas en costo, tiempo y cali
 Estos modelos de proceso no se traducen directamente al proceso a usar en el proyecto, mas bien el proyecto realmente utilizado es una adaptación de algún modelo dependiendo la circunstancia y elección. Normalmente este proceso es que guía al proyecto.
 
 Hay 2 procesos fundamentales que son ejecutados por diferentes personas:
-- **Proceso de Desarrollo**: Es el corazón del proceso de software, los otros procesos giran alrededor de el . Se enfoca en las actividades para el desarrollo y garantizar la calidad necesarias
+- **Proceso de Desarrollo**: Es el corazón del proceso de software, los otros procesos giran alrededor de el. Se enfoca en las actividades para el desarrollo y garantizar la calidad necesarias
 - **Administración del Proyecto**: Se enfoca en el planeamiento y control del proceso de desarrollo con el fin de cumplir los objetivos 
 
 Como dijimos antes normalmente el proceso es un conjunto de fases cada una con una tarea bien definida que produce una salida, las salidas intermedias se las conoce como *producto de trabajo* y cada una de estas es una entidad formal y tangible capaz de ser verificada
@@ -160,9 +162,9 @@ Cada una de dichas fases sigue el enfoque **ETVX**:
 - V(Verification): Las inspecciones/controles/revisiones/verificaciones que deben realizarse a la salida de la fase
 - X(Exit): Cuando puede considerarse que la fase fue realizada exitosamente
 
-Las características son las mismas que siempre: Proveer alta CyP. Para ello existen Controles de Calidad (CC) que tienen como objetivo prevenir defectos. Los procesos deben conseguir repetir el desempeño cuando se utilizan en distintos proyectos, es decir que el resultado de un proceso debe ser predecible bajo control estadístico. Además todo proceso debe lograr adaptarse a cambios repentinos.
+Las características deseadas en el software son las mismas que siempre: Proveer alta CyP. Para ello existen Controles de Calidad (CC) que tienen como objetivo prevenir defectos. Los procesos deben conseguir repetir el desempeño cuando se utilizan en distintos proyectos, es decir que el resultado de un proceso debe ser predecible bajo control estadístico. Además todo proceso debe lograr adaptarse a cambios repentinos.
 
-Ahora si podemos definir el objetivo del **Proceso de Desarrollo de Software** el cual es construir sistemas de software dentro de los costos y el tiempo planeado, cronograma y que posea la calidad apropiada, satisfaciendo al cliente, alta CyP. Aunque para ello se necesita un proceso adecuado para alcanzar los objetivos.
+Ahora si podemos definir el objetivo del **Proceso de Desarrollo de Software** el cual es construir sistemas de software dentro de los costos y el tiempo planeado, respetando el cronograma, y que posea la calidad apropiada, satisfaciendo al cliente, alta CyP. Aunque para ello se necesita un proceso adecuado para alcanzar los objetivos.
 
 Normalmente este proceso esta compuesto por las siguientes fases:
 - Análisis de requerimientos y especificación: Tiene como objetivo comprender precisamente el problema, especifica el "que". Su salida es la SRS
@@ -190,7 +192,7 @@ Este proceso se encarga de la asignación y administración de los recursos entr
 ###### Proceso de inspección
 El objetivo principal de este proceso es **Detectar los defectos en los productos de trabajo**. Actualmente es utilizado en todos los productos de trabajo, mejora tanto la calidad como la productividad. Estas inspecciones pueden realizarse sobre cualquier documento, sean requerimientos, planificaciones, diseños, etc. 
 
-Realizado por el personal técnico para el personal técnico, es decir, es una revisión hecha por pares. Tiene 4 fases bien estructuradas con toles definidos para cada participante y su foco es encontrar problemas, no su resolución. Los roles presentes son:
+Realizado por el personal técnico para el personal técnico, es decir, es una revisión hecha por pares. Tiene 4 fases bien estructuradas con roles definidos para cada participante y su foco es encontrar problemas, no su resolución. Los roles presentes son:
 - Moderador: Tiene la responsabilidad general
 - Autor: Quien realizó el producto de trabajo
 - Revisor: Quien identifica los defectos
@@ -213,7 +215,7 @@ Un proyecto de software produce muchos ítems: programas, documentos, datos, man
 
 Para dejarlo claro, la administración de configuración del software (SCM) controla sistemáticamente los cambios producidos. Se enfoca en los cambios durante la evolución, los cambios de requerimientos se manejan aparte. Este proceso requiere tanto disciplina como herramientas.
 
-SCM es usualmente independiente del proceso de desarrollo, a medida que los ítems se producen, estos se introducen en la SCM. Cabe aclarar que SCM solo controla los ítems del proceso de desarrollo. De esta forma *la administración de configuración debe asegurar que as distintas versiones se combinen apropiadamente sin perdidas*
+SCM es usualmente independiente del proceso de desarrollo, a medida que los ítems se producen, estos se introducen en la SCM. Cabe aclarar que SCM solo controla los ítems del proceso de desarrollo. De esta forma *la administración de configuración debe asegurar que las distintas versiones se combinen apropiadamente sin perdidas*
 
 Las funcionalidades necesarias son:
 - Recolectar todos las fuentes, documentos y otra información del sistema actual
@@ -250,7 +252,7 @@ Estos cambios se inician a través de un requerimiento de cambio. Existe un regi
 ###### Proceso de Administración de Procesos
 La administración de procesos se enfoca en la *evaluación y mejora del proceso* en si. (**NO CONFUNDIR CON ADMINISTRACIÓN DEL PROYECTO**)
 
-Para lgorar mejorar el proceso se debe comprender el proceso actual:
+Para lograr mejorar el proceso se debe comprender el proceso actual:
 - Requiere que el proceso este bien documentado
 - Que sea apropiadamente ejecutado en los proyectos 
 - Recolectar datos de los proyectos para comprender el desempeño del proceso en los proyectos
