@@ -291,15 +291,15 @@ Dado un conjunto de requerimientos es deseable/necesario saber cuanto costara en
 **Un modelo intenta determinar la estimación del esfuerzo a partir de valores de ciertos parámetros**, los cuales dependen del proyecto. De esta forma el modelo reduce el problema de estimar el esfuerzo del proyecto al de estimar ciertos **parámetros claves** del proyecto, los cuales deben poder medirse en etapas muy tempranas del proyecto. Hay 2 enfoques:
 
 - Estimación Top-Down: Se intenta determinar el esfuerzo total y luego calcular el esfuerzo de cada parte del proyecto. Primero se estima el tamaño global del proyecto en KLOC, luego se calcula $\text{esfuerzo} = a * \text{tamaño}^b$ donde a y b se determinan a través de análisis de regresión sobre proyectos pasados
-- Estimación Bottom-Up: Primero identificamos los módulos del sistema y los clasificamos como simples, medios o complejos. Luego determinamos el esfuerzo total de codificación para cada tipo de módulo, obtenemos el esfuerzo total de codificaciones en base a la clasificación anterior y al conteo de cada tipo. Utilizamos la distribución de esfuerzos de proyectos similares para estimar el esfuerzo de cara tarea y por ultimo refinamos los estimadores anteriores en base a factores específicos del proyecto
+- Estimación Bottom-Up: Primero identificamos los módulos del sistema y los clasificamos como simples, medios o complejos. Luego determinamos el esfuerzo total de codificación para cada tipo de módulo, obtenemos el esfuerzo total de codificaciones en base a la clasificación anterior y al conteo de cada tipo. Utilizamos la distribución de esfuerzos de proyectos similares para estimar el esfuerzo de cada tarea y por ultimo refinamos los estimadores anteriores en base a factores específicos del proyecto
 - COCOMO:
 	- Tiene enfoque top-down
 	- Utiliza tamaño ajustado con algunos factores 
 	- Procedimiento:
-		- Obtener el estimador inicial usando el tamaño
-		- Determinar un conjunto de  factores de multiplicación representando distintos tributos
-		- Ajustar el estimador de esfuerzo escalándolo según el factor de multiplicación final
-		- Calcular el estimador de esfuerzo de cada fase principal
+		- Obtener el estimador inicial usando el tamaño tal que $E = a*\text{tamaño}^b$  donde tanto $a$ como $b$ los sacamos en si el sistema es ==Orgánico, Semi-rígido o Rígido==
+		- Determinar un conjunto de  factores de multiplicación representando distintos atributos
+		- Ajustar el estimador de esfuerzo escalándolo según el factor de multiplicación final con la formula $\text{esfuerzo} = E * \prod_{k=I}^{15} {f_k}$, donde $\prod_{k=I}^{15} {f_k}$ es el factor de ajuste    
+		- Calcular el estimador de esfuerzo de cada fase principal en base al tipo de sistema, hay un cuadro para cada tipo de sistema
 
 Los factores de ajuste son:
 - Atributos del software:
@@ -327,12 +327,12 @@ Hay 2 niveles de planificación:
 - Planificación global
 - Planificación detallada 
 
-La *planificación global* depende fuertemente del esfuerzo estimado, hay una cierta flexibilidad ,dependiendo de los recursos asignados, para una cierta estimación. Un método es estimar el tiempo programado del proyecto en meses como una función del esfuerzo en personas/mes
+La *planificación global* depende fuertemente del esfuerzo estimado, hay una cierta flexibilidad, dependiendo de los recursos asignados para una cierta estimación. Un método es estimar el tiempo programado del proyecto en meses como una función del esfuerzo en personas/mes
 $\text{Rule of thumb:} \space M =  \sqrt{esfuerzo}$
 
 Seguidamente determinar la duración de cada meta parcial principal del proyecto. Luego distribuir los recursos, aunque la distribución de los RRHH no es homogénea, sigue aproximadamente una curva de Rayleigh. Con dicha curva y la distribución de esfuerzos se puede determinar el tiempo de las metas parciales. Cabe aclarar que la distribución de esfuerzo y la distribución de los tiempos en las fases son 2 cosas distintas
 
-En la *planificación detallada*  se pueden utilizar herramientas como ayuda. En la teoría cualquier actividad a realizarse debe quedar reflejada en la planificación detallada, donde cada tarea tiene asignado un nombre, esfuerzo, fecha, duración, recursos, etc. Esta planificación debe ser consistente con las metas, dado que las tareas son subactividades de las actividades a nivel de metas, así que el esfuerzo individual sebe sumar apropiadamente preservando la duración total de la meta 
+En la *planificación detallada*  se pueden utilizar herramientas como ayuda. En la teoría cualquier actividad a realizarse debe quedar reflejada en la planificación detallada, donde cada tarea tiene asignado un nombre, esfuerzo, fecha, duración, recursos, etc. Esta planificación debe ser consistente con las metas, dado que las tareas son subactividades de las actividades a nivel de metas, así que el esfuerzo individual debe sumar apropiadamente preservando la duración total de la meta 
 
 ###### Estructura del equipo de trabajo
 Para asignar las tareas en la planificación detallada es necesario un equipo de trabajo estructurado.
@@ -358,6 +358,8 @@ Se deben identificar los ítems de configuración y especificar los procedimient
 Objetivo básico: entregar un software de alta calidad .
 
 Defecto: Algo que causa que el software se comporte de manera inconsistente, con respecto a los requerimientos o necesidades del cliente
+
+Objetivo del proyecto: Entregar software con baja densidad de defectos entregados 
 
 El desarrollo de software es una actividad altamente dependiente de personas, por lo cual es propensa a errores. Estos defectos se pueden introducir en cualquier etapa. Como el objetivo de calidad es la baja densidad de defectos, los defectos deben eliminarse. Normalmente esto se hace mediante las actividades de control de calidad incluyendo revisiones y testing
 
@@ -398,7 +400,7 @@ Durante el planeamiento del proyecto se realiza una *Evaluación de Riesgos*. Es
 
 La cantidad de riesgos puede ser grande, por ello se deben priorizar para enfocar la atención en las áreas de alto riesgo 
 
-**Definición de prioridades y Análisis de los riesgos**: Establecer la probabilidad de materialización de los riesgos identificados y la pérdida que éstos originarían. Ordenas de acuerdo al "valor de exposición al riesgo (RE)"
+**Definición de prioridades y Análisis de los riesgos**: Establecer la probabilidad de materialización de los riesgos identificados y la pérdida que éstos originarían. Luego se debe ordenar de acuerdo al "valor de exposición al riesgo (RE)"
 Es decir, RE es el valor esperado de la perdida debido a un riesgo. Siempre queremos realizar planes para tratar con los riesgos de mayor RE, clasificando las probabilidades de ocurrencia como Bajas, Medias o Altas, luego clasificar los impactos de los riesgos como Bajos, Medios o Altos para poder enfocarnos solamente en todos los riesgos AA y AM/MA
 
 *Tareas de Control de Riesgos*
@@ -416,9 +418,9 @@ El plan de administración del proyecto es meramente un documento que sirve como
 - Tiempo: es la mas importante de las medidas
 - Esfuerzo: Es el principal recurso
 - Defectos: Determinan calidad
-- Tamaño:: Mucha información se normaliza respecto al tamaño
+- Tamaño: Mucha información se normaliza respecto al tamaño
 
-El objetivo del seguimiento del proyecto es hacer visible la ejecución del proyecto de manera de realizar acciones correctivas cuando sea necesario con el fin de asegurar el éxito del proyecto. hay distintos niveles de seguimientos:
+El objetivo del seguimiento del proyecto es hacer visible la ejecución del proyecto de manera de realizar acciones correctivas cuando sea necesario con el fin de asegurar el éxito del proyecto. Hay distintos niveles de seguimientos:
 - Nivel de actividad:
 	- Asegura que cada actividad se realiza apropiadamente y a tiempo
 	- Realizado diariamente por los administradores de proyecto 

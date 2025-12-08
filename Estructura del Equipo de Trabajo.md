@@ -1,0 +1,14 @@
+Para asignar las tareas en la planificación detallada es necesario un equipo de trabajo estructurado.
+- Organización Jerárquica:
+	- Es la más común
+	- Hay un administrador de proyecto con la responsabilidad global, realiza diseño, asigna recursos, etc.
+	- Tiene programadores, testers y administrador de configuración para ejecutar las tareas detalladas 
+	- Una persona podría cumplir mas de un rol
+- Equipos democráticos:
+	- Funciona en pequeños grupos
+	- El liderazgo es rotativo
+	- ALTERNATIVA:
+		- Reconoce tres tareas principales: Desarrollo, testing y administración del programa
+		- Cada una tiene su propio equipo y cada equipo su líder
+		- Todos reportan a un líder general
+		- Se utiliza para el desarrollo de grandes productos 
