@@ -1,0 +1,52 @@
+package subscription;
+
+/*Esta clase abstrae el contenido de una sola suscripcion que ocurre en 
+lista de suscripciones que figuran en el archivo de suscrpcion (json) */
+
+public class Subscription{
+	
+	private String url;
+	private String urlType;	
+  private String content;	
+	public Subscription(String url, String urltype, String contenido){
+		this.url = url;
+		this.urlType = urltype;
+    this.content = contenido;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getUrlType() {
+		return urlType;
+	}
+	public void setUrlType(String urlType) {
+		this.urlType = urlType;
+	} 
+  public String getContent(){
+    return content;
+  }
+  public void setContent(String content_new) {
+    this.content = content_new;
+  }
+	
+	@Override
+	public String toString() {
+		return "{url=" + getUrl() + ", urlType=" + getUrlType() + "content="+getContent()+ "}";
+	}
+	
+	public void prettyPrint(){
+		System.out.println(this.toString());
+	}
+
+	
+	
+
+	
+	
+	
+}

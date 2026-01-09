@@ -1,0 +1,224 @@
+
+---------------------https://rss.nytimes.com/services/xml/rss/nyt/Business.xml---------------------
+
+Title: Oil Up, Global Stocks Down After Israel Strikes Iran
+Description: Oil prices are up and stocks are down, as investors fear a potential wider regional conflict.
+Publication Date: Fri, 13 Jun 2025 12:24:13 +0000
+Link: https://www.nytimes.com/2025/06/13/business/dealbook/markets-oil-israel-strikes-iran.html
+
+Title: Where’s the Inflation From Tariffs? Just Wait, Economists Say.
+Description: Are predictions for a jump in consumer prices too early, or just wrong?
+Publication Date: Fri, 13 Jun 2025 09:01:42 +0000
+Link: https://www.nytimes.com/2025/06/13/business/economy/tariff-trade-war-inflation.html
+
+Title: New Fees on Floating Garages Are Trump’s Latest Effort to Revive U.S. Shipbuilding
+Description: President Trump is targeting special foreign-made vessels called ro-ros, which transport vehicles, but the fees could raise the price of cars up to $300.
+Publication Date: Fri, 13 Jun 2025 09:01:36 +0000
+Link: https://www.nytimes.com/2025/06/13/business/shipping-cars-ro-ros.html
+
+Title: China Labor Bulletin, a Rights Group in Hong Kong, Shuts Down
+Description: The China Labor Bulletin, founded by Han Dongfang, tracked factory closures and worker protests in China. It cited financial difficulties for its dissolution.
+Publication Date: Fri, 13 Jun 2025 09:02:11 +0000
+Link: https://www.nytimes.com/2025/06/12/business/hong-kong-labor-rights-nonprofit-closes.html
+
+Title: Oil Prices Surge and Stock Markets Stumble After Israel Strikes Iran
+Description: The military strikes jolted investors, raising concerns that a broader Mideast conflict would disrupt the world’s energy supplies.
+Publication Date: Fri, 13 Jun 2025 10:42:07 +0000
+Link: https://www.nytimes.com/2025/06/12/business/israel-iran-oil-stock-markets.html
+
+Title: Meta Invests $14.3 Billion in Scale AI to Kick-Start Superintelligence Lab
+Description: Meta is making its first major minority investment in an outside company as it tries to catch up to a growing field of artificial intelligence rivals.
+Publication Date: Fri, 13 Jun 2025 01:21:00 +0000
+Link: https://www.nytimes.com/2025/06/12/technology/meta-scale-ai.html
+
+Title: F.A.A. Further Restricts Area Around Reagan Airport to Helicopters
+Description: The agency has taken steps to reduce the risk of midair collisions after a military helicopter struck a commercial flight in January, killing everyone on both crafts.
+Publication Date: Thu, 12 Jun 2025 20:40:39 +0000
+Link: https://www.nytimes.com/2025/06/12/us/politics/faa-reagan-airport.html
+
+Title: David H. Murdock, a Rags-to-Riches Corporate Raider, Dies at 102
+Description: He was a school dropout at 14 and homeless for a spell, but as a driven investor and chief of Dole he became a billionaire. Later came another quest: to extend life through better nutrition.
+Publication Date: Fri, 13 Jun 2025 05:57:27 +0000
+Link: https://www.nytimes.com/2025/06/12/business/dealbook/david-h-murdock-dead.html
+
+Title: Do Californians Really Pay Trump’s Bills?
+Description: The rising tension between President Trump and Gov. Gavin Newsom is reviving questions about who pays into — and who takes from — the federal government.
+Publication Date: Thu, 12 Jun 2025 21:05:35 +0000
+Link: https://www.nytimes.com/2025/06/12/upshot/trump-california-donor-states.html
+
+Title: Elon Musk’s xAI Could Be Getting $250 Million in Investments
+Description: Two dozen venture capital firms and other investors are investing in xAI, the artificial intelligence and social media company.
+Publication Date: Thu, 12 Jun 2025 22:37:27 +0000
+Link: https://www.nytimes.com/2025/06/12/business/xai-elon-musk-investors.html
+
+Title: G.O.P. Senators Want Fewer Cuts to Food Aid, Teeing Up a Fight with the House
+Description: Republicans whose constituents rely on nutritional assistance worry that cuts to those programs approved by the House will saddle their states with huge costs and harm low-income children.
+Publication Date: Thu, 12 Jun 2025 20:39:52 +0000
+Link: https://www.nytimes.com/2025/06/12/us/politics/republican-senators-food-aid.html
+
+Title: FTC May Impose Political Bias Rule on Omnicom and Interpublic Merger
+Description: The Federal Trade Commission is considering restrictions on Omnicom and Interpublic to prevent the combined company from refusing to place ads on platforms for political reasons.
+Publication Date: Thu, 12 Jun 2025 18:47:40 +0000
+Link: https://www.nytimes.com/2025/06/12/business/ftc-omnicom-interpublic-merger.html
+
+Title: What Caused the Air India Plane Crash?
+Description: Safety experts said investigators would be looking at why and how the plane started descending during its take off.
+Publication Date: Thu, 12 Jun 2025 22:38:03 +0000
+Link: https://www.nytimes.com/2025/06/12/business/india-plane-crash-causes.html
+
+Title: Boeing’s 787 Dreamliner Raised Safety Concerns But Had Never Crashed Before
+Description: There are more than 1,100 of the jets in service today. Air India flies nearly three dozen of them.
+Publication Date: Thu, 12 Jun 2025 14:38:21 +0000
+Link: https://www.nytimes.com/2025/06/12/business/india-plane-crash-boeing-787-dreamliner-safety.html
+
+Title: How Companies Are Bracing for Trump’s Immigration Crackdown
+Description: Sectors including construction, hospitality, health care and manufacturing are on high alert. Economists are worried about the labor market and growth.
+Publication Date: Thu, 12 Jun 2025 15:29:32 +0000
+Link: https://www.nytimes.com/2025/06/12/business/dealbook/companies-trump-immigration-crackdown.html
+
+Title: Meter, Networking Start-Up, Raises $170 Million
+Description: The company has collected $170 million in new capital as it seeks to help connect data centers and other businesses in the age of artificial intelligence.
+Publication Date: Fri, 13 Jun 2025 12:23:11 +0000
+Link: https://www.nytimes.com/2025/06/12/business/dealbook/meter-networking-fundraise.html
+
+Title: Boeing 787 Crash in India Brings Fresh Scrutiny to Plane Maker’s Safety Record
+Description: The crash happened just weeks after the company cut a deal with the U.S. government to avoid taking criminal responsibility for a pair of deadly crashes in 2018 and 2019.
+Publication Date: Thu, 12 Jun 2025 19:31:37 +0000
+Link: https://www.nytimes.com/2025/06/12/business/boeing-787-dreamliner-crash-safety-record.html
+
+Title: The Art of the Stall: China’s Strategy for Dealing With Trump
+Description: Beijing has gained time to build up its own strengths by drawing out negotiations with the United States, using its chokehold over critical minerals.
+Publication Date: Thu, 12 Jun 2025 10:11:23 +0000
+Link: https://www.nytimes.com/2025/06/12/world/asia/trump-china-trade-deal.html
+
+Title: Traveling to Europe? Here’s What to Expect From Tourism Protests on June 15.
+Description: On Sunday, activists in Barcelona, Lisbon and other hot spots plan to take to the streets to voice their concerns about “touristification.”
+Publication Date: Thu, 12 Jun 2025 14:30:25 +0000
+Link: https://www.nytimes.com/2025/06/12/travel/europe-tourism-protests.html
+
+Title: Charging Your EV May Be Getting Easier, Even if It’s Not a Tesla
+Description: It is becoming easier to find fast chargers for electric vehicles, and they are more likely to work — and not just for Teslas.
+Publication Date: Thu, 12 Jun 2025 09:02:26 +0000
+Link: https://www.nytimes.com/2025/06/12/business/electric-vehicle-charging-tesla.html
+
+Title: How Washington Has Tried to Control China’s Tech
+Description: Under three presidential administrations, officials in Washington have used export controls to hold back China’s access to advanced technology.
+Publication Date: Thu, 12 Jun 2025 06:58:05 +0000
+Link: https://www.nytimes.com/2025/06/12/business/washington-china-export-controls-tech-huawei.html
+
+Title: New China Trade ‘Deal’ Takes U.S. Back to Where It Started
+Description: If a handshake agreement holds, it will merely undo some of the damage from the trade war that President Trump started.
+Publication Date: Thu, 12 Jun 2025 06:55:34 +0000
+Link: https://www.nytimes.com/2025/06/11/us/politics/us-china-trade-deal-trump.html
+
+Title: Washington Post Names Adam O’Neal as Opinion Editor
+Description: Mr. O’Neal, a correspondent for The Economist, will be in charge of championing “personal liberties and free markets,” the section’s new direction laid out by Jeff Bezos.
+Publication Date: Wed, 11 Jun 2025 20:27:41 +0000
+Link: https://www.nytimes.com/2025/06/11/business/media/washington-post-opinion-editor-adam-oneal.html
+
+Title: How Labor Unions Came to Define the L.A. Immigration Protests
+Description: Unions have backed immigrant rights in California and have been on the forefront of resisting the Trump administration’s deportations.
+Publication Date: Thu, 12 Jun 2025 17:15:16 +0000
+Link: https://www.nytimes.com/2025/06/11/business/economy/la-protests-immigrants-unions.html
+
+Title: The House’s Policy Bill Would Lose Money. Could Trump’s Tariffs Replace It?
+Description: The short answer is probably not, according to multiple forecasters.
+Publication Date: Thu, 12 Jun 2025 16:34:06 +0000
+Link: https://www.nytimes.com/2025/06/11/business/trump-tariffs-tax-bill.html
+
+Title: Senate Republicans Want to Trim Some of Trump’s Tax Cuts in Domestic Policy Bill
+Description: G.O.P. senators are considering whether to further curb the president’s favorite tax cuts as they rewrite key portions of the sprawling domestic agenda bill passed by the House.
+Publication Date: Wed, 11 Jun 2025 19:13:16 +0000
+Link: https://www.nytimes.com/2025/06/11/us/politics/republicans-trump-populist-tax-cuts.html
+
+Title: Musk Called Trump Privately Before Posting Message of ‘Regret’
+Description: It remains to be seen how Mr. Trump will handle the attempted rapprochement and whether the two men’s relationship can be restored.
+Publication Date: Wed, 11 Jun 2025 23:16:26 +0000
+Link: https://www.nytimes.com/2025/06/11/us/politics/musk-trump.html
+
+Title: Midea Recalls AC Units Over Mold Risk, Leaving Customers Frustrated
+Description: Midea’s recall of 1.7 million air-conditioners is causing frustration and confusion among its design-conscious user base.
+Publication Date: Thu, 12 Jun 2025 16:12:23 +0000
+Link: https://www.nytimes.com/2025/06/11/style/midea-air-conditioners-mold-recall-reaction.html
+
+Title: Richard Beattie, Early Engineer of Private Equity Takeovers, Dies at 86
+Description: A top Wall Street lawyer, he worked on some of the biggest corporate mergers in history, including KKR’s takeover of Nabisco in 1989. He also served in the Carter administration and in city government.
+Publication Date: Wed, 11 Jun 2025 17:43:44 +0000
+Link: https://www.nytimes.com/2025/06/11/business/dealbook/richard-beattie-dead.html
+
+Title: How the UK Plans to Boost Its Economy
+Description: Rachel Reeves, the chancellor of the Exchequer, broke down public spending plans, including more money for the military, public transport and affordable housing.
+Publication Date: Wed, 11 Jun 2025 18:11:19 +0000
+Link: https://www.nytimes.com/2025/06/11/business/uk-spending-economy.html
+
+Title: Disney and Universal Sue A.I. Firm Midjourney for Copyright Infringement
+Description: The suit, against Midjourney, is the first time major Hollywood companies have sued over A.I.-generated images.
+Publication Date: Wed, 11 Jun 2025 19:17:17 +0000
+Link: https://www.nytimes.com/2025/06/11/business/media/disney-universal-midjourney-ai.html
+
+Title: New York Times Names Ligaya Mishan and Tejal Rao as Co-Chief Restaurant Critics
+Description: The pair, Ligaya Mishan and Tejal Rao, are part of an effort to expand starred restaurant reviews across the country, the company said.
+Publication Date: Wed, 11 Jun 2025 13:20:43 +0000
+Link: https://www.nytimes.com/2025/06/11/business/media/nyt-restaurant-critics-announced.html
+
+Title: CPI Shows U.S. Inflation Remains Muted as Tariff Impact Is Limited
+Description: The Consumer Price Index rose 2.4 percent in May, from a year earlier, a reading that reflects only the initial impact of President Trump’s tariffs.
+Publication Date: Wed, 11 Jun 2025 18:17:24 +0000
+Link: https://www.nytimes.com/2025/06/11/business/cpi-may-inflation-tariffs.html
+
+Title: What’s Next as the Latest U.S.-China Trade Talks Conclude
+Description: U.S. negotiators say the London summit represented progress. But investors and business leaders remain wary.
+Publication Date: Wed, 11 Jun 2025 13:23:00 +0000
+Link: https://www.nytimes.com/2025/06/11/business/dealbook/us-china-trade-talks.html
+
+Title: China Walks a Line in U.S. Trade Talks, Trying Not to Overplay Its Hand
+Description: China has leverage it can use by limiting access to its rare earth supplies, but it does not want to sacrifice its reputation as a reliable supplier.
+Publication Date: Wed, 11 Jun 2025 18:07:16 +0000
+Link: https://www.nytimes.com/2025/06/11/business/china-rare-earths.html
+
+Title: Trump’s Pick for F.A.A. Leader Is Grilled Over Views on Pilot Training and Safety
+Description: The confirmation hearing for Bryan Bedford, a commercial airline executive, came as the agency confronts critical staffing shortages and questions about passenger safety.
+Publication Date: Wed, 11 Jun 2025 21:12:13 +0000
+Link: https://www.nytimes.com/2025/06/11/us/politics/bryan-bedford-faa-senate.html
+
+Title: Rubio Is Pressing to Open Sanctions Investigation Into Harvard
+Description: Experts and former officials said it was unusual for a cabinet secretary to try to influence the Treasury Department’s sanctions process to target a domestic entity.
+Publication Date: Wed, 11 Jun 2025 19:07:08 +0000
+Link: https://www.nytimes.com/2025/06/11/us/politics/rubio-harvard-sanctions-investigation.html
+
+Title: Elon Musk Says His Trump Criticisms ‘Went Too Far’
+Description: President Trump and Elon Musk traded social media barbs last week. Mr. Trump has said that he has no interest in repairing the relationship with his former adviser.
+Publication Date: Wed, 11 Jun 2025 19:15:17 +0000
+Link: https://www.nytimes.com/2025/06/11/business/elon-musk-trump-feud.html
+
+Title: Germany Embraces LNG as It Weans Itself Off Russian Gas
+Description: The country, like others across Europe, is building more facilities to handle an increase in imports of liquefied natural gas, much of it from the United States.
+Publication Date: Thu, 12 Jun 2025 00:31:42 +0000
+Link: https://www.nytimes.com/2025/06/11/business/russia-germany-gas-lng.html
+
+Title: U.S. Court Agrees to Keep Trump Tariffs Intact as Appeal Gets Underway
+Description: The appeals court’s decision delivered an important but interim victory for the Trump administration.
+Publication Date: Wed, 11 Jun 2025 01:24:21 +0000
+Link: https://www.nytimes.com/2025/06/10/business/economy/trump-tariffs-court.html
+
+Title: Trump Hails Progress With China, but Details Are Sketchy
+Description: Two days of trade talks resulted in what leaders called a framework agreement meant to solidify terms of a truce that the superpowers reached in Geneva last month.
+Publication Date: Wed, 11 Jun 2025 18:57:39 +0000
+Link: https://www.nytimes.com/2025/06/10/business/economy/us-china-trade-deal.html
+
+Title: ABC Says Terry Moran, Suspended for Social Media Posts, Will Not Return
+Description: ABC News suspended Mr. Moran on Sunday after he wrote on X that Stephen Miller, the deputy White House chief of staff, was “a world-class hater.”
+Publication Date: Tue, 10 Jun 2025 22:52:42 +0000
+Link: https://www.nytimes.com/2025/06/10/business/media/terry-moran-abc-news.html
+
+Title: A Familiar On-Air Face Amid the L.A. Protests: Dr. Phil
+Description: Oprah Winfrey’s psychologist sidekick made appearances before and after immigration raids, and interviewed President Trump’s border czar for his fledgling TV network.
+Publication Date: Tue, 10 Jun 2025 20:08:22 +0000
+Link: https://www.nytimes.com/2025/06/10/business/media/la-protests-dr-phil.html
+
+Title: 23andMe Customers Did Not Expect Their DNA Data Would Be Sold, Lawsuit Claims
+Description: The genetic-testing company, which collected DNA data from users, is for sale in bankruptcy court. Now, 27 states and the District of Columbia oppose selling the data without express consent.
+Publication Date: Tue, 10 Jun 2025 20:57:26 +0000
+Link: https://www.nytimes.com/2025/06/10/business/23andme-data-lawsuit.html
+
+Title: Barbara Holdridge, Whose Record Label 

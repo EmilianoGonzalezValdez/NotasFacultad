@@ -1,3 +1,0 @@
-El objetivo de la codificación es _implementar el diseño de la mejor manera posible_, escribiendo código el cual logre reducir los costos de testing y mantenimiento siendo fácil de leer y comprender, aunque no necesariamente de escribir
-
-Dado que objetivo de un programador es escribir programas simples y fáciles de leer con la menor cantidad de bugs en el menor tiempo posible, existen principios y pautas para la programación que pueden ayudar a escribir código de alta calidad

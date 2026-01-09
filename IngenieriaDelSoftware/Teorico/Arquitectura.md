@@ -1,0 +1,6 @@
+La arquitectura del software de un sistema es la estructura de este que comprende los elementos del software, las propiedades externamente visibles de ellos y la relación entre ellas. La arquitectura es el diseño de mas alto nivel, donde se hacen las elecciones de tecnología, productos a utilizar, servidores, etc. Divide el problema en partes lógicas tal que cada parte pueda ser comprendida independientemente describiendo también la relación entre ellas.
+Además nos ayuda con:
+- Comunicación y comprensión: Al mostrar solo el nivel mas alto del sistema, facilita mucho la comunicación definiendo un marco de comprensión común entre los interesados
+- Reúso: Una forma de reúso es componer el sistema con partes existentes, por ello se elige una arquitectura tal que las componentes existentes encajen adecuadamente con otra componentes a desarrollar 
+- Construcción y evolución:  La división provista por la arquitectura servirá para guiar el desarrollo del sistema. Ayudando a asignar equipos de trabajos a diferentes partes, además de facilitar la elección de partes que necesitan cambiarse durante la evolución del software 
+- Análisis: Es deseable  que propiedades de confiabilidad y desempeño puedan determinarse en el diseño de alto nivel, permitiendo considerar distintas alternativas de diseño hasta encontrar los niveles de satisfacción deseados

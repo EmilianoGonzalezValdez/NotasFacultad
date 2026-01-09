@@ -1,1 +1,0 @@
-El software debe cambiar para adaptarse a los cambios de la institución/empresa. Es aquí donde las practicas de [[Ingeniería del Software]] deben preparar al software para que estos cambios no sean abruptos. Los métodos que producen alta calidad, si no permiten cambios, no son útiles 

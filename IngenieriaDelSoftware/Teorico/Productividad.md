@@ -1,0 +1,1 @@
+Un software que demora mucho tiempo en ser entregado o uno barato y de mala calidad son inaceptables. La productividad asocia estas 2 ideas de forma tal que $\text{si es mas alta} => \text{Menor costo/ menor tiempo}$ donde, el costo del software se mide en Persona/Mes

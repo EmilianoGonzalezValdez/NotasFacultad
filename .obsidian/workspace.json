@@ -1,0 +1,197 @@
+{
+  "main": {
+    "id": "d077743047ecc3b0",
+    "type": "split",
+    "children": [
+      {
+        "id": "98fab0fbb019d6b7",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "93d5ab0a2bb52526",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "New tab"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "7902811113a5b8c0",
+    "type": "split",
+    "children": [
+      {
+        "id": "c4dedb654cdaaeee",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "fe28a374871f6212",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "ea65b131835b6fae",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "c804896780d0f75f",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "0c4eb1eef7c5a5d9",
+    "type": "split",
+    "children": [
+      {
+        "id": "3e569f0d7a451df4",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "3ae1e71d5fb1cd90",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Facu/IngenieriaDelSoftware/Teorico/Administración de Riesgos.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for Administración de Riesgos"
+            }
+          },
+          {
+            "id": "6c1e00a62c8d83b6",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Facu/IngenieriaDelSoftware/Teorico/Administración de Riesgos.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from Administración de Riesgos"
+            }
+          },
+          {
+            "id": "7be1e68404ade9c3",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "79f2854d6632e19f",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "ca14a15f2baf466b",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Facu/IngenieriaDelSoftware/Teorico/Administración de Riesgos.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of Administración de Riesgos"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false,
+      "obsidian-excalidraw-plugin:New drawing": false,
+      "obsidian-git:Open Git source control": false
+    }
+  },
+  "active": "93d5ab0a2bb52526",
+  "lastOpenFiles": [
+    "Facu/Redes Y Sistemas Distribuidos/Redes y SIstemas Distribuidos.md",
+    "Facu/IngenieriaDelSoftware/Teorico/Administración de Riesgos.md",
+    "2025-10-28.md",
+    "Facu/IngenieriaDelSoftware/Teorico/Planificación y Recursos Humanos.md",
+    "Facu/IngenieriaDelSoftware/Teorico/Prioridades.md",
+    "Facu/IngenieriaDelSoftware/Teorico/Planificación del seguimiento del Proyecto.md",
+    "Facu/IngenieriaDelSoftware/Teorico/Planeamiento del Proyecto del Software.md",
+    "Facu/IngenieriaDelSoftware/Teorico/Planeamiento del Control de Calidad.md",
+    "Facu/IngenieriaDelSoftware/Teorico/Notas Bases de datos 2do parcial.md",
+    "Facu/IngenieriaDelSoftware/Teorico/Estimación del Esfuerzo en Planeamiento del Proyecto de SW.md"
+  ]
+}
