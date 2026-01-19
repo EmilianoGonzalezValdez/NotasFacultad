@@ -53,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "dinamicamente",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -74,12 +74,12 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "0c4eb1eef7c5a5d9",
@@ -186,7 +186,7 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "ea65b131835b6fae",
+  "active": "ddbfe52a09b991ff",
   "lastOpenFiles": [
     "Untitled.md",
     "Redes Y Sistemas Distribuidos/Resumen Redes y Sistemas Distribuidos Febrero.md",
