@@ -8,13 +8,17 @@
         "type": "tabs",
         "children": [
           {
-            "id": "93d5ab0a2bb52526",
+            "id": "ddbfe52a09b991ff",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "Redes Y Sistemas Distribuidos/Resumen Redes y Sistemas Distribuidos Febrero.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "Resumen Redes y Sistemas Distribuidos Febrero"
             }
           }
         ]
@@ -49,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "dinamicamente",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -70,7 +74,8 @@
               "title": "Bookmarks"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -181,8 +186,14 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "93d5ab0a2bb52526",
+  "active": "ea65b131835b6fae",
   "lastOpenFiles": [
+    "Untitled.md",
+    "Redes Y Sistemas Distribuidos/Resumen Redes y Sistemas Distribuidos Febrero.md",
+    "Redes Y Sistemas Distribuidos/Temas/Redes De Dispositivos.md",
+    "Redes Y Sistemas Distribuidos/Redes y SIstemas Distribuidos.md",
+    "Redes Y Sistemas Distribuidos/Media/Fuentes/redes_de_computadoras-freelibros-org.pdf",
+    "Redes Y Sistemas Distribuidos/Media/Fuentes",
     "Facu/Redes Y Sistemas Distribuidos/Redes y SIstemas Distribuidos.md",
     "Facu/IngenieriaDelSoftware/Teorico/Administración de Riesgos.md",
     "2025-10-28.md",
