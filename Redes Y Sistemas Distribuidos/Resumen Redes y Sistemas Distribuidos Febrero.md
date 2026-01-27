@@ -133,7 +133,7 @@ La nube permite a individuos y empresas acceder a la tecnología avanzada bajo d
 - *Nube Privada:* Infraestructura dedicada a una sola organización proporcionando mayor control y seguridad 
 - *Nube Híbrida:* Combina nubes públicas y privadas, permitiendo a las organizaciones aprovechar lo mejor de ambos mundos 
 
-### Estructura de la Nube 
+## Estructura de la Nube 
 
 Una nube se la puede considerar una red jerárquica compuesta por 4 niveles:
 - *Regiones:* Son ubicaciones geográficas donde los proveedores de servicios en la nube tienen centros de datos, aunque cada región puede albergar múltiples zonas de disponibilidad 
@@ -157,6 +157,106 @@ Existe una **clasificación de los balanceadores de carga:**
 - *Enrutador de la VPC:* Se encarga de la comunicación entre las subredes dentro de la misma VPC y de dirigir el tráfico hacia y desde internet o hacia otras VPCs. De esta forma los servidores de diferentes subredes dentro de una misma VPC se comunican a través del enrutador de la VPC
 - *Puerta de enlace de internet:* Se conecta a la internet y permite que los servidores en las subredes publicas envíen y reciban trafico de internet 
 - *Puerta de enlace de VPCs:* Se usan para comunicar diferentes VPCs entre si
+
+
+## Sistema Operativo para la nube 
+
+antes de ver los detalles de la pila de protocolos en la nube es necesario ver conceptos importantes sobre el cómputo en la nube, facilitando así la comprensión de algunas capas
+### Cómputo en la Nube 
+
+Tenemos varias alternativas de servicios en la nube:
+- **Infraestructura como servicio (Iaas)**
+	- - Ambiente formado por recursos informáticos básicos que pueden ser accedidos/manejados vía interfaces basadas en servicios de la nube y herramientas. 
+	- Los usuarios pueden aprovisionar, configurar y gestionar sus propios recursos informáticos
+	- Se pueden escalar los recursos según las necesidades del negocio 
+	- Los proveedores del IaaS son responsables del mantenimiento del hardware
+- **Plataforma como servicio (PaaS)**
+	- Plataforma completa par que los desarrolladores creen, desplieguen y gestionen aplicaciones sin preocuparse por la infraestructura subyacente 
+	- Proporciona herramientas y servicios para el desarrollo de aplicaciones, como bases de datos, middleware y entornos de ejecución 
+	- El proveedor se encarga del mantenimiento del entorno de desarrollo
+- **Software como servicio**
+	- Permite a los usuarios acceder a las aplicaciones completas alojadas en la nube mediante una suscripción, sin necesidad de instalación o mantenimiento local
+	- Los usuarios pueden acceder al software desde cualquier dispositivo con conexión a internet
+	- El proveedor se encarga de todas las actualizaciones, mantenimiento y seguridad del software
+
+Para mejorar la infraestructura de la nube tenemos 2 opciones regulares:
+- **Virtualización:**
+	- La virtualización permite dividir un servidor físico en varias máquinas virtuales donde cada una es capaz de ejecutar si propio sistema operativo y aplicaciones
+	- *Hipervisor:* software especializado que permite que múltiples instancias se ejecuten en un solo servidor físico
+	- Tanto el sistema operativo invitado y el software de aplicación ejecutado en servidor virtual no son conscientes del proceso de virtualización
+	- Si una maquina falla, no afecta a las demás
+	- Se pueden agregar o eliminar maquinas virtuales según se necesite
+- **Containerización:**
+	- Se empaqueta el código de la aplicación junto con los archivos de configuración relacionados, librerías y dependencias requeridas para que se pueda ejecutar
+	- Las aplicaciones son desplegadas en contenedores. Cada contenedor se ejecuta en un proceso
+	- Usar contenedores permite varios servicios de la nube ejecutándose como un servidor único mientras se accede al mismo SO
+	- Los contenedores pueden ejecutarse en cualquier plataforma que soporte el motor de contenedores
+	- Si un contenedor falla, no afecta a los otros
+	- Como comparten el núcleo de un sistema operativo, los contenedores requieren menos recursos que las maquinas virtuales
+
+### Ahora si, sistemas operativos para la nube 
+
+#### Capa de red
+
+La capa de red está formada por protocolos que facilitan la conectividad y el enrutamiento dentro de la infraestructura de red de cada proveedor.
+También se preocupa de la seguridad de estas redes. Los protocolos usados son:
+- *Protocolos de internet:* Son importantes para que los datos puedan moverse entre redes conectadas a través de internet. Se usan BGP e IP
+- *Protocolos para redes privadas virtuales (VPN):* Las VPN permiten establecer conexiones seguras entre las redes del cliente y la nube a través de internet. Los protocolos mas comunes incluyen:
+	- *OpenVPN:* Cifra los datos y asegura que viajen protegidos a través de una conexión pública
+	- *WireGuard:* También cifra conexiones VPN, ofreciendo mayor velocidad y simplicidad
+- *Protocolos para conexiones privadas entre cliente y proveedor de la nube:* Cuando las empresas necesitan conexiones más rápidas y seguras, pueden optar por métodos privados que no usan internet. Por ejemplo:
+	- *MPLS:* crea rutas privadas dedicadas para enviar datos directamente entre las instalaciones del cliente y el proveedor de nube
+	- *Tuneles VPN:* permiten crear una conexión segura sobre internet público hacia el proveedor de nube, utilizando protocolos como IPsec o L2TP
+	- *Conexiones dedicadas:* establecen líneas privadas entre el centro de datos del cliente y la nube, siendo estas conexiones mas rápidas, confiables y seguras que las basadas en internet público
+
+#### Capa de infraestructura 
+
+La capa de infraestructura se refiere a los protocolos básicos que permiten la comunicación y transferencia de datos entre servidores y clientes. Incluye los siguiente tipos de protocolos:
+- Protocolos de capa de aplicación de internet como HTTP, HTTPS, SFTP, FTP
+- Protocolos de capa de transporte de internet como TCP, UDP
+
+#### Capa de almacenamiento 
+
+La capa de almacenamiento consiste de protocolos usados para acceder y gestionar datos almacenados en la nube. Se usan protocolos diferentes para diferentes tipos de almacenamiento. Estos tipos de almacenamiento pueden ser:
+- *En bloque:* se almacenan datos en bloques individuales
+- *De archivos:* permite acceso a sistema de archivos
+- *De objetos:* para grandes cantidades de datos no estructurados como:
+	-  Archivos multimedia
+	- Copias de seguridad
+	- Datos de IoT
+
+#### Capa de plataforma
+
+La capa de plataforma es un conjunto de herramientas y servicios que los desarrolladores pueden usar para construir y ejecutar aplicaciones sin tener que preocuparse por los detalles técnicos de cómo funcionan los servidores o la infraestructura detrás de escena.
+Esta capa permite que las aplicaciones se conecten y trabajen con servicios en la nube utilizando *APIs* como puentes
+
+Esta capa proporciona todo lo necesario para que los desarrolladores puedan fácilmente:
+- *Escribir Código* de sus aplicaciones
+- *Probarlas* para asegurarse de que funcionan correctamente
+- *Desplegarlas*
+
+Gracias a esta capa los desarrolladores no tienen que preocuparse por configurar servidores, gestionar redes o resolver problemas complejos de infraestructura pudiendo es esta forma enfocarse únicamente en crear las funcionalidades y características de su aplicación
+
+En esta capa se usan los siguientes protocolos:
+- *REST:* se usa para que las aplicaciones pidan o envíen información a los servicios en la nube
+- *gRPC (google remote procedure call):* permite a los programas ejecutar funciones o procedimientos en servidores remotos como si estuvieran en la misma máquina local
+
+#### Capa de funciones sin servidor
+
+La capa de funciones sin servidor involucra protocolos que permiten ejecutar código en respuesta a eventos sin necesidad de gestionar servidores, ni la infraestructura. Siendo ideal para aplicaciones que requieren escalabilidad rápida y eficiente.
+Los eventos son fundamentales para activar y ejecutar las funciones. Los tipos mas comunes de estos son:
+- *Evento HTTP:* cuando un usuario hace una solicitud a través de una API o un browser
+- *Cambios en la base de datos:* cuando hay modificaciones en los datos
+- *Eventos de almacenamiento en la nube:* cuando se hacen acciones sobre objetos almacenados
+- *Eventos de mensajería:* sistemas de mensajeria o colas que mandan notificaciones sobre nuevos mensajes o tareas
+- *Eventos de IoT:* cuando dispositivos IoT mandan datos o notificaciones 
+- *Eventos a intervalos regulares:* evento que pasó un tiempo T
+- *Eventos de aplicaciones externas:* aplicaciones externas mandan notificaciones sobre eventos relevantes
+
+#### Capa de contenedores
+
+La capa de contenedores esta compuesto por los protocolos y tecnologías usadas para la gestión y orquestación de contenedores en la nube, refiriendo a la gestion y orquestación de aplicaciones en la nube usando tecnologías como docker.
+Los contenedores permiten empaquetar las aplicaciones y sus dependencias, lo que facilita su despliegue y escalabilidad.
 
 # La Internet de las Cosas
 
@@ -263,6 +363,106 @@ Para ello el controlador debe de lograr realizar ciertas funciones especificas:
 - *Comunicación y coordinación* facilitando la comunicación entre diferentes dispositivos y sistemas en la red, actuando como intermediario para la transmisión de datos. Se cordina con Gateways IoT y servidores en la nube para análisis y almacenamiento de datos
 - *Retroalimentación a Gateways IoT en la nube* transmitiendo datos recopilados y procesados a los servidores en la nube para análisis adicional y almacenamiento. Puede sincronizar datos con otros sistemas de control y monitoreo remoto
 
+## Sistema Operativo para el Internet de las Cosas
+
+*Diferencias de los protocolos de IoT con os protocolos de internet:*
+- Muchos dispositivos IoT son de baja potencia y tienen recursos limitados. Por lo tanto los protocolos para IoT están diseñados para ser ligeros y eficientes en el uso de energía y recursos. Mientras que los dispositivos conectados a internet generalmente tienen recursos relativamente abundantes en términos de energía, capacidad de procesamiento y memoria
+- La IoT se enfoca en la comunicación entre dispositivos IoT heterogéneos en entornos específicos. La internet está diseñada para la comunicación entre computadoras y servidores, facilitando el intercambio de información a gran escala y el acceso a servicios en linea
+- Se necesitan protocolos para escalar a una gran cantidad de dispositivos IoT, gestionando transmisiones de datos recuentes y a menudo en tiempo real. Mientras que los protocolos de internet permiten escalar a muchas maquinas y gestionar grandes volúmenes de tráfico de datos, pero solo para computadoras y servidores y no para dispositivos IoT
+
+Para la internet de las cosas veremos un *modelos e capas de referencia* con las mismas capas que las de redes de computadoras, pero se añaden dos capas mas, además las capas con el mismo nombre resuelven problemas adicionales típicos de internet de las cosas:
+
+### Capa Física
+
+La capa física del IoT se encarga de la transmisión de bits a partir de medios físicos. Los problemas a resolver en esta capa son:
+- *El consumo energético:* hay dispositivos IoT que son alimentados por batería y necesitan ser eficientes en el uso de la energía. Implementando de esta forma técnicas como el modo sueño
+- *Interferencias y ruido:* las comunicaciones inalámbricas pueden ser afectadas por interferencias y ruido. Se usan técnicas de modulación adaptativa para optimizar la transmisión según las condiciones del canal ajustando el tipo de modulación según el nivel de interferencia o ruido
+- *Conectividad:* garantizar que los dispositivos pueden mantenerse conectados en entornos difíciles. Se puede implementar una *malla* de modo que todos los dispositivos se comuniquen entre sí directamente
+
+Los protocolos de esta capa son:
+- *Zigbee:* diseñado para ser eficiente en el consumo de energía, siendo ideal para dispositivos alimentados por baterías
+- *LoRaWAN:* permite la comunicación de largo alcance con un bajo consumo de energía
+- *NB-IoT:* permite baja potencia y larga duración de la batería
+
+### Capa de enlace de datos
+
+La capa de enlace de datos es responsable de la transmisión de datos entre dispositivos dentro de la misma red local. Los problemas considerados son:
+- *Control de errores:* igual que antes
+- *Control de acceso al medio:* igual que antes
+- *Retrasos y variaciones en el tiempo de transmisión:* pueden afectar a las aplicaciones en tiempo real. Una idea de solución es ajustar el tamaño y la estructura de las tramas para minimizar la latencia
+- *Desconexiones frecuentes:* los dispositivos IoT al ser móviles o ubicarse en áreas con mala cobertura pueden sufrir desconexiones frecuentes
+- *Seguridad de la comunicación:* los datos transmitidos no deben ser interceptados ni alterados. Se puede aplicar cifrado y autenticación en la capa de enlace de datos para asegurar la comunicación  
+
+Los protocolos usados son: 
+- *Ya vistos o conocidos:* Wi-Fi, Ethernet, Bluetooth
+- *También en capa física:* Zigbee, LoRaWAN
+- *Bluetooth Low Energy(BLE):* muy eficiente en consumo de energía, ideal para dispositivos que necesitan durar mucho tiempo con baterías pequeñas. Tiene un menor costo de implementación en comparación con otras tecnologías 
+- *6LoWPAN:* permite encapsular y enviar paquetes IPv6 sobre redes de baja potencia. Se puede usar en sensores y actuadores. Implementa técnicas de comprensión de encabezado y fragmentación para permitir que los paquetes IPv6 se transmitan eficientemente en redes WPAN de baja potencia 
+
+
+### Capa de Red
+
+La capa de red gestiona el direccionamiento y el enrutamiento de los dados entre diferentes redes. Sus problemas son:
+- *Enrutameinto:* en redes con dispositivos móviles y topologías cambiantes
+- *Escalabilidad:* gestión eficiente de un gran número de dispositivos
+- *Movilidad en redes inalámbricas:* soporte para dispositivos que se mueven fuera y dentro de la red
+
+Sus protocolos son:
+- *De internet:* IPv4, IPv6
+- *6LoWPAN:* permite que los dispositivos de baja potencia usen IPv6. Resuelve problemas de enrutamiento y direccionamiento. Facilita la integración con redes IP tradicionales
+- *RPL:* optimizado para redes de dispositivos con baja potencia y alta tasa de pérdida de paquetes. Soporta redes con gran número de nodos
+
+### Capa de Transporte
+
+La capa de transporte Asegura la transmisión de datos confiable y ordenada entre dispositivos. Problemas:
+- *Fiabilidad de la transmisión:* asegurar que los datos lleguen de manera confiable, en especial en redes con alta tasa de pérdida de paquetes
+- *Control de flujo y congestión*
+- *Compatibilidad de protocolo:* integración con protocolos específicos de IoT
+
+Protolocos:
+- *De internet:* TCP, UDP
+- *MQTT:* optimizado para redes con ancho de banda limitada, diseñado para minimizar el consumo de energía durante la transmisión de datos, proporciona varios niveles de calidad de servicio para garantizar la entrega de mensajes. Usa formato de mensaje compacto para minimizar el tamaño de los datos enviados, esto reduce el consumo de energía. MQTT usa TCP como base para la transmisión de datos. Se centra en la comunicación en tiempo real
+- *CoAP:* optimizado para dispositivos con recursos limitados, como baja capacidad de procesamiento y memoria. Proporciona confirmaciones de entrega y retransmisión de mensajes perdidos. Esta optimizado para minimizar el uso de ancho de banda, también usa formato binario de mensaje compacto. Generalmente se implementa sobre UDP 
+
+### Capa de aplicación
+La capa de aplicación define los protocolos de comunicación usados por las aplicaciones de IoT facilitando la interacción entre el usuario y el sistema IoT. Sus problemas son:
+- *Interoperabilidad:* asegurar que los dispositivos y aplicaciones de diferentes fabricantes puedan comunicarse entre si
+- *Seguridad y privacidad:* garantizar que los datos sean transmitidos y almacenados de manera segura. Puede usarse SSL y TLS para asegurar las comunicaciones
+- *Gestión de dispositivos:* administración eficiente de un gran número de dispositivos. Se pueden usar plataformas de gestión que facilitan la gestión y monitoreo de dispositivos
+- *Eficiencia energética:* para dispositivos con recursos limitados y consumo de energía bajo
+- *Fiabilidad y calidad de servicio:* entrega de mensajes confiables para aplicaciones criticas 
+- *Escalabilidad y ancho de banda:* poder manejar la demanda cuando el número de dispositivos IoT aumenta
+- *Simplicidad:* simples de implementar en dispositivos con capacidades limitadas
+- *Complejidad:* suficientes complejos como para manejar las necesidades de las aplicaciones
+
+Protocolos:
+- *De la web:* HTTP, HTTPS
+- *MQTT:* facilita la comunicación de dispositivos y servidores, facilita la comunicación entre diferentes fabricantes, soporta grandes cantidades de datos solo cuando es necesario en lugar de mantener conexión constantes
+- *CoAP:* proporciona un enfoque ligero para la comunicación entre dispositivos y servidores. Es ideal para dispositivos con baterías. Ligero y fácil de implementar
+- *Websocket:* WenSocket se basa en TCP y permite streams de mensajes a ser enviados en ambos sentidos entre cliente y servidor, mientras se mantiene la conexión TCP abierta
+- *DDS (Data Distribution Server):* es un middleware centrado en datos para la comunicación de dispositivos a dispositivos o maquina a maquina
+- *XMPP (extensible messaging presence protocol):* es un protocolo para comunicación de tiempo real y streaming de datos XML entre entidades de red. XMPP soporta caminos de comunicación cliente a servidor y servidor a servidor
+
+### Capa de procesamiento y almacenamiento
+La capa de procesamiento y almacenamiento es responsable de procesar, almacenar y analizar los datos recopilados por los dispositivos IoT. Problemas:
+- *Procesamiento en tiempo real:* capacidad para procesar y analizar datos rápidamente. **Edge computing:** procesamiento de datos cercanos a la fuente para reducir la latencia. Reduce la carga de la red al procesar datos localmente antes de enviarlos a la nube
+- *Almacenamiento masivo:* manejo eficiente del almacenamiento de grandes volúmenes de datos. **Cómputo en la nube:** uso de servicios de la nube para almacenar y analizar grandes volúmenes de datos. Permite el acceso a datos desde cualquier lugar 
+
+Los componentes de esta capa son: Servidores locales, edge computing, las nubes.
+Las tecnologías: Bases de datos, sistemas de procesamiento de datos en tiempo real, análisis de grandes cantidades de datos
+
+
+### Capa de gestión y orquestación 
+
+La capa de gestión y orquestación se encarga de la gestión y orquestación de recursos de la red IoT. Proporciona herramientas para la configuración, monitoreo, actualización y administración de dispositivos y aplicaciones IoT.
+La funcion de esta capa es la gestión de dispositivos, seguridad, actualizaciones de firmware y monitoreo de rendimiento.
+Las *plataformas IoT*: proveen herramientas para la gestión centralizada de dispositivos. 
+Los problemas de esta capa son:
+- *Configuración y monitoreo:* necesidad de configurar y monitorear dispositivos de manera eficiente
+- *Actualización de firmware:* capacidad de actualizar el software de los dispositivos de manera remota
+Sus protocolos son:
+*LwM2M:* proporciona herramientas para la configuración, monitoreo y administración de dispositivos IoT. Facilita la administración remota del firmware de los dispositivos
+
 # Redes BlockChain 
 
 Una **red blockchain** es un conjunto de nodos interconectados que operan en un **sistema descentralizado** que permite la creación de un **registro digital de transacciones** descentralizado y seguro 
@@ -338,3 +538,223 @@ Como para realizar contratos inteligentes es necesitan datos externos, del mundo
 - *Oraculo de computación:* realizan cálculos complejos que no pueden ser procesados directamente por los contratos inteligentes en la blockchain
 - *Oraculo de eventos:* proporcionan información sobre eventos específicos que ocurren fuera de la blockchain como la finalización de un contrato o la confirmación de una entrega
 - *Oraculos de procesamiento de pagos:* facilitan la transferencia de valor entre diferentes sistemas, permitiendo pagos entre contratos inteligentes y sistemas externos
+
+## Sistema Operativo para redes blockchain
+
+Para las redes blockchain usaremos un modelo de capas de referencia. La organización en capas es bastante diferente que en las redes de computadoras. Ademas la capa de aplicación resuelve problemas adicionales típicos de las redes blockchain
+
+### Capa de infraestructura base:
+
+La capa de infraestructura base proporciona la infraestructura subyacente para la creación y operación de blockchains. INcluye componentes físicos y de red como internet (TCP/IP, HTTP, SSL, etc.) o enrutadores
+
+
+### Capa de protocolo Base
+
+La capa de protocolo base es la blockchain en si misma. Tiene su propia cadena de bloques con un diseño especifico, incluyendo su propio token nativo. Es responsable de la seguridad y el funcionamiento operativo de la red blockchain. Establece las reglas fundamentales de consenso y la estructura de datos principal. Facilita la comunicación entre nodos y el envío de transacciones. 
+Es en esta capa donde se llevan a cabo las transacciones.
+
+Un **mecanismo de consenso** establece las reglas y mecanismos mediante los cuales los nodos llegan a un acuerdo sobre el estado del libro mayor. Sus beneficios son:
+- Usar mecanismo de consenso previene problemas como el doble gasto al garantizar que solo una versión del libro mayor sea aceptada por todos los nodos
+- Usar mecanismos de consenso aumenta la resistencia a ataques maliciosos al requerir que un número significativo de nodos coincida en el estado del sistema. Algunos ejemplos de protocolos en esta capa son:
+	- Bitcoin
+	- Ethereum
+	- Cardano
+	- Solana
+
+Las blockchains en esta capa suelen enfrentar limitaciones en su capacidad para procesar un gran número de transacciones por segundo, lo cual puede resultar en tiempos de espera prolongados y tarifas elevadas, especialmente en períodos de alta demanda. Para resolver esto se definen soluciones de escalabilidad
+
+### Capa de Comunicación entre Redes Blockchain
+
+En esta capa se usan protocolos que facilitan la interoperabilidad y la comunicación entre diferentes redes blockchain. Facilita la creaciónd e redes interconectadas y aborda problemas como la escalabilidad y la dicha interoperabilidad. Algunos ejemplos son *Polkadot* o *Cosmos*
+
+### Capa de Soluciones de Escalabilidad
+
+Esta capa mejora el rendimiento y la capacidad de procesamiento de transacciones al construirse sobre una blockchain existente. Permiten realizar un mayor número de transacciones fuera de la cadena principal, lo cual reduce la carga sobre la blockchain y disminuye los costos asociados, aunque se procura no comprometer la seguridad proporcionada por la blockchain. Sus protocolos son:
+- *Rollups:* agrupan varias transacciones en un paquete: este paquetes se valida en una red secundaria y luego registran solo los resultados finales en la blockchain del protocolo base
+- *Cadenas laterales:* blockchains independientes que están conectadas a una blockchain principal donde las cadenas laterales pueden procesar transacciones y ejecutar aplicaciones de manera independiente guardando los resultados en sus propios libros mayores, ademas pueden tener sus propios protocolos diferentes de la cadena principal
+- *Canales de estado:* permiten transacciones rápidas y privadas entre dos partes sin necesidad de registrar cada transacción en la blockchain principal. Un canal de estado es un entorno temporal donde dos o mas partes pueden ejecutar varias transacciones directamente entre ellas sin involucrar a las blockchains principales. Al finalizar las interacciones el estado final del canal se registra en la blockchain principal, solo se pagan tarifas por abrir y cerrar el canal
+
+### Capa de Aplicaciones
+
+Permite la ejecución y acceso a las aplicaciones que interactúan con la blockchain. Aquí se encuentran las aplicaciones descentralizadas (dApps) que operan sobre la blockchain, así como aplicaciones no descentralizadas
+
+Los contratos inteligentes permiten la ejecución automática de acuerdos cuando se cumples ciertas condiciones predefinidas, estos están registrados en la blockchain por lo que son inmutables y transparentes. Estos pueden gestionar transacciones complejas que involucran múltiples partes y condiciones, pudiendo hasta interactuar con otros contratos y dApps en la blockchain. Los contratos inteligentes minimizan el riesgo humano. Algunos ejemplos de dApps:
+- *Finanzas descentralizadas (DeFi):* aquí los contratos inteligentes son fundamentales para gestionar préstamos, intercambios y otros servicios financieros sin intermediarios
+- *Gestión de cadenas de suministro:* pueden rastrear productos a lo largo de la cadena de suministro, registrando cada paso en la blockchain para garantizar autenticidad y trazabilidad. Es una dApp siempre que use contratos inteligentes
+- *Redes sociales:* ofrecen mayor privacidad y control sobre los datos personales, a menudo recompensando a los usuarios con criptomonedas por su participación
+- *Votación:* redes que usan blockchains para mejorar la transparencia y la seguridad en los procesos de votación
+- *Almacenamiento descentralizado:* permiten el almacenamiento y distribución de datos de manera descentralizada aumentando la seguridad y resistencia frente a fallos
+- *Mercados NFTs*
+- *Juegos*
+
+Ejemplos de aplicaciones no descentralizadas:
+- *Interfaces de usuarios*
+- *Wallets*
+
+### Capa de Desarrollo
+
+Proporciona las herramientas necesarias para desarrollar y desplegar aplicaciones sobre blockchain. Las tecnologías específicas usadas son:
+- Apis
+- Bibliotecas
+- Plataformas de desarrollo
+- Frameworks para dApps
+
+Y los lenguajes suelen ser:
+- Solidity
+- JavaScript
+- Python
+- C++
+- Go
+
+
+
+# Sistemas Operativos de Redes 
+
+Para manejar los tipos de redes a estudiar hacen falta *sistemas operativos de redes (SOR)*. En cada tipo de red hay un problema a ser resuelto si queremos que no tenga un mal desempeño, siendo la SOR quien se encarga de resolver estos problemas. Para que las máquinas en un tipo de red se puedan comunicar hacen falta *protocolos de comunicación*. Los SOR contienen estos protocolos.
+
+Los SOR están organizadas como una pila de capas o niveles, donde la cantidad de capas, los nombres de estas, sus contenidos y su función difieren de un tipo de red a otro. El motivo de esta organización es lograr que cada capa le ofrezca ciertos servicios a las capas superiores ocultando su implementación. De esta forma una capa superior puede acceder a las operaciones y servicios primitivos ofrecidos por una capa inferior mediante le *Interfaz entre dichas capas* la cual es el conjunto de lo que puede ofrecer la capa inferior a la superior.
+Además como el SOR se ocupa de la comunicación de información siempre debemos pensar como se comunica una capa $n$ de un dispositivos con la capa $n$ de otro dispositivo sin darle importancia a los problemas de capas inferiores a la $n$.
+
+El *Protocolo de capa $n$* es el conjunto de reglas y convenciones usadas en la conversación entre la capa $n$ de una maquina y la capa $n$ de otra maquina.
+Las comunicaciones entre capas consecutivas ocurren:
+- **Durante el envío de mensaje:** cada capa pasa los datos y la información de control a la capa inmediatamente inferior, hasta que se alcanza la capa mas baja
+- **Durante la recepción de mensaje:** cada capa pasa cierta información conteniendo los datos a la capa inmediatamente superior hasta que alcanza la capa mas alta   
+
+Debajo de la capa 1 está el *medio físico*. Al conjunto de capas y protocolos se la llama *arquitectura de red* o pila de protocolos
+
+# Sistemas operativos para redes de computadoras 
+
+En una red de computadoras la red se usa para la comunicación entre estas. Para ello se pueden usar nodos intermediarios como conmutadores, enrutadores y puertas de enlace, un claro ejemplo es la *internet* 
+
+Primero veremos cómo sería una jerarquía de protocolos para una red de computadoras.
+- *Procesos de aplicación* (capa 5 o **capa de aplicación**): Produce un mensaje y lo pasa a la capa 4 para su transmisión 
+- La capa 4 (**capa de transporte**): Pone un encabezado en el mensaje para identificarlo y pasa el resultado a la capa 3. Este encabezado contiene *números de secuencia* para que la capa 4 de la máquina destino entregue los mensajes en el orden correcto 
+- La capa 3 (**capa de red**): Debido a que hay limitaciones en el tamaño de los mensajes de esta capa, divide en *paquetes* los mensajes entrantes colocándole un encabezado a cada paquete. Además, si la maquina es un enrutador, decide cuál de las lineas de salida existentes usar. Luego pasa los paquetes a la capa 2
+- La capa 2 (**capa de enlace de datos**):Agrega un encabeza y un terminador a cada pieza, luego pasa las unidades resultantes a la capa 1 para su transmisión
+- Luego en la máquina receptora el mensaje pasa de abajo hacia arriba de capa en capa, perdiendo los encabezados conforme avanza 
+
+En las redes de computadoras hay varios problemas a resolver:
+- **Como identificar las máquinas de una red?:**
+	- *Solución:* Se usan direcciones para las máquinas
+- **Control de flujo:** un emisor rápido satura de datos al receptor hasta que este ya no puede almacenar más datos que le llegan y comienza a perder datos 
+	- *Solución:* Uso de retroalimentación al emisor, es decir, indicarle cuándo y cuánto puede enviar
+- **Los mensajes que llegan no pueden ser aceptados por un protocolo de capa por ser demasiado grandes:** el mensaje grande llega de una red diferente que tiene un tamaño máximo de mensaje mayor al de la red actual, o hay capas consecutivas que aceptan distintos tamaños de mensajes 
+	- *Solución:* fragmentar los mensajes, transmitir fragmentos y reensamblar los mensajes. Hay 2 tipos de soluciones, la *fragmentación transparente* y la *fragmentación no transparente*. En la primera los paquetes se van fragmentando y reensamblando luego de cada capa, mientras que en la segunda los paquetes no se vuelven a reensamblar hasta que no lleguen a su destino 
+- **Congestión:** a veces en la red hay que enviar demasiados mensajes por la misma línea de salida de un enrutador y esta se pone más lenta o no puede mandarlos a todos(la red no puede manejar la carga de paquetes que recibe)
+	- *Solución:* las computadoras emisoras se enteran de la congestión y reducen el tráfico de salida 
+
+
+# Modelos de Capas para Redes de Computadoras
+
+
+En nuestro caso veremos un modelo de capas híbrido con las siguientes capas con sus respectivas funciones y problemas:
+
+1. **Capa de aplicación:**
+	- *Función:* Aplicaciones de red middleware
+	- *Problemas:* ---
+2. **Capa de transporte:**
+	- *Función:* Comunicación entre procesos
+	- *Problemas:* retransmisiones, control de flujo y control de congestión 
+3. **Capa de red:**
+	- *Función:* Envío de paquetes entre 2 host usando rutas entre ellos
+	- *Problemas:* Almacenamiento y reenvío, enrutamiento, control de congestión, fragmentación de mensajes 
+4. **Capa de enlace de datos:**
+	- *Función:* Comunicación entre máquinas conectadas directamente entre si
+	- *Problemas:* Control de flujo, control de acceso a canal compartido, control de errores
+5. **Capa física:**
+	- *Funcion:* Transporte usando medios físicos de un stream de datos
+	- *Problemas:* Medios físicos guiados y no guiados, interconexión de medios físicos de distinto tipo, teoría de señales
+
+### Capa de Aplicación
+
+En la capa de aplicación tenemos las aplicaciones de red. Cada una ofrece un servicio especifico con su propia forma de interfaz de usuario. Hay 2 opciones para desarrollar aplicaciones de red:
+1. El programador para especificar la comunicación usa una API; la *socket API* es el estándar en facto para el software que se comunica sobre la internet
+2. El programador se apoya en middlewares para construir la aplicación de red, donde el middleware provee servicios al software de la aplicación que hacen mas fácil a los desarrolladores implementar la comunicación y la entrada/salida de modo que se pueden enfocar en el propósito especifico de la aplicación 
+
+#### TCP/IP
+
+La capa de aplicación de TCP/IP contiene varios protocolos de nivel mas alto:
+- FTP (transferencia de archivos)
+- SMTP (correo electronico)
+- DNS (resolucion de nombres de host en sus direcciones de red)
+- HTTP (para la web)
+
+En la capa de aplicación de Internet es muy importante *la web* y los protocolos que la soportan: HTTP, HTTPS, DNS.
+
+En la web están los sitios web que son conjuntos de páginas web entrelazadas. Tambien están las aplicaciones web a las que se accede por medio de un navegador y realizan funciones similares a las aplicaciones de escritorio 
+
+### Capa de Transporte
+
+La capa de transporte provee comunicación entre procesos, mejorando los servicios de la capa de red. La capa de transporte se ejecuta por completo en los hosts. El software y hardware de esta capa se denomina **Entidad de transporte (ET)**
+
+La capa de transporte debería solucionar ciertos problemas:
+- Uso de *temporizadores* y las *retransmisiones de paquetes*
+- Uso de búferes y control de flujo
+- Evitar congestionar la red poniendo demasiados paquetes en ella
+- El direccionamiento explicito de los destinos(solo si hay procesos cliente y procesos servidor)
+
+#### Capa de transporte de internet
+
+La capa de transporte del internet tiene 2 protocolos:
+- **TCP:**  
+	- TCP divide el flujo de bytes en mensajes discretos y pasa cada uno de ellos a la capa de interred. 
+	- Proporciona una entrega confiable y en orden de los mensajes, es decir que el flujo de bytes se entrega sin errores a la maquina destino
+	- TCP se encarga del *Reensamblado* de los mensajes recibidos en el receptor.
+	- TCP maneja el *control de flujo* y *control de congestión* 
+- **UDP:**
+	- Proporciona entrega de mensajes no confiable y desordenada
+	- No tiene confirmaciones de recepción de los mensajes, ni control de flujo, control de congestión o retransmisiones cuando se recibe un mensaje erróneo
+	- UDP se suele usar para aplicaciones que no usan control de flujo ni la secuenciación de mensajes, aplicaciones que involucran consultas de solicitud-respuesta
+	- Aplicaciones de transmisión de voz y vídeo
+
+
+### Capa de Red
+
+Los objetivos de la capa de red o capa 3 son:
+- Algoritmos de almacenamiento y reenvío
+- *Control de congestión*
+- Resolver problemas que surgen cuando un mensaje tiene que viajar por redes de distinta tecnología para llegar a destino
+- *Enrutamiento*
+
+
+Un problema recurrente es la demora de llegada de un mensaje, el cual ocurre debido a que se toma la ruta mas larga entre la gran cantidad de rutas entre el origen del mensaje y su destino. Para ello existen los 
+- *Algoritmos de enrutamiento:* Eligen la mejor/mejores rutas entre el origen y el destino
+
+*Capa de interred:*
+- Permite que los host inyecten paquetes dentro de cualquiera de las redes de la interred
+- Los paquetes diferentes entre dos host viajan a su destino de manera independiente
+- A causa de esto los paquetes pueden llegar en un orden distinto al cual fueron mandados. SI esto pasa, las capas mas altas deberían ordenarlos
+
+##### Capa de red: TCP/IP
+
+Para distinguir entre las diferentes máquinas que tienen una conexión a internet se usan direcciones IP que pueden ser de *IPv4 (32bits)* o *IPv6 (128 bits)* 
+Se envían paquetes IP con su propio formato, y se usan protocolos de enrutamiento como *OSPF* y *BGP* para enrutamiento de paquetes
+
+### Capa de enlace de datos:
+
+El objetivo de la capa de enlace de datos es transformar un medio de transmisión puro en una línea de comunicación que aparezca libre de errores de transmisión
+
+*Problemas de diseño que se consideran:*
+- Fragmentación de paquetes en tramas, cuando un paquete es demasiado grande para ser aceptado por la CED
+- *Tramas de confirmación de recepción* son usadas cuando el servicio es confiable
+- *Control de flujo*
+- *Control de acceso a un canal compartido:* Se busca manejar y minimizar o evitar colisiones, las cuales ocurren cuando varias maquinas comparten un mismo canal de comunicaciones y envían tramas en simultaneo usando este canal
+
+A la hora de controlar errores en los mensajes debido a imperfecciones en el medio físico, es necesario que los mensajes lleven cierta información extra con el propósito de control de errores. De esta forma se pueden aplicar alguno de los siguientes 2 enfoques:
+- Identificación de errores y retransmisión de mensajes erróneos
+- Corrección de errores en el mensaje recibido
+
+
+### Capa física
+
+El propósito de la capa física es transportar un stream de datos de una máquina a otra usando medios físicos. Aun así la CF no existe solo en medios físicos, estos últimos se conectan entre si usando dispositivos como modems, multiplexores, etc.
+
+*Medios físicos:*
+- Bit: se propaga entre pares transmisor/receptor
+- Enlace físico: lo que yace entre el transmisor y receptor
+- Medios guiados: las señales se propagan en medios sólidos: cobre, fibra óptica, coaxial
+- Medios no guiados: las señales se propagan libremente: radio
+- Par trenzado: 2 cables de cobre aislados
+- cable coaxial: 2 conductores concéntricos de cobre, bidireccionales, broadband (múltiples  canales en el cable)
+- Cable de fibra óptica: Fibra de vidrio que transporta pulsos de luz, cada pulso es un bit. Operan a alta velocidad y tienen baja tasa de errores
+- Radio: señal transportada en el espectro electromagnético, no usa cable físico, es bidireccional. Hay efectos de propagación de entorno: reflexión, obstrucción por objetos,, interferencia
