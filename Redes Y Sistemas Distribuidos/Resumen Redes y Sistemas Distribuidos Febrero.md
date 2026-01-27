@@ -594,10 +594,10 @@ Ejemplos de aplicaciones no descentralizadas:
 ### Capa de Desarrollo
 
 Proporciona las herramientas necesarias para desarrollar y desplegar aplicaciones sobre blockchain. Las tecnologías específicas usadas son:
-- Apis
-- Bibliotecas
-- Plataformas de desarrollo
-- Frameworks para dApps
+- Apis: permiten a los desarrolladores construir aplicaciones que se comunican con la blockchain sin necesidad de entender completamente su funcionamiento interno
+- Bibliotecas: Facilitan el desarrollo de aplicaciones descentralizadas
+- Plataformas de desarrollo: Entornos que permiten a los desarrolladores crear y desplegar dApps
+- Frameworks para dApps: estructura que proporciona un conjunto de herramientas y bibliotecas par facilitar el desarrollo de dApps
 
 Y los lenguajes suelen ser:
 - Solidity
