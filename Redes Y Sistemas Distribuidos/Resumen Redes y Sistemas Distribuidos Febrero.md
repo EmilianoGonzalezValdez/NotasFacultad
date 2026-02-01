@@ -120,6 +120,122 @@ Puede pasar que al enviarse mensajes en una red de difusión estos se pierdan de
 
 Normalmente en el internet hay redes dorsales o backbones, las cuales estan conectadas a varias WANs, las cuales a su vez estan conectadas a redes MANs. De esta forma las LANs se conectan a WANs o MANs formando asi una red de redes jerarquicamente distribuida
 
+### Capa de Aplicación del Internet 
+
+Veremos dos enfoques para desarrollar aplicaciones de red para la internet:
+1. El programador para especificar la comunicación usa una API, donde el saber sobre el sistema operativo de red subyecente tiene su utilidad 
+2. La Web: el programador se apoya en la tecnología de la web para construir una aplicación de red.
+
+Dichas aplicaciones de red de internet suelen usar alguno de los siguientes estilos de arquitectura:
+- Cliente-Servidor
+- Peer-To-Peer
+- Arquitectura orientada a servicios
+- Microservicios 
+
+#### Arquitectura Cliente-Servidor
+
+En el modelo cliente-servidor hay dos procesos que se comunican, uno en la maquina cliente y otra en la maquina servidor. La forma de comunicación es:
+- El proceso cliente manda solicitud al proceso servidor
+- El proceso cliente espera un mensaje de respuesta
+- Luego el proceso servidor recibe y procesa la solicitud
+- El proceso servidor manda mensaje de respuesta al proceso cliente
+
+Los servidores se caracterizan por siempre estar en un host con dirección IP permanente y se pueden usar centros de datos para la escalabilidad.
+Mientras que los clientes se caracterizan por podes estar conectados intermitentemente usando direcciones IP dinámicas. Además los clientes no se comunican entre si 
+
+
+Ahora vamos a ver los pasos de una aplicación usando **UDP:**
+1. Cliente crea datagrama con IP y puerto del servidor y envía el datagrama aunque este pueda perderse
+2. Si llega, el servidor lee el datagrama
+3. El servidor envía respuesta especificando dirección y puerto de cliente. Tambien puede perderse esta respuesta
+4. Si llega, el cliente lee el datagrama de respuesta 
+5. Cliente finaliza
+En este caso no se especifica que pasa si la respuesta llega o no al cliente. Esto es responsabilidad de la red 
+
+Ahora veremos los pasos pero usando **TCP:**
+1. Se ejecuta proceso del servidor
+2. Servidor espera por pedido de conexión entrante
+3. El cliente requiere pedido de conexión al servidor
+4. El servidor acepta la conexión con el cliente
+5. El cliente envía su pedido al servidor
+6. El servidor lee el pedido
+7. El servidor envía la respuesta
+8. El cliente lee la respuesta
+9. Si hay mas pedidos al servidor se vuelve al paso 5
+10. El cliente cierra la conexión
+11. El servidor cierra la conexión 
+
+
+#### Arquitectura P2P
+
+Algunos ejemplos de aplicaciones P2P se usan para:
+- *Distribución de archivos:* la aplicación distribuye un archivo de una única fuente a un gran número de compañeros
+- *Bases de datos distribuidas:* sobre una gran comunidad de compañeros
+- *Streaming:* Video on demand
+- *VoIP:* voz sobre IP
+
+*¿Cuanto tiempo se requiere para distribuir un archivo de un servidor a N compañeros?*. Para responder dicha pregunta debemos considerar ciertos parámetros como:
+- Tasa de subida del enlace de acceso al compañero i: $u_i$
+- Tasa de subida del enlace de acceso al servidor: $u_s$
+- Tasa de descarga del enlace de acceso al compañero i: $d_i$
+- Tamaño del archivo a ser distribuido: $F$
+- Número de compañeros que quieren adquirir una copia del archivo: $N$
+
+**Distribución de archivos en cliente-servidor:**
+El *tiempo de distribución* es el tiempo que toma obtener una copia del archivo por los $N$ compañeros. Para calcularlo podemos dividir el problema en 2 partes:
+- **Transmisión del servidor:** el servidor debe enviar secuencialmente $N$ copias de archivo a cada peer.
+	- Tiempo para enviar 1 copia: $F/u_s$
+	- Tiempo para enviar $N$ copias: $NF/u_s$
+	- Demasiado trabajo del servidor
+- **Descarga del cliente:** cada cliente debe descargar una copia del archivo
+	- $d_{min}= \min({d_1,d_2,...,d_n})$ 
+	- Tiempo de descarga del cliente con $d_{min}$: $F/d_{min}$ segs
+	- Este es el peor tiempo de descarga
+
+Por ende el Tiempo para distribuir F a N clientes usando enfoque cliente servidor es:$$D_{c-s}\ge \max({NF/u_s},{F/d_{min}})$$ Aumentando linealmente en N
+
+**Distribución de Archivos en P2P:**
+Al comienzo de la distribución solo el servidor tiene el archivo. Para que la comunidad de compañeros reciba este archivo, el servidor debe enviar cada bit del archivo al menos una vez en su enlace de acceso.
+En P2P cada compañero puede redistribuir cualquier porción del archivo que ha recibido a cualquierasea otros compañeros, así los compañeros asisten al servidor en el proceso de distribución. Cuando un compañero recibe algo de datos de un archivo, puede usar su capacidad de subida para redistribuir los datos a los otros compañeros. Por ende, la capacidad total de subida del sistema es:$u_{total}=u_s+\sum{u_i}$. De esta forma el tiempo mínimo de distribución es: $$NF/u_{total}$$
+De esta forma podemos partir el problema en 3:
+- **Transmisión de servidor:** debe subir al menos una copia, lo cual tarda:$F/u_s$
+- **Cliente:** cada cliente debe descargar la copia de una archivo, lo cual minimamente tarda: $F/d_{min}$. Como agregado cada cliente debe poder subir NF bits donde la tasa de subida maxima es de $u_s + \sum{u_i}$.
+
+De esta forma el tiempo para distribuir F a N clientes usando enfoque P2P nos queda como: $$D_{P2P}\ge \max({F/u_s}\space ,{F/d_{min}}\space,NF/(u_s+\sum{u_i}))$$
+
+
+#### Arquitectura orientada a servicios 
+
+*Requisitos funcionales:* 
+- Provisión de servicios: los servicios deben ser capaces de proporcionar funcionalidades especificas 
+- Consumo de servicios: los clientes deben poder solicitar y recibir servicios
+
+*Requisitos no funcionales:*
+- Interoperabilidad: entre servicios. Es decir, comunicación entre servicios de manera efectiva independientemente de la plataforma o lenguaje de programación usado
+- Reusabilidad: los servicios deben diseñarse para reutilizarse en diferentes contextos
+- Escalabilidad: los servicios deben escalar según sea necesario
+- Flexibilidad: los servicios deben ser capaces de adaptarse a cambios en las necesidades del negocio
+- Seguridad: garantizar la seguridad de los datos y transacciones entre servicios
+
+Para lograr todos estos requisitos la solución es organizar las aplicaciones en *servicios reutilizables* que se comunican entre sí a través de un bus de servicios.
+Cada servicio realiza una función específica y puede ser usado por diferentes aplicaciones. En arquitectura SOA, los servicios se comunican entre si usando patrones como: solicitud-respuesta, publicar-suscribir, o enviar-olvidar. Los servicios son modulares y pueden actuar tanto como clientes como servidores dependiendo del contexto.
+
+En este sentido podemos organizar la arquitectura en 2 componentes:
+- **Nodos o  roles:**
+	- *Servicios independientes:* cada servicio tiene un rol definido
+	- *Bus de servicios empresarial:* infraestructura de software que facilita la integración y comunicación entre los servicios 
+	- *Clientes:* consumen los servicios ofrecidos
+- **Mensajes de comunicación:**
+	- *Clientes a ESB:* solicitudes de servicios, datos a procesar
+	- *ESB a servicios:* enrutamiento de solicitudes a los servicios adecuados
+	- *Servicios a ESB:* respuestas a las solicitudes, datos procesados
+	- *Servicios entre sí:* comunicación para coordinar acciones y compartir datos
+
+
+#### Arquitectura de microservicios
+
+
+
 # La Nube
 
 La *nube* permite el acceso remota  un conjunto de **recursos informáticos** incluyendo almacenamiento, procesamiento de datos y aplicaciones a través de una **red de servidores** interconectados.
