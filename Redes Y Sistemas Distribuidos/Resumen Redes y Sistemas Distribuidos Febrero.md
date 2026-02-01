@@ -874,3 +874,134 @@ El propósito de la capa física es transportar un stream de datos de una máqui
 - cable coaxial: 2 conductores concéntricos de cobre, bidireccionales, broadband (múltiples  canales en el cable)
 - Cable de fibra óptica: Fibra de vidrio que transporta pulsos de luz, cada pulso es un bit. Operan a alta velocidad y tienen baja tasa de errores
 - Radio: señal transportada en el espectro electromagnético, no usa cable físico, es bidireccional. Hay efectos de propagación de entorno: reflexión, obstrucción por objetos,, interferencia
+
+
+# REORDENAR DESPUES
+
+## Arquitectura de microservicios
+
+Los **requisitos Funcionales** de esta arquitectura son:
+- *Provisión de servicios* especializados: proporcionar funciones únicas y biend efinidas
+- *Comunicación entre servicios:* para cumplir con tareas más complejas
+- *Consumo de servicios:* los clientes o aplicaciones deben poder solicitar y recibir servicios de manera eficiente
+
+**Requisitos no funcionales:**
+- *Escalabilidad:* escalamiento independiente de cada servicio según demanda.
+- *Flexibilidad:* en el desarrollo y despliegue, los sesrvicios deben adaptarse a los cambios en las necesidades del negocio
+- *Mantenibilidad:* fáci implementar nuevas funcionalidades
+- *Seguridad:* se pueden implementar politicas de seguridad más centralizadas y consistentes a través de los servicios. Garantizar la seguridad de los datos y las transacciones entre servicios
+- *Independencia y autonomía:* cada servicio debe ser capaz de desarrollarse, implementarse y escalarse de manera independiente
+- *Resiliencia:* los servicios deben diseñarse para tolerar fallos y mantener la operación continua, incluso si uno de ellos falla
+
+Por la necesidad de abarcar dichos requisitos es que nace la **arquitectura de microservicios** como una evolución de la **SOA**. En esta la aplicación se divide en pequeños servicios independientes que se comunican entre sí a través de APIs que no dependen de un lenguaje especifico. Cada microservicio se especializa en una sola tarea y se encarga de una funcionalidad especifica, además pueden actuar tanto como cliente, como servidor dependiendo del contexto y la tarea que se está realizando. 
+Para la comunicación se usa APIs REST, o gRPC 
+
+Los Nodos o roles existentes en esta arquitectura son:
+- *Servicios independientes:* componentes funcionales de aplicación que interactuan entre si
+- *API gateway:* intermediario que gestiona las solicitudes de clientes y mocroservicios
+- *Clientes:* aplicaciones que consumen los servicios
+
+Los **mensajes de comunicación** son:
+- Clientes a API gateway: solicitudes de datos, comandos
+- API gateway a microservicios: ruteo de solicitudes a los microservicios correspondientes
+- Microservicios a API gateway: respuesta a las solicitudes, resultados de las operaciones
+- Microservicios entre si: comunicación inter-servicios para operaciones complejas
+
+Junto con esos mensajes los protocolos usados suelen ser SOAP o REST para la comunicación entre servicios
+
+## Protocolos de capa de aplicación
+
+Para hacer un diseño detallado de una aplicación de red sobre internet conviene definir un protocolo de capa de aplicación. Este se suele apoyar o no en un protocolo de base
+
+### FTP: Protocolo de Transferencia de Archivos
+
+Algunas caracteristicas de FTP:
+- Usado para transferir archivos hacia/desde un host remoto
+- Cada archivo tiene restricciones de acceso y poseción
+- FTP permite inspeccionar carpetas
+- FTP permite mensajes de control textuales
+
+Usa modelo cliente/servidor y els ervidor se conecta mediante el puerto 21.
+
+Se intercambian 3 tipos de paquetes:
+- Uso de *comandos* enviados al servidor FTP que son enviados como texto ASCII sobre un canal de control
+- 	*sintaxis:*
+- 		User username
+- 		PASS password
+- 		LISTS return list of file in current directory
+- 		RETR filename retrieves giles
+- 		STOR filename stores file onto remote host
+- *Mensajes de Respuesta:* a comandos del servidor FTP
+- 	*sintaxis:*
+- 		Código de estatus y frase
+- *Mensajes con datos enviados*
+
+
+Las reglas(o pasos) de FTP son:
+1. Cliente FTP contacta servidor FTP en puerto 21 usando TCP
+2. El cliente es autorizado en la conexión de control
+3. El cliente inspecciona directorio remoto, envía comandos sobre la conexión de control, se comienza con identificación de ususario y password
+4. Cuando el servidor recibe un comando de transferencia de archivo, el servidor abre una 2da conexión de datos TCP para el archivo con el cliente
+5. Luego de transferir un archivo, el servidor cierra la conexión de datos.
+
+El servidor abre otra conexión TCP de datos apra transferir otro archivo.
+El servidor mantiene el "estado:" directorio corriente, autenticación previa 
+
+
+## La WEB
+
+Para las paginas web suelen ser importantes los datos y la información. En el mundo hay entidades y relaciones entre entidades. Los datos se refieren a los datos de esas entidades y relaciones. Dichos datos suelen estar en bases de datos siendo estas una de las fuentes de datos que usan las páginas web.
+
+Los datos se procesan de determinada manera y se obtiene lo que se llama información. Esta información es la que tienen las paginas web pudiendo ser organizadas de distinta forma en base a los datos extraidos, no necesariamente en formato de texto, pueden ser diagramas, imagenes, figuras, tablas. Aun asi una página web puede ser solo de datos o solo de información
+
+Se pueden utilizar lenguajes de consulta para expresar consultas sobre datos con el posible fin de generar información. Las consutas son procesadas por motores de bases de datos apra retornar los datos deseados. 
+
+Para ver los datos deseados otra alternativa a escribir consultas en lenguaje de consultas es **navegar**. Al navegar uno va viajando por una serie de pantallas que contienen los datos que desea inspeccionar. Llamamos hipertexto a un conjunto de textos donde cada uno de los cuales contiene enlaces a otros textos. Al seleccionar un enlace se muestra el texto deseado enlazado. Por ende recorrer varios hipertextos es navegar.
+Además nos vamos a referir con medias a cosas como fotos, videos, audios, gráficos. Con esta idea podemos generalizar el hipertexto a **hipermedia** donde tenemos un conjunto de nodos donde cada nodo puede tener texto y medias Y enlaces a otros nodos
+
+Con estos conceptos ya podemos decir que una Página Web puede contener vinculos a otras páginas web ubicadas en cualquier lugar del mundo y que si bien una página suele contener texto, tambien puede referencias varios objetos
+
+Las **páginas web estaticas** son simplemente documentos en algún tipo de formato usando HTML5.
+Como la información cambia frecuentemente estas pueden ser muy ineficientes, ya que deberiamos modificarlas a mano. Para solucionar esto surgen las **Páginas dinamicas** donde las páginas HTML son generadas por medio de programas que se ejecutan del lado del servidor que toman parámetros de entrada que suelen ser ingresados como valores de formularios.
+
+Que el servidor tenga que construir páginas dinamicas puede ser ineficiente támbien por varios motivos:
+1. La página nueva que genero el servidor puede tener mucho en comun con la que ya se encontraba en el browser, repitiendo una parte a ser enviada por la red
+2. El cliente se queda bloqueado esperando luego de hacer un pedido HTTP al servidor web y recién puede continuar ejecutandose cuando recibe una página. Estos llamados **pedidos sincronicos** pueden ser conflictivos si el procesamiento de un pedido del lado del servidor toma mucho tiempo ya que el no poder usar la aplicación web mientras tanto para otra cosa puede ser bastante desagradable
+
+La solución a estos problemas es usar una **página única**. Cuando se entra en la aplicación web el servidor web manda una página única al browser que contiene una interfaz con el ususario completa con apariencia similar a las interfaces de usuario de aplicaciones de escritorio. Desde esta página única se pueden hacer los pedidos de datos al servidor web, donde este ultimo solo se encarga de obtener los datos, no de computar las páginas de forma tal que luego de hacer el pedido de datos la aplicación puede seguir haciendo otras tareas mientras se procesa el pedido. A esto se lo llama **pedido asincronico**. Luego cuando llegan los datos se actualiza la interfaz del usuario
+
+### URLs
+
+Como todo enlace incrustado en una página web necesita una manera de nombrar a otra página web y similarmente un objeto referenciado por una página web necesita una manera de ser nombrado, las páginas/objetos se nombran usando URLs (Localizadores Uniformes de Recursos) que son conformados por:
+- Nombre del protocolo (HTTP)
+- Nombre de dominio de host que contiene la página
+- El nombre del archivo que contiene la página(camino al archivo)
+
+El problema de este formato es que no es suficiente para especificar la página dinámica deseada o el programa que obtiene los datos deseados. Es necesario tener parámetros para la creación de páginas dinámicas o para el programa que obtiene datos y es necesario poder ingresar los parámetros en el pedido HTTP.
+
+La primera solución es que la URL contenga el nombre de programa y parámetros, donde estos ultimos son ingresados por medio de un formulario HTML. En esta solución los parametros son pares $\text{nomre=valor}$, se separa el nombre del programa con ? y los parametros con &.
+
+Otra solución es que los aprametros se ingresan separados por & en un campo especial del pedido HTTP llamado *cuerpo de la entidad* donde los URL tienen tamaño maximo, cuando los parámeetros exceden ese tamaño máximo no se puede usar la solución 1, ahi es se torna util la 2da solución
+
+
+### La web
+
+Un **sitio Web** es un conjunto de páginas web relacionadas localizadas bajo un único nombre de dominio y publicadas por al menos un servidor web, tipicamente producida por una organización o persona. Estos sitios se centran en entregar contenido mediante, usualmente, páginas estaticas
+
+Una **Página de inicio** de un sitio wewb es una página de entrada al sitio web que sirve de guia hacia las páginas que contienen la información necesaria, suele ser la página que se carga por default al navegar
+
+### Aplicaciones web
+
+Las **aplicaciones web** retornan y almacenan información usando scripts del lado del servidor y del lado del browser ejecutan también scripts para diversas tareas. Las mismas suelen soportar tareas, funciones o procesos, siendo su objetivo principal que el usuario realice una o más tareas
+
+En una **aplicación web social** los usuarios pueden crear y compartir contenido, además de comunicarse entre si mediante posts, comentarios y mensajes.
+
+La **Web 2.0** son sitios y aplicaciones que hacen uso de contenido generado por usuarios finales y se caracteriza por una mayor interaccion del usuario, una mayor colaboracion de los usuarios y canales de comunicación mejorados.
+
+Actualmente esta en desarrollo la **Web 3.0** caracterizada por:
+- Descentralización: los usuarios están en control de sus datos, los usuarios son dueños del valor que generan, conexiones P2P
+- Blockchain: permite transacciones más seguras, privacidad de datos y propiedas
+- Web semántica: losd atos tienen significado y son legibles por computadoras, considerandose:
+- 	Datos enlazados abiertos: se identifican objetos con URLs, al ver una URL se accede a información util. Dentro de la información a un URL puede haber enlaces a otros URL
+- 	Metadatos semánticos: etiquetas semánticas agregadas a las páginas web para describir mejor su significado
+- Uso de inteligencia artificial: procesamiento de lenguaje natural y aprendizaje automatico
