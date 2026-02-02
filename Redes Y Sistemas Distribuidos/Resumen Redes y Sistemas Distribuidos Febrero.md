@@ -889,3 +889,69 @@ Actualmente esta en desarrollo la **Web 3.0** caracterizada por:
 - 	Datos enlazados abiertos: se identifican objetos con URLs, al ver una URL se accede a información util. Dentro de la información a un URL puede haber enlaces a otros URL
 - 	Metadatos semánticos: etiquetas semánticas agregadas a las páginas web para describir mejor su significado
 - Uso de inteligencia artificial: procesamiento de lenguaje natural y aprendizaje automatico
+
+
+Para ver las páginas web se usa un *navegador*. Este permite pedir mediante el protocolo HTTP una página/objetos a un servidor web. Una página pedida puede ser dinámica, estatica o una página única. El servidor web retorna la página en respuesta al pedido del navegador. Si els ervidor retornó una página, el navegador interpreta el texto y los comandos de formateo que contiene la página y despliega la página adecuadamente formateada en pantalla.
+
+Un problema que surge con esto es que para poder desplegar una página el navegador tiene que entender su formato. Para que los navegadores entiendan las páginas web estas se escriben en un lenguaje llamado HTML
+
+Para realizar la comunicación entre el browser y el servidor web hay un orden que seguir:
+1. El cliente inicica una conexión TCP con el servidor web, usando el puerto 80
+2. El servidor web acepta la conexión TCP del cliente
+3. Mensajes HTTP intercambiados entre el browser y el servidor web
+4. La conexión TCP se cierra
+
+Con HTTP el servidor no mantiene información acerca de pedidos del pasado del cliente. Los protocolos que mantienen el "estado" o historial son complejos
+
+Como no todas las páginas contienen solamente HTML, cuando un servidor regresa una página también regresa alguna información adicional acerca de ella llamado tipo MIME. Si este tipo MIME no es uno de los integrados, el navegador consulta una tabla de tipos MIME que asocia un tipo MIME con un visor.
+
+
+
+Para desarrollar visores se usan plug-ing y aplicaciones auxiliares.
+**Un Plug-in** es un módulo de código que se ejecutan dentro del proceso del navegador. Estos son instalados por el navegador como una extensión de si mismos. Por consecuencia, los plugins tienen acceso a la página actual y pueden modificar su apariencia.
+La *interfaz del plugin* es un conjunto de procedimientos que todos los plugins tienen que implementar a fin de que el navegador pueda llamarlos. Mientras que la *interfaz del navegador* es un conjunto de procedimientos del navegador que e plugin puede llamar. Una vez que un plugin completa su trabajo, se lo elimina de la memoria del navegador.
+
+**Las aplicaciones auxiliares** se ejecutan en un proceso separado del browser, no ofrecen interfaz al navegador ni usan servicios de este. Suelen aceptar el nombre de un archivo y lo abren y despliegan
+
+### Servidores Web
+
+A un *servidor web* se le proporcionará el nombre de un archivo correspondiente a una página a buscar y regresar. También se le puede proporcionar el nombre de un programa con parámetros a ejecutar. Un servidor web se lo puede ver como una computadora que almacena *software del servidor web* y archivos como documentos HTML, imágenes, archivos JavaScript, etc.
+
+Para optimizar el acceso a las páginas estaticas en disco se usa la caché de páginas estaticas en la memoria. Para ahcer aún mas rapido el servidor web se opta por una arquitectura con un módulo frontend y k modulos de procesamiento MP (hilos)
+
+Ahora veremos los pasos de un servidor web con múltiples hilos para manejar pedidos de páginas estáticas:
+1. Cuando llega una solicitud el frontend la acepta y construye un registro corto que la describe
+2. Después entrega el registro a uno de los MP
+3. Si se trata de un pedido de página estatica el MP primero verifica la caché para ver si el archivo está allí
+4. Si el archivo está en la cache actualiza el registro para incluir un apuntador al archivo
+5. Si el archivo no está en caché el MP inicia una operación de disco. Cuando el archivo lelga del disco, se coloca en la caché y se regresa al cliente
+6. Mientras uno o mas MP están bloqueados esperando a que termine una operación del disco, otros MP pueden estar trabajando en otras solicitudes
+7. Conviene tener además múltiples discos, para que más de un disco pueda estar ocupado al mismo tiempo
+
+Las arquitecturas actuales muestran una división entre frontend y backend donde al frontend se lo llama proxy reverso, porque retorna contenido de otros servidores backend y sirve estos objetos al ciente. También exiten soluciones que ponen en caché páginas creadas dinámicamente
+
+
+### Cookies
+
+Una cookie es un pequeño archivo o cadena con contenido en forma de nombre=valor que se usa en los pedidos y respuestas HTTP se envía información de estado de sesión.
+Los campos de una cookie son:
+- *dominio* (nombre del dominio destino de la cookie)
+- *ruta* en la estructura del directorio del servidor. Identifica que partes del árbol de archivos del servidor podrían usar el cookie
+- El *campo contenido* toma la forma nombre = valor
+- El campo *expira* el cual si esta vacio el navegador descarta la cookie cuando sale. Pero si se proporciona una fecha y hora, el navegador mantiene la cookie hasta que expire dicho horario
+- El campo *seguro* que se usa para indicar que el navegador solo puede retornar la cookie a un servidor usando un transporte seguro. Estos e usa para aplicaciones seguras como comercios electronicos.
+
+Si se quiere eliminar una cookie del disco duro del cliente lo que se hace es que els ervidor mande la misma cookie nuevamente pero con la fecha caducada.
+
+Para almacenar las cookies se usa un directorio de cookies para que el navegador pueda guardar las cookies en el disco duro de la máquina del cliente con la opcion de guardar la información en una base de datos.
+
+**Comunicación de cookies al cliente:**
+-	Cuando un cliente solicita una página web, el servidor puede proporcionar una cookie junto con la página solicitada
+
+**Comunicación de las cookies al servidor web:**
+- Antes que un navegador solicite una página a un sitio web, verifica su directorio de cookies para ver si el dominio al que está solicitando la página ya colocó alguna cookie
+- De ser así, todas las cookies para ese dominio se incluyen en el mensaje de la solicitud
+- Cuando el servidor web las obtiene, puede interpretarlas de la forma que desee
+
+
+
