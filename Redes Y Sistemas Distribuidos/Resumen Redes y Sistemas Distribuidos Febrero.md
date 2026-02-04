@@ -954,4 +954,225 @@ Para almacenar las cookies se usa un directorio de cookies para que el navegador
 - Cuando el servidor web las obtiene, puede interpretarlas de la forma que desee
 
 
+**Necesidades para un protocolo para la web**
+*Cosas que se necesita que soporte un protocolo para la web:*
+- Pedido de páginas, de objetos o de ejecución de programas que generan páginas
+- Manejo del estado de sesión
+- Poder mantener el sistema de archivos del servidor web
+- Recepción de páginas por un browser
+- Seguridad (encriptación de mensajes)
+- Feedback adecuado cuando no se puede responder los pedidos
+- Comunicación confiable
+
+
+### HTTP
+
+**HTTP:** *Hyper Text Transfer Protocol*. Transfiere páginas de servidores web a navegadores y manda pedidos de navegadores a servidores web. Soporta 2 tipos de mensaje:
+- HTTP-Request(de navegador a servidor web)
+- HTTP-Response (de servidor web a navegador web)
+
+
+#### Conexiones HTTP
+
+Existen 2 formas de HTTP, el persistente y el no persistente.
+
+El *HTTP no persistente:*
+- A lo sumo un objeto se manda por conexión TCP para luego cerrar la conexión
+- Descargar múltiples objetos requiere de muchas conexiones
+- 	En HTTP 1.0 se establece una conexión TCP por cada solicitud y se libera al recibir respuesta
+
+Este modelo de HTTP no es optimo, ya que para descargar una página estática puede ser necesario establecer varias conexiones 
+
+Para eso existe el *HTTP persistente*, en el cual:
+- Múltiples objetos pueden ser enviados a través de una única conexión TCP entre el cliente y el servidor
+- Bajo una misma conexión TCP los pedidos son procesados en orden y los resultados se mandan en orden
+- Soportado por *HTTP 1.1*
+
+**RTT (definición):** tiempo necesario para que un paquete pequeño viaje del cliente al servidor y de regreso.
+
+De esta forma podemos calcular el tiempo de respuesta de HTTP no persistente para recibir un archivo:
+- Un RTT para iniciar la conexión TCP
+- Un RTT para el pedido HTTP y el regreso de los primeros bytes de la respuesta HTTP
+- Tiempo de transmisión del archivo
+- Tiempo de respuesta de HTTP no persistente = $2RTT + \text{tiempo de transmisión del archivo}$
+
+Con HTTP 1.1 se pueden hacer varios pedidos bajo una misma conexión, pero van a ser procesados en orden y los resultados van a ser enviados en orden.
+Esto trae varios problemas, ya que no se envían documentos al browser aunque se sepa que se los va a necesitar ya que el servidor va a esperar que sean pedidos. Además no permite recibir varios pedidos, priorizarlos y reordenar las respuestas en el orden mas pertinente 
+
+Por ello se creo el protocolo *HTTP 2.0* en el cual:
+- Por medio de un mecanismo server push empuja archivos que sabe que van a necesitarse pero que el cliente puede no saber inicialmente
+- Las respuestas a los pedidos pueden volver en cualquier orden
+- HTTP 2.0 comprime los encabezados y los envía en binario para reducir el uso de banda ancha
+- Cada respuesta lleva un identificador de su pedido
+ Hoy en dia tanto Apache HTTP como Ngix soportan HTTP 2.0
+
+#### Pedidos HTTP
+
+Un mensaje de pedido deberia tener la siguiente información:
+- En caso que se quiera recibir una página:
+- 	El URL de un documento
+- 	La especificación de programa que genera la página web
+- El *tipo de acción* que se quiere hacer en el sistema de archivos del servidor web(meter páginas, borrar páginas, etc.)
+- Mandar *información sobre la máquina/software dek cliente* para que el servidor web pueda retornar páginas adecuadas al cliente
+- Mandar *información de estado de sesión* para que el servidor se entere
+- *Restricciones sobre el tipo de páginas* que el cliente puede aceptar
+
+
+Para indicar el tipo de acción que se quiere hacer se usa un campo al principio de la linea donde se pone el nombre del *método* que se quiere usar:
+- *Método Post:* Se usa cuando las páginas tienen un input de formulario. Este input es subido al servidor en un campo llamado **cuerpo de la entidad**
+- *Método que usa URL:* El metodo GET sirve para sacar la información de una URL concreta, de esta forma el input es subido en el campo URL de la línea del pedido
+- *Método PUT:* Sube un archivo en el campo cuerpo de la entidad en el camino especificado por el campo URL
+- *Método DELETE:* Borra el archivo especificado en el campo URL
+- *Método HEAD:* simplemente solicita el encabezado de la respuesta del servidor web, sin la página o datos de la respuesta, o sea, feedback sobre el resultado del pedido, tipo de contenido, etc.
+- *Método OPTIONS:* permite que el cliente consulte al servidor por una página y obtenga los métodos y encabezados HTTP que pueden ser usados con esa página. Aunque tambien se puede usar para saber los métodos HTTP soportados por el servidor web en general
+
+Para enviar mas información diversa lo que se hace es indicar el tipo de información de la que se trata y luego la información en si(body{}, params{}, etc)
+
+#### Respuestas HTTP
+
+La información que deberia tener un mensaje de respuesta:
+- Feedback adecuado sobre el pedido realizado (como cuando no se puede cumplir el pedido)
+- Página o documento solicitado
+- En ese caso información sobre el tipo de documento enviado (como el tipo MIME, ultima modificación, etc.)
+- Información de estado de sesión para mantener actualizado al cliente
+
+Para poder especificar en la respuesta el feedback sobre el pedido recibido se usa un código y un mensaje. El código de estado es de 3 dígitos y indica si la solicitud fue atendida o no. Mientras que para mandar además de la página solicitada información adicional en una respuesta HTTP se usan *encabezados de respuesta* que son pares de encabezado y valor donde de indica el tipo de información de la que se trata y luego la información en sí.
+
+Es decir que finalmente las respuestas HTTP tienen el siguiente formato:
+1. *Línea de estado*
+2. *Encabezado de respuesta*
+3. Luego viene el cuerpo de la respuesta
+
+#### Encabezados HTTP
+
+Los mensajes HTTP suelen tener *encabezados.* de pedido, respuesta o de ambos tipos.
+Estos encabezados se usan para *proveer información* a ser procesada por el receptor del mensaje, también se usan para *fijar restricciones* que deben cumplir mensajes futuros(tipos de páginas que pueden manejar los clientes, conjuntos de caracteres aceptables, etc.), para proveer información sobre *eventos* importantes o para proveer datos de *estado de la sesión*
+
+### HTML
+
+*HTML* es el lenguaje estándar para crear páginas web. Este describe la estructura de una página web e indica al navegador como mostrar el contenido de la página. La sintaxis es muy parecida a XML. Con HTML uno podria representar:
+- Páginas que incluyen texto, gráficos, hipervínculos, etc.
+- *Tablas* y *formularios*
+
+Un documento HTML es una serie de *elementos*. Pero ¿Que es un elemento? Bueno, un elemento es simplemento contenido cerrado entre *etiquetas* donde cada etiqueta tiene un nombre y esta demarcada entre '<','>'. Estas etiquetas pueden tener o no atributos, los cuales tienen un nombre y un valor separados por '='.
+
+**Pasos para generar páginas diámicas del lado del servidor:**
+1. Un usuario llena un formulario y hace click en el botón de envío
+2. Se envía un mensaje al servidor web con el contenido del formulario. Se proporciona el mensaje a un programa o una secuencia de comandos. El programa procesa el mensaje
+3. El programa solicita información a un servidor de bases de datos
+4. El servidor de bases de datos responde con la información requerida
+5. El programa genera una página HTML personalizada y la envia al cliente
+6. El browser muestra la página recibido al usuario
+
+Recordemos que las páginas dinamicas son páginas web creadas por programas que se ejecutan en el servidor. Suelen hacer las siguientes tareas:
+- Procesar parámetros de formularios
+- Procesar encabezados de pedido HTTP
+- Pedir datos a fuentes de datos
+- Generar páginas web con los datos recibidos
+- Generar encabezados de respuesta HTTP
+
+
+#### PHP
+
+**Enfoque PHP (procesador de hipertexto):**
+- Se definen páginas dinámicas mediante la inserción de comandos especiales dentro de páginas HTML.
+
+Para utilizar PHP el servidor web tiene que entender PHP. Ya que normalmente el código PHP es interpretado por un servidor web. PHP se diseño para trabajar con el servidor web Apache, aunque hoy en dia puede ser usado en la mayoria de servidores web.
+Algunas cosas que puede hacer PHP:
+- Generar contenido de página dinpamica
+- Operar con archivos en el servidor
+- Recolectar datos de formulario
+- Enviar y recibir cookies
+- Acceder a encabezados de pedido HTTP
+- Definir encabezados de respuesta HTTP
+- Acceder a base de datos
+
+PHP es gratuito y fácil de aprender y se ejecuta eficientemente.
+
+
+##### Acceso a campos de formularios
+- *$_POST:* usado para recoelctar datos de formulario luego de someter un formulario con método POST
+- *$_GET:* usado para recoelctar datos de formularios luego de someter un formulario con método GET.
+
+**Tipos ded atos de PHP:**
+- String: secuencia de caracteres entre comillas
+- Integer: número entero
+- Float: número con punto decimal o número en forma exponencial
+- Boolean: valores booleanos TRUE y FALSE
+- Array: un arreglo almacena varios valores en una variable
+- Object: PHP permite definir clases y objetos
+
+**Operadores:**
+- De comparación, de asignación
+- Para los distintos tipos de datos
+
+**Acceso a información de encabezados HTTP:**
+- $_SERVER: contiene información de encbezados, caminos y localización de scripts
+- Para acceder a encabezados poner como agumento alguna de las siguientes:
+- 	HTTP_USER_AGENT, SERVER_ADDR, SERVER_NAME, SERVER_SOFTWARE, SERVER_PROTOCOL, REQUEST_METHOD, REQUEST_TIME, QUERY_STRING, HTTP_ACCEPT, HTTP_CHARSET, HTTP_HOST, etc.
+
+**Definición de encabezados de respuesta HTTP:**
+- Hay que usar la función header()
+- Se deben fijar encabezados antes de la etiqueta <html aparezca
+
+
+**Definición de Cookies:**
+- Setcokkie() define cookie para ser enviada junto con el resto de los encabezados HTTP
+- Esta función debe usarce antes de generar cualquier salida, o sea antes que la etiqueta.
+- Un cookie se crea con la función setcookie(name, value, expire, path, domain, secure, httponly)
+
+**Acceso al valor de una cookie:**
+- $_COOKIE se usa para retornar el valor de una cookie
+- htmlspecialchars convierte caracteres especiales en entidades HTML
+
+## Capa de Protocolo Base de Redes Blockchain 
+
+Asumimos que hay un *registro de transacciones*. Veremos ciertos *requisitos a alcanzar* por el sistema en lo que se refiere al registro. Luego veremos que usar cadenas de bloques es una **solución**
+
+**Requisitos:**
+- *Registro de transacciones:* capacidad de almacenar transacciones
+- *Consistencia del estado del sistema:* todos los participantes deben tener una visión unificada del estado actual del sistema
+- *Descentralización:* queremos que el registro opere sin una autoridad central que controle el sistema
+- *Inmutabilidad:* una vez que las transacciones se agregan al registros, no pueden ser modificados ni eliminados
+- *Seguridad:* los datos del registro deben estar protegidos contra alteraciones y accesos no autorizados
+- *Transparencia:* todos los participantes deben poder ver y verificar las transacciones y los datos en el registro
+- *Consenso:* los nodos de la red deben acordar la validez de grupos de transacciones antes de agregarlas al registro
+- *Escalabilidad:* el registro debe ser capaz de manejar un número creciente de transacciones y nodos sin una disminución significativa en el rendimiento
+- *Rendimiento:* el tiempo de procesamiento de las transacciones y la actualización del registro debe ser eficiente
+- *Resiliencia:* el sistema debe ser robusto y capaz de recuperarse rapidamente frente a fallas o ataques
+- *Privacidad:* debe garantizarse la confidencialidad de ciertos datos y transacciones cuando sea necesario
+
+La solución a dichos requisitos es usar una cadena de bloques (blockchain):
+- Es una estructura de datos descentralizado y cronologica que almacena información en forma de bloques.
+- Cada bloque contiene un conjunto de transacciones
+- Se tiene una red de nodos distribuidos donde cada nodo tiene una copia completa de la blockchain
+- El *hash de un bloque* es un identificador único del bloque generando mediante un algoritmo criptografico. Funciona como una huella digital del bloque y cambia si se modifica cualquier dato del bloque. Un hash hace extremadamente dificil alterar un bloque sin ser detectado
+- Los bloques de una cadena de bloques están enlazados mediante *hashes*. Cada bloque contiene el hash del bloque anterior
+- Todos los participantes pueden ver los bloques de la blockchain
+- Se usan *mecanismos de consenso* para asegurar que los nodos acuerden la validez de los nuevos bloques
+- **Estructura de un bloque:**
+- 	*Encabezado del bloque:* contiene metadatos cruciales para la integridad y verificación
+- 	*Cuerpo del bloque:* almacena las transacciones realizadas
+- 	*Hash del bloque:* generado a partir de todos los datos contenidos en el bloque. Este hash garantiza que cualquier cambio resultaria en un nuevo valor completamente diferente, protegiendo así la integridad e inmutabilidad del registro de la blockchain
+- **Encabezado del bloque:**
+- 	*Hash del bloque anterior*
+- 	*Merkle Root:* es un hash que resume todas las transacciones dentro del bloque
+- 	*Nonce:* número aleatorio usado durante el rpoceso de minería para encontrar un hash valido
+- 	*TimeStamp:* marca temporal indicando cuando se creo el bloque
+
+**Como se logran los requisitos:**
+- *Distribución:* uso de varios nodos con copia de blockchain
+- *Inmutabilidad:* los bloques no pueden alternarse una vez agregados a la blockchain, cualquier cambio sería detectable porque alteraria el hash del bloque
+- *Transpariencia:* todas las transacciones son visibles públicamente
+- *Consenso:* por medio de los mecanismos de consenso
+- *Rendimiento:* la eficiencia en la creación de bloques y la validación de transacciones depende de la impelmentación y su algoritmo de consenso
+- *Privacidad:* se pueden implementar mecanismos para la privacidad como transacciones confidenciales
+- *Escalabilidad:* es un desafío por eso se desarrollaron soluciones de escalabilidad y otras tecnologías
+- *Seguridad:* se emplean algoritmos criptograficos para proteger los datos y las transacciones.
+- 	Además el uso de mecanismos de consenso como proof-of-work o proof-of-stake asegura que se necesita una cantidad significamente de recursos para comprometer la red.
+- 	La descentralización ayuda, un atacante tendría que comprometer mas del 50% de los nodos
+- *Consistencia:* mediante mecanismo de consenso todos los nodos acuerdan que bloque es el siguiente en añadirse a la cadena
+
+**Principales mecanismos de consenso:**
+- *Proof of Work(PoW):* hay *nodos mineros* que compiten por resolver problemas criptograficos complejos. El primero en resolverlo valida un bloque y recibe recompensas. Hay un alto costo energetico necesario para alterar bloques. Puede ser lento
 
