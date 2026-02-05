@@ -1666,7 +1666,222 @@ Algunas formas de organizar un contrato inteligente:
 - 	*recuperación social:* contactos de confianza ayudan al usuario a recuperar su cuenta
 - 	*contratos multisig:* exigir firmas multiples para recuperar credenciales
 - Registro de actividad y auditoria: decidir qué datos se registraran para monitoreo. Por ejemplo, usar logs de actividad
+
+
+## Capa de transporte
+
+**Proposito de la capa de transporte**
+La *capa de transporte(CT)* provee comunicación lógica entre procesos de aplicación que se ejecutan en diferentes sistemas finales. Esto no lo puede hacer la capa de red. La CT se implementa solo en los sistemas finales.
+Se busca una *comunicación Lógica*, como si los hosts ejecutando los procesos estuvieran directamente conectados
+La capa de transporte busca mejorar la calidad de los servicios de la CR
+
+La capa de transporte confía en los servicios de la Capa de Red.
+Llamamos *Entidad de transporte(ET)* al software/hardware de la capa de transporte
+
+**¿Por qué conviene estudiar la capa de transporte?**
+Al desarrollar una aplicación de red, hay que pensar en qué requisitos ella tiene referentes a la capa de transporte
+Ayuda a hacer aplicaciones más eficientes y de mejor calidad al conocer cómo funciona la capa de transporte.
+Para usar la API de los sockets ahce falta entender cómo funcionan algunos protocolos de capa de transporte
+Para mejorar protocolos de capa de transporte o diseñar nuevos protocolos
  
 
+**Problemas que soluciona la capa de transporte**
+- Uso de *temporizadores* y las  *retransmisiones de paquetes*
+- El direccionamiento explícito de los destinos
+- 	¿Cómo hacer para que un proceso adecuado atienda a las necesidades de una máquina cliente?
+- 	El proceso podría no estar activo, el cliente podría no saber cuál proceso usar, etc.
+- Uso de búferes para lograr comunicación confiable eficiente
+- Control de flujo (evitar que los emisores saturen a los receptores)
+- Evitar congestionar la red poniendo demasiados paquetes en ella.
+- 	Cuando la CR pierde paquetes, la CT puede solucionarlo
+
+*Segmento* es una unidad de datos del protocolo de transporte
+*Confirmaciones de recepción* de paquetes enviados
+Los tipos de paquetes que deben ser confirmados son:
+- paquete de datos
+- paquetes con información de control
+
+
+Un problema que se presenta es que la capa de transporte deberia permitir la entrega de segmentos al host destino, y que la entrega de segmentos sea ordenada (respetando el orden del flujo de datos a enviar recibido de la capa de aplicación).
+
+Una solución para la entrega ordenada de segmentos al host destino puede ser que:
+- El emisor numera los segmentos enviados, usando *números de secuencia*, respetando el orden del flujo de datos recibido de la capa de acplicación.
+- Para cada número de segmento enviado el emisor dispara un *temporizador de retransmisiones*.
+- El receptor manda *confirmaciones de recepción (ACK)* para segmentos recibidos correctamente.
+- Si expira el temporizador de un segmento sin recibir el ACK, el emisor retransmite el segmento correspondiente
+- El receptor *re-ensambla en orden* los segmentos recibidos y los entrega a la capa de aplicación.
+
+#### TCP
+
+*TCP (protocolo de control de transmisión)* tiene como meta el proporcionar un flujo de bytes confiable de extremo a extremo a través de una interred no confiable. TCP se adapta dinámicamente a las propiedades de la inter-red y se sobrepone a muchos tipos de fallas. Existe tambien la *Entidad de transporte TCP (ETCP)*, por lo que hay veces que diremos TCP para referirnos a la ETCP y a veces al protocolo TCP.
+
+**Problemas que resuelve TCP:**
+- Retransmisión de paquetes: uso de números de secuencia, confirmaciones de recepción y temporizadores
+- Fijar la duración de temporizadores de retransmisiones(algoritmo complejo)
+- Manejo de conexiones entre pares de procesos
+- Direccionamiento
+- Control de congestión
+- Control de flujo
+
+Una ETCP acepta *flujos de datos* a transmitir de procesos locales. Cada flujo de datos se *divide en fragmentos* llamados segmentos que no exceden los 64KB, y se envía cada segmento dentro de un datagrama IP.
+
+El servicio TCP se obtiene al hacer que tanto el servidor como el cliente creen sockets
+- Dirección de un socket = IP + Puerto
+- Para obtener el servicio TCP se debe *establecer una conexión* explicitamente entre el socket en la maquina emisora y uno en la maquina receptora.
+
+Un socket puede usarse para múltiples conexiones al mismo tiempo:
+- dos o más conexiones pueden terminar en el mismo socket
+- Las *conexiones se identifican* mediante los identificadores de sockets de los dos extremos (socket1,socket2)
+
+Es importante saber que cada byte de un flujo de datos a enviar en una conexión TCP tiene su propio *número de secuencia* de 32 bits, lo cual impone un límite en el tamaño de un flujo de datos. Este número de secuencia es importante para confirmaciones de recepción y para otros asuntos según veremos.
+La ETCP emisora y la receptora intercambian datos en forma de segmentos, donde cada segmento es el *encabezado TCP* ++ (0 o mas bytes) de datos.
+
+Existen **limites que restringen el tamaño de un segmento**, especificamente cada segmento debe caber en la carga útil de 65.515 bytes del IP. Cada red tiene una *unidad máxima de transferencia(MTU)* y cada segmento debe caber en la MTU (en la practica la MTU es usualmente 1500 bytes).
+
+Otro problema que surge en la capa de transporte al confiar en la capa de red es que, la capa de red (que incluye IP) no proporciona ninguna garantía de que los datagramas se entregarán de manera apropiada, tampoco garantiza que se entregarán.
+La solución que aplica TCP es:
+- Si un datagrama se recibe correctamente se confirma su recepción
+- Si no se confirma la recepción de un datagrama luego de un intervalo de tiempo entonces se debe retransmitir
+- Corresponde a TCP terminar los temporizadores y retransmitir los datagramas conforme sea necesario
+
+Otro problema es que los datagramas que llegan podrían hacerlo en el orden incorrecto, lo cual para cuando se trabaja con redes de datagramas. Esto es un problema principalmente porque usualmente la capa de aplicación del receptor necesita procesar los mensajes en el orden en que fueron enviados.
+Para solucionarlo TCP se encarga de reensamblar los mensajes en la secuencia apropiada.
+
+Cuando un transmisor envía un segmento, también inicia un temporizador. Cuando llega el segmento a destino, la ETCP receptora devuelve un segmento que contiene un *número de confirmación de recepción* igual al siguiente número de secuencia que espera recibir. Si el temporizador expira antes de llegar el ack, el emisor envía de nuevo el segmento
+
+También pueden llegar segmentos fuera de orden, por lo que habrá que esperar antes de entregar segmentos a la capa de aplicación y antes de enviar confirmaciones de recepción.
+Tambien pueden retardarse segmentos en tránsito durante tanto tiempo que el temporizador del emisor expira y los segmentos se retransmiten
+
+Además las retransmisiones podrían incluir rangos de bytes a los de la transmisión original. Esto puede suceder porque hay nuevos datos para enviar y se los puede mandar. Por ello se requiere una administración cuidadosa para llevar el control de os bytes que se han recibido correctamente en un momento determinado
+
+
+#### Segmentos TCP
+
+Los segmentos sin datos se usan para acks y *mensajes de control*. Se componen por:
+- *puerto de origen* y *puerto de destino:* ambos de 16 b. La dirección de un puerto más la dirección IP del host forman un punto terminal único de 48 b. Los puntos terminales de origen y destino en conjunto identifican la conexión
+- *Número de secuencia:* es número de byte en el flujo de bytes transmitido y corresponde al primer byte den el segmento. Tiene 32 b de lingitud
+- *Número de confirmación de recepción:* indica el siguiente byte esperado del flujo de bytes a transmitir. Tiene 32 b de longitud
+- *ACK:* se establece en 1 para indicar que el n° de confirmación de recepción es valido. Si el ACK = 0, entonces el segmento no contiene una confirmación de recepción
+- *longitud del encabezado:* N° de palabras de 32 bits en el encabezado TCP, suelen ser 20 bytes, que son 5 5 palabras de 32 b
+- El campo *opciones* es de longitud variable
+- *URG:* indica que el segmento contiene datos urgentes que deben procesarse de inmediato
+- *PSH:* sirve para pedir al receptor que procese y entrege los datos inmediatamente al nivel superior, en lugar de esperar a completar el buffer. Esto se usa en escenarios donde la inmediatez es clave
+- *RST:* se utiliza para reiniciar una conexión. Se puede enviar por ejemplo cuando hay un error critico en la conexión
+- *Urgent pointer:* complementa el indicador URG. Su proposito es especificar la ubicación del último byte de datos urgentes dentro del segmento
+- *CWR (congestion window reduced) y ECE (explicit congestion notification):* relacionados con el manejo de congestión en la red. CWR indica que el transmisor ha reducido su ventana de congestión. ECE señala que el receptor ha detectado congestión a través de notificaciones explicitas
+
+
+#### Transferencia de datos confiable
+
+Actualmente con mecanismos simples como confirmaciones de recepción, temporizadores y retransmisiones quedan lagunas en como se hace la entrega de datos confiables. Y quedan preguntas como: ¿Que se confirma exactamente en un ACK?, ¿Cuantos paquetes se envian antes de recibir un ACK?, ¿Que hace el receptor cuando se pierde o daña un paquete?.
+
+Para responder estas preguntas hay que definir un *protocolo de datos confiable*. Hay varios de estos porque hace falta *optimizar el rendimiento según las características de la red*, como la latencia, proporcion de errores, y capacidad de la red.
+
+La capa de transporte debe soportar al menos un protocolo para *entrega de datos confiable*. Veremos varios de estos protocolos de mas simple a mas complejo. Estos protocolos asumen que el canal puede:
+- Corromper paquetes
+- Perder paquetes
+- La transferencia de datos es en un sentido, o sea hay un emisor y un receptor
+
+El protocolo mas simple es el de *parada y espera*, aunque luego vermos mas complejos como los de *tubería*. Estos protocolos se pueden usar tanto en capa de transporte como en capa de enlace de datos, pues entrega confiable de datos es un problema de esas capas.
+
+Vimos que la Capa de Transporte se ocupa del uso de temporizadores y retransmisiones de paquetes, ya que los paquetes perdidos deben retransmitirse.
+Sabemos que un paquete no se perdio porque fue confirmado con un *paquete de confirmación de recepción(ACK)*. Por ello podemos asumir que un paquete se perdio si pasa un cierto tiempo y no fue confirmado, entonces se perdió y hay que retransmitirlo. Para medir este tiempo se usan temporizadores.
+
+Se puede prestar la situación donde el mensaje que se pierde es un ACK, y el paquete fuera retransmitido innecesariamente, por lo que llegaria mas de una vez el mismo paquete para terminar siendo transmitido a la capa de aplicación mas de una vez. Para solucionar esto se le asigna *números de secuencia* a los paquetes que salen con la idea de que dado un número de secuencia de un segmento que acaba de llegar, el receptor puede usar ese número de secuencia para decidir si el segmento es un duplicado y en ese caso descartarlo
+
+#### Protocolo de parada y Espera
+
+Suponemos que la latencia es lo suficientemente baja como para mandar solo un paquete anted de que llegue el ACK. En dicha situación un protocolo óptimo para manejarla se llama protocolo de *parada y espera*
+
+Tambien supondremos que el canal de comunicaciones subyacente puede perder paquetes. Los paquetes tienen números de secuencias, se trabaja con ACKs y se usan retransmisiones de paquetes.
+
+Con estas suposiciones el **comportamiento del emisor sera:**
+1. El emisor envía paquete P y *para* de enviar
+2. El emisor *espera* una cantidad "razonable" de tiempo para el ACK
+3. Si llega el ACK a tiempo, se envía siguiente paquete. GO TO 2
+4. Si no, se retransmite paquete P. GO TO 2
+Si hay paquete o ACK demorado pero no perdido la retransmisión va a ser un duplicado con igual número de secuencia, luego se descartara en el receptor
+
+
+Para evaluar un protocolo para comunicación confiable podemos simplificar un poco las cosas y además hacer un análisis de mejor caso. Para ello vamos a asumir que hay un canal de comunicación que une el emisor con el receptor y que la transmisión entre el emisor y el receptor es sin errores(no se ppierden paquetes, no se demoran paquetes, no se alteran paquetes en curso).
+
+Entonces, vamos a denominar como L la longitud de los segmentos, T a la tasa de transmisión del canal, RTT es el tiempo entre la salida del ultimo bit del mensaje y la llegada del primer bit del ack(pudiendose calcular a partir de "D" o *demora de propagación del emisor al receptor*) y $U_{sender}$ sera la utilización del canal
+
+De esta forma nos queda que:
+- *Tiempo de transmisión del segmento:* $L/T$
+- RTT = 2 * D
+- $U_{sender} = {L/R}/{RTT + L/R}$
+
+
+#### Protocolos de tubería
+
+En esta situación tenemos una latencia alta, el RTT es muy alto comparado con el tiempo de copiar un paquete. Por lo tanto se pueden mandar varios paquetes antes de que llegue el ACK del primer paquete enviado.
+Unos protocolos adecuados para dicha situación se los conocen como *protocolos de tubería*. En nuetro caso veremos 2:
+- Protocolo Retroseso-N
+- Protocolo de Repetición Selectiva
+
+Los protocolos de tubería se caracterizan debido a que el emisor puede enviar múltiples paquetes al vuelo a ser confirmados. Por lo cual hay que usar bufferes en el emisor y tener un número de secuencia de mas de un bit
+
+
+La ET emisora debe manejar *buferes para los mensajes de salida* porque puede hacer falta retransmitirlos. El emisor almacena en bufér todas los segmentos hasta que se confirma su recepción
+
+
+#### Protocolo Retroseso-N
+
+Si tenemos una latencia grande, la proporcion de errores o pérdida de paquetes es muy baja y rara vez se demoran paquetes, entonces se puede hacer el código del receptor mas sensillo y eficiente, usando la solución más fácil a estos problemas. Si estos problemas ocurren con cierta frecuencia, será necesario complicar el código del receptor para que se manejen eficientemente esos problemas.
+
+Si un paquete T a la mitad de una serie larga se daña o pierde, como la CT receptora debe entregar los paquetes a la capa de aplicación en secuencia, no puede entregarle los paquetes que llegaron bien despues de T.
+En estos casos, con *Retroseso-N* el receptor descarta todos los paquetes subsecuentes al paquete perdido, sin enviar ack para los paquetes descartados
+
+Entonces, el receptor envía *ack acumulativo*, el mayor número de secuencia tal que los segmentos anteriores se recibieron bien.
+El emisor tiene un solo temporizador para el paquete mas víejo no confirmado. Al expirar el temporizador retransmite todos los segmentos no confirmados. Si llega ACK nuevo y hay segmentos enviados no confirmados, el temporizador es reiniciado. Si llega ACK nuevo y no hay segmentos sin confirmar, el temporizador es detenido.
+Asumimos en el emisor que voy a tener varios bufferes, todos los del mismo tamaño. Como el RTT es fijo, estos representarián la cantidad de segmentos a enviar por ráfaga para aprovechar el canal al maximo. Para referirnos a los números de secuencia de esos búferes usamos el concepto de *ventana del emisor*
+Dicha "ventana" permite hasta N paquetes consecutivos sin confirmar. Llamamos *ventana emisora* a las tramas enviadas sin ack positivo o tramas listas para ser enviadas
+
+Si el espacio de secuencia es de MAX_SEQ + 1 números de secuencia no se puede hacer la ventana emisora de tamaño MAX_SEG + 1, como mucho puede ser de MAX_SEQ
+
+
+Para evitar que haya mas MAX_SEQ paquetes sin ack pendientes la solución es prohíbir a la capa de red que moleste con más trabajo, para ello se usa un "enable_network_layer" y "disable-network_layer"
+
+El principal problema de retroceso N es el uso ineficiente del canal frente a segmentos perdidos o demorados
+
+
+#### Protocolo de Repetición Selectiva
+
+En la situacion que tengamos latencia grande, proporción de errores o pérdida de paquetes importante y que los paquetes puedan demorar, va a ser necesario hacer que el código del receptor maneje eficientemente los problemas de la red, por más que esto signifiqie complicar el código del receptor. Veremos el protocolo de repetición selectiva que adopta este enfoque
+
+Si ocurre que un paquete T se pierde a mitad de una serie, la capa de transporte receptora debe entregar paquetes a la capa de aplicación en secuencia. Ocurre lo mismo que con el protocolo de repetición-N. En este caso la solución es distinta, los paquetes en buen estado recibidos después de un paquete dañado E se almacenan en un búfer. Cuando el paquete E llega correctamente, el receptor entrega a la capa de aplicación, en secuencia, todos los paquetes posibles que ha almacenado en el búfer. 
+Para ello el mecanismo mas común de retransmisiones es esperar a que el temporizador de E termine y el emisor lo mande de nuevo. Aunque, una mejor solución es usar un ack negativo (NAK) por el receptor, estimulando asi la retransmisión de paquetes antes que los temporizadores terminen y así se mejora el rendimiento.
+
+El receptor confirma individualmente todos los paquetes recibidos correctamente. Hay búferes para paquetes según se necesiten para su entrega eventual en orden a la capa de aplicación. El emisor solo reenvía paquetes para los cuales el ACK no fue recibido o se recibió un NAK. Hay un temporizador del emisor para cada paquete no confirmado
+
+La ventana del emisor contiene N números de secuencias consecutivos, además los limita a enviar paquetes no confirmados
+
+**Tipos de paquetes que puede haber en la ventana del emisor:**
+- Paquetes enviados y confirmados porque antes hay paquetes no confirmados
+- Paquetes enviados y no confirmados
+- Paquetes listos para enviarse en búfer
+
+Es necesario almacenar en búfer paquetes porque puede perderse un pquete y llegar otros a continuación del mismo y en repetición selectiva estos se almacenan. Para representar el conjunto de paquetes que puede almacenar en búfer el receptor se usan intervalos de números de secuencia dentro del espacio de npumeros de secuencia. Un intervalo de esos recibe el nombre de *ventana corrediza*
+
+**Tipos de paquetes que puede haber en la ventana del receptor:**
+- Paquetes esperados y no recibidos
+- Paquetes recibidos fuera de orden
+- Paquetes aceptables en la ventana que no han llegado aun
+
+Se mantiene en búfer un paquete aceptado por la ventana receptora hasta que todos los que le preceden hayan sido pasados a la capa de aplicación
+
+**Algunos detalles de la repetición selectiva:**
+- tamaño de ventana emisora comienza en 0 y crece hasta MAX_SEQ
+- el receptor tiene un búfer para cada número de secuencia en su ventana
+- cuando llega un paquete, su número de secuencia es revisado para ver si cae dentro de la ventana, de ser así, y no ha sido recibido aun, se acepta y almacena
+
+El tamaño de la ventana receptora = (MAX_SEQ + 1)/2. Con tamaños mayores no funciona
+En el encabezado de paquete hay número de secuencia de k bits
+**¿Como transmitir datos entre dos maquinas y en ambas direcciones eficientemente?**
+Para ello se "lleva a caballito (piggybacking)". Consiste en que cuando llega un segmento S con datos, el receptor se aguanta y espera hasta que la capa de aplicación le pasa el siguiente paquete P. La confirmación de recepción de S se anexa a P en un segmento de salida (usando el campo ack en el encabezado del segmento de salida).
+
+Sabiendo esto, para extender repetición selectiva para tener flujo de datos entre 2 maquinas en las dos direcciones hay que usar el piggybacking, es decir, la capa de transporte para mandar un ack, debe esperar por un paquete al cual superponer un ack.
+Esto nos trae otro problema, ¿Como evitar retrasar demasiado el envío de confirmaciones de recpción por no tener trafico de regreso? Bueno, se usa un temporizador auxiliar de modo que tras llegar un paquete de datos en secuencia, se arranca un temporizador auxiliar mediante start_ack_timer. Si no se ha presentado tráfico de regreso antes de que termine este temporizador, se envía un paquete de ack independiente. Esto siempre con el tiempo de temporizador auxiliar mucho menor a el tiempo de temporizador de retransmisiones, para asegurarse que el ack de un paquete correctamente recibido llegue antes que el emisor termine su temporización y retransmita el paquete
 
 
