@@ -2080,3 +2080,177 @@ En resumen **TCP Reno:**
 
 
 
+## Evitando segmentos duplicados retrasados
+
+Hay 2 razones por las que pueden llegar segmentos duplicados a un host receptor:
+1. Si se pierde un ack y el segmento se retransmite
+2. Si el segmento se demora debido a la congestión y su temporizador expira, el emisor lo retransmitira
+
+Como no se puede entregar segmentos duplicados a la capa de aplicación, es necesario saber si un segmento que llega al host receptor es duplicado o no.
+
+¿Como hacer para saber eficientemente si doss egmentos son diferentes o no?
+La solución inviable es comparar ambos segmentos bit a bit ya que esto requeriria almacenar todos los segmentos que llegaron previamente, y eso es muy ineficiente.
+
+Una mejor solución es numerar los segmentos con números de secuencia. Entonces los paquetes con n° de secuencia diferentes son distintos. Esta idea funcionaria bien si tenemos un n° de secuencia de tamaño arbitrario O números de secuencia lo suficientemente largos como para estar seguros de que no se van a reutilizar
+
+Aun así los npumeros de secuencia no pueden ser de tamaño arbitrario porque queremos que los segmentos tengan longitud máxima. Por lo tanto el espacio de números de secuencia es finito; porque queremos que el número de secuencia sea un campo del encabezado de longitud fija
+
+Esta idea de solo usar un espacio de secuencia finito y numerar los segmentos con n° de secuencia no siempre funciona bien
+Por ejemplo, en la situación que pasa cuando un segmento S con n° de secuencia X queda demorado debido a que la red esta congestionada. El temporizador de retransmisiones asociado a S expira y se retransmite S. El protocolo de enrutamiento cambia las rutas y la retransmisión de S llega rápido a destino. Pero aun quedo en la red un *duplicado retrasado* de S (el que tiene número de secuencia X). Este duplicado retrasado de S más adelante llega a destino generando problemas.
+Este tipo de problemas son tan serios que deben ser evitados
+
+
+Entonces ¿Como encaramos los problemas de duplicados retrasados?
+La idea es asegurar que ningun paquete viva más allá de T sec (tiempo de vida de paquete).
+Esto se refiere a paquetes de datos, retransmisiones de ellos y a confirmaciones de recepción. Eliminar paquetes viejos que andan dando vueltas por ahí.
+Veremos que esta idea hace que la solución de los problemas de duplicados retrasados sea manejable
+
+
+**Para resolver el problema de duplicados retrasados dentro de una conexión:**
+Asumiendo que T es el tiempo de vida de paquete, el origen etiqueta los segmentos con n° de secuencia que no van a reutilizarse dentro de T sec.
+Para lograr que al regresar al principio de los n° de secuencia, los segmentos viejos con el mismo n° de secuencia hayan desaparecido hace mucho tiempo, el espacio de secuencia debe ser lo suficientemente grande para garantizar eso
+
+Normalmente la cantidad de números de secuencia debe ser mayor a la cantidad de segmentos que puedo enviar en el tiempo de vida de cada segmento. Tendrá que ser potencia de 2 porque el número de secuencia es un campo del encabezado del segmento
+
+**¿Como evitar que un duplicado retrasado que pasa de una conexión a otra genere problemas?**
+Como al establecer una conexión se usan segmentos, una conexión debería tener un *N° inicial de secuencia* con el que comienza a operar
+
+Una idea de solución seria escoger como número inicial de secuencia de la conexión nueva un n° de secuencia que haga imposible o improbable que el duplicado retrasado de n° de secuencia X genere problemas. Además se mantiene dentro de una conexión que el origen etiqueta los segmentos con n° de secuencia que no van a reutilizarse dentro de T sec (tiempo de vida del paquete).
+
+Una implementación dada en el libro de Comer dice que:
+Al crear una nueva conexión cada extremo genera un número de secuencia de 32 bits aleatorio que pasa a ser el npumero inicial de secuencia para todos los datos enviados. Alguna implementación de TCP usa esta solución.
+Esta implementación tiende a funcionar debido a que la probabilidad de que un paquete duplicado retrasado genere problemas en una conexión siguiente es baja debido a la elección aleatoria del número inicial de secuencia de la conexión siguiente
+
+
+Otra implementación diferente es dada en el libro de Tanembaum, donde:
+Vincular el número de secuencia de algún modo al tiempo y para medir el tiempo usar un reloj de modo que:
+- Cada host tiene un *reloj de hora del dia*
+- Los relojes de los host no necesitan ser sincronizados, pues se supone que cada reloj es un contador binario que se incrementa a si mismo en intervalos uniformes.
+- El reloj continua operando aun ante la caída del host
+Cuando se establece una conexión los k bits de orden mayor del reloj = *Número inicial de secuencia*
+
+Esto funciona debido a que si el reloj se mueve más rapido que la asignación de npumeros de secuencia a los paquetes que se envían, entonces el número inicial de secuencia de una nueva conexión va a ser mayor al número de secuencia de cualquier duplicado retrasado de la conexión previa
+
+
+## Estableciendo conexiones
+
+Como al establecer una conexión se usan segmentos, una conexión debería tener un número de secuencia con el que comienza a operar.
+La idea sigue siendo la misma, vincular el número inicial de secuencia de algún modo al tiempo y para medir el tiempo usar un reloj
+
+La implementación de la idea de Tomlinson dice que:
+- Cada host tiene un reloj de hora del dia. Los relojes de los host no necesitan ser sincronizados, se supone que cada reloj es un contador binario que se incrementa a si mismo en intervalos uniformes. El reloj continua operando aun ante la caída del host
+- Cuando se establece una conexíon los k bits de orden mayor del reloj = *número inicial de secuencia*
+
+
+Cuando un host se cae, al reactivarse sus ET no saben dónde estaban en el espacio de secuencia. Este es un problema porque para el siguiente segmento a enviar no se sabe qué números de secuencia generar; si se genera mal, entonces el nuevo segmento podría tener el mismo número de secuencia que otro segmento distinto circulando por la red.
+Para solucionar esto vamos a requerir que las ET estén inactivas durante T segundos tras una recuperación para permitir que todos los segmentos viejos expiren (entonces no vamos a tener dos segmentos diferentes con el mismo número de secuencia)
+
+**¿Cómo hacer para establecer una conexión entre dos host?**
+Para establecer conexión el host de origen envía un segmento *CONNECTION REQUEST* al destino y espera una respuesta *CONNECTION ACCEPTED*.
+Supongamos que se establecen conexiones haciendo que un host 1 envía segmento S = CR N, P a host 2 donde N es el número de secuencia y P es el número de puerto. Host 2 confirma ese pedido con segmento CA N
+
+En este contexto puede pasar que S se demora demasiado en llegar a host 2, vence el timer en host 1 y host 1 manda un duplicado S'. Luego puede psar que host 2 reciba S' y un buen tiempo despues S
+El problema con esto es que no tenemos forma de saber si un segmento CR que contiene un número de secuencia inicial es un duplicado de una conexión reciente o una conexión nueva, por ende el host no sabe si mandar un segmento CA o no.
+La solución a esto es el *Acuerdo de las 3 vias* de Tomlinson de 1975 donde:
+- En un caso de operación normal solo hay que fijarse en el número de secuencia del segmento de datos enviado
+- En un caso de segmento CR duplicado con retraso. El host 1 rechaza el primer CA del host 2, al rechazar el host 1 del intento de establecimiento de conexión del host 2, el host 2 se da cuenta de que fue engañado por un duplicado con retardo y *abandona la conexión*; de esta forma un duplicado con retardo no causa daño
+
+
+#### Establecimiento de una conexión TCP
+
+El número de secuencia inicial de una conexión no es 0, se usa un *esquema basado en reloj* con un pulso de reloj cada 4 usec. Al caerse un host, no podra reiniciarse durante el tiempo máximo de paquete, para asegurar que no haya paquetes de conexiones previas vagando por internet.
+
+El campo *SYN* en el encabezado TCP se usa para establecer conexiones.
+La solicitud de conexión es con SYN = 1, y ACK = 0.
+La respuesta de conexión si lleva una confirmación de recepción, por lo que tiene SYN = 1 y ACK = 1. Recordar además que hay un campo con número de secuencia confirmado.
+
+En TCP las conexiones usan el *acuerdo de 3 vias*:
+1. Para establecer una conexión, el servidor, espera pasivamente una conexión entrante ejecutando LISTEN y ACCEPT y especificando cierto origen o bien nadie en particular
+2. En el lado del cliente ejecuta CONNECT, la cual envía un segmento TCP con el bit SYN encendido y el bit ACK apagado, y espera una respuesta
+3. Al llegar el segmento al destino, la ETCP allí revisa si hay un proceso que haya ejecutado un LISTEN en el puerto indicado en el campo puerto de destino
+4. Si no lo hay, envía una respuesta con el bit RST encendido para rechazar la conexión
+5. Si algún proceso está escuchando en el puerto ese proceso recibe el segmento TCP entrante y puede entonces aceptar o rechazar la conexión; si la acepta se envía un segmento de ack
+
+
+## Liberación de conexiones
+
+**¿Como hacer un protocolo para liberación de conexiones?**
+
+La primera idea seria hacer un protocolo en el que:
+- el host 1 dice "ya termine¿terminaste también?"
+- Si el host 2 responde "Ya termine también. Adios", la conexipon puede liberarse con seguridad.
+En la practica un protocolo asi no siempre funciona, porque existe el *problema de los dos ejércitos*
+
+Hay 2 ejercitos azules rodeando a un ejercito blanco. Si los dos ejércitos azules atacan simultaneamente van a ganar. Por eso quieren sincronizar su ataque. Supongamos que el comandante del ejercito azul 1 manda un mensaje  "¿que le parece que ataquemos en el horario X?", el mensaje llega y el comandante del ejercito azul 2 contesta que está de acuerdo. Aun así el ataque no va a ocurrir puesto que el comandante del ejercito azul 2 no sabe si el mensaje fu recibido por el ejercito azul 1.
+
+**SPOILER:** No existe un protocolo que resuelva el problema de los 2 ejercitos 
+
+Para el caso de liberación de conexiones "atacar" equivale a "desconectar". Si ninguna de las aprtes está preparada para desconectarse hasta estar convencida que la otra está preparada para desconectarse también, nunca ocurrira la desconexión
+
+Otra idea seria permitir que cada parte decida cuando la conexión está terminada. Este es un problema mas sencillo. Veremos cuatro escenarios de liberación de conexión usando un acuerdo de 3 vias. Aunque este protocolo no es infalible, generalmente es adecuado
+
+**La liberación de conexión en un host significa** que la ET remueve la información sobre la conexión de su tabla de conexiones abiertas y avisa de alguna manera al dueño de la conexión
+
+
+El caso normal:
+1. Host 1 envía un segmento DISCONNECTION REQUEST e inicia un temporizador para el caso que no llegue DR de host 2
+2. Al llegar DR al host 2, éste emite un segmento DR e inicia un temporizador para el caso de que no llegue respuesta de host 1
+3. Al llegar esta DR el host 1 envía de regreso un segmento ACK y libera la conexión
+4. Cuando el segmento ACK llega el host 2 tambien libera la conexión
+
+Caso 2 Si se pierde el último segmento ACK:
+- Al expirar el temporizador la conexión se libera de todos modos
+
+Caso 3 Si se pierde el segundo DR:
+- El host 1 no recibira la respuesta esperada, su temporizador expirará y todo comenzará de nuevo
+
+Caso 4, Respuesta perdida y DRs subsiguientes perdidos:
+Supongamos que todos los intentos repetidos de retransmitis la DR también fallan debido a la pérdida de segmentos:
+- Tras N reintentos el emisor se da por vencido y libera la conexión
+- Mientras tanto tambíen termina el temporizador del receptor y también se sale
+
+El protocolo anterior falla si se pierde la DR inicial y N retransmisiones. El emisor se dará por vencido y liberará la conexión, pero el otro lado no sabrá nada sobre los intentos de desconexión y seguirá plenamente activo. Esta situación origina una *conexión abierta a medias*
+
+Para evitar estas *conexiones abiertas a medias* hay varias soluciones. Una es evitar que el emisor se diera por vencido tras N reintentos, sino obligandolo a seguir insistiendo hasta recibir una respuesta. 
+El problema de esta solución es que si se permite que expire el temporizador en el otro lado, entonces el emisor continuará eternamente, pues nunca aparecerá una respuesta
+
+Otra manera de matar conexiones abiertas a medias es:
+- Si no ha llegado ningún segmento durante una cierta cantidad de segundos al host 2, se libera automaticamente la conexión en el host 2
+- Luego el host 1 detectará la falta de actividad y también se desconectara
+- Esta solución también resuelve el caso que la red "se rompio" y los host ya no pueden conectarse
+
+Para implementar esta idea es necesario que cada ET tenga un temporizador que se detenga y se reinicie con cada envío de un segmento.
+Por esto mismo no se puede garantizar absolutamente que cuando se libera una conexión no occure pérdida de datos. Pero si se puede limitar mucho que esto suceda
+
+
+#### Liberación de Conexiones
+
+La *liberación simétrica:*
+- Cada parte se cierra por separado, independientemente de la otra
+- Una de las partes emite un DISCONNECT porque ya no tiene más datos por enviar y aun está dispuesta a recibir datos de la otra parte
+- Una conexión se libera cuando ambas partes han emitido una primitiva DISCONNECT
+
+
+La liberación simetrica es ideal cuando cada proceso tiene una cantidad fija de datos por enviar y sabe con certidumbre cuándo los ha enviado
+En otras situaciones la determinación de si se ha efectuado o no todo el trabajo o si debe terminarse o no la conexión no es tan obvia
+TCP trabaja con liberación simetrica
+
+
+#### Liberación de una conexión TCP
+
+En TCP los encabezados tienen un campo dedicado a la liberación de conexiones.
+El campo *FIN* especifica que el emisor no tiene más datos que transmitir.
+Tras cerrar una conexión, un proceso puede continuar recibiendo datos indefinidamente
+Ambos segmentos, SYN y FIN, tienen número de secuencia y por tanto, tienen la garantía de procesarse en el orden correcto
+
+**Resumen:**
+- Para liberar una conexión cualquiera de las partes puede enviar un segmento TCP con el bit FIN establecido, lo que significa que no tiene más datos por transmitir, pero todavía puede recibir datos del otro lado
+- Al confirmarse la recepción del FIN, ese sentido se apaga. Sin embargo puede continuar un flujo de datos indefinidos en el otro sentido
+- Cuando ambos sentidos se han apagado, se libera la conexión
+- Normalmente se requieren 4 segmentos TCP para liberar una conexión: un FIN y un ACK para cada sentido. Sin embargo es posible que el primer ACK y el segundo FIN estén contenidos en el mismo segmento, reduciendo la cuenta total a 3
+- Una vez que el cliente manda el ACK al servidor, entra en un estado de espera llamado TIMED-WAIT
+- El tiempo gastado en TIMED_WAIT es de dos tiempos de vida de paquete. TCP espera esta cantidad para garantizar que todos los paquetes de la conexión han muerto, en el caso que el ACK final se haya perdido
+- Luego de la espera la conexión se cierra formalmente y todos los recursos del lado del cliente son liberados.
+- Ambos extremos de una conexión TCP pueden enviar segmentos FIN al mismo tiempo. La recepción de ambos se confirma de la manera normal y se apaga la conexión. No hay diferencia entre la liberación secuencial o simultanea por parte de los hosts
+
+
