@@ -1,4 +1,4 @@
-# Redes de Dispositivos 
+<img width="689" height="519" alt="imagen" src="https://github.com/user-attachments/assets/5e1849d7-7353-40dd-a9ff-47c730f007cf" /># Redes de Dispositivos 
 Una red de dispositivos es una estructura compuesta por dispositivos interconectados. Dos dispositivos o nodos están interconectados si estos pueden intercambiar información. Estos nodos también pueden compartir recursos, aplicaciones y servicios, facilitando así la colaboración y el funcionamiento conjunto de los dispositivos conectados. La conexión se hace por medios de transmisión, los cuales pueden usar medios físicos o inalámbricos, luego la comunicación entre nodos conectados se realiza mediante protocolos específicos que aseguran la correcta y eficiente transmisión de datos. En la materia nos interesan los siguientes ejemplos de redes de dispositivos:
 - *La Internet*: sirve para conectar computadoras entre si por medio de **proveedores de servicio de Internet**
 - *La nube*: Por medio de una **red de servidores** interconectados se proveen servicios a organizaciones o personas como almacenamiento y ejecución de aplicaciones
@@ -2254,3 +2254,158 @@ Ambos segmentos, SYN y FIN, tienen número de secuencia y por tanto, tienen la g
 - Ambos extremos de una conexión TCP pueden enviar segmentos FIN al mismo tiempo. La recepción de ambos se confirma de la manera normal y se apaga la conexión. No hay diferencia entre la liberación secuencial o simultanea por parte de los hosts
 
 
+## La Capa de Red
+
+La capa de red tiene como proposito el llevar paquetes de un host de origen a uno de destino siguiendo una ruta conveniente.
+Los asuntos de los que se encarga esta capa son:
+- Almacenamiento y reencío
+- Enrutamiento
+- Control de Congestión
+- Conectar redes de distintas tecnologías
+- Fragmentación
+
+**¿Por que estudiamos la capa de red?**
+- Para entender cómo están organizadas las redes
+- Para entender cómo se intercoenctan redes de distintas recnologías
+- Para aprender algunos conceptos fundamentales como proveedores de servicios de red, enrutadores, etc.
+- Para entender la necesidad de los enrutadores y cómo funcionan
+- Para entender cómo se hacen asignaciones de direcciones de red a máquinas en una red local, a instituciones varias. El por qué y cómo se lo hace
+- Para entender algunos problemas fundamentales y algoritmos alternativos para su solución. Enrutamiento, control de congestión, fragmentación
+
+El hardware subyacente de la capa de red se compone de varias subredes de distinta tecnología unidas entre sí usando puertas de enlace.
+Recordemos que un paquete no puede pasar tal cual de una red a otra porque los formatos de paquete difieren de una red a otra, y porque los tamaños maximos de paquetes difieren de una red a otra
+
+
+**Enfoques para mandar un conjunto de paquetes desde un host de origen a un host de destino**
+
+Hay dos bandos en relación a cómo se debe hacer esto:
+- Usar una ruta fija para mandar todos los paquetes (*servicio orientado a la conexión*)
+- La ruta puede cambiar, por lo que distintos paquetes pueden seguir distintos caminos (*servicio no orientado a la conexión*)
+
+*Servicio no orientado a la conexión:*
+- Alentado por la comunidad de internet
+- Los paquetes se enrutan de manera independiente. La ruta a usar entre los host va a cambiar cada cierto tiempo. Cada paquete debe llevar una dirección de destino completa
+- La nomenclatura usada es: Paquetes = *datagramas*, Subredes = *subredes de datagramas*
+-  Para ver el **Diseño de la tabla de un enrutador** vamos a suponer que: Existe un procedimiento que dada la dirección del host de destino me retorna dirección del enrutador destino, y que el enrutador de destino sabe cómo entregar el paquete a host de destino (por mas que el host de destino esté en una LAN)
+-  *Tabla del enrutador:* La tabla del enrutador solo necesita entradas para los enrutadores de la subred. cada entrada de la tabla de enrutador esta formada por filas "<enrutador de destino, línea de salida>" donde la linea de salida es la dirección de un enrutador
+
+Cuando lelga un paquete a un enrutador:
+1. Se lo almacena y se comprueba que llegó bien
+2. Se determina el enrutador de destino asociado al host de destino
+3. Se usa fila de ese enrutador de destino para reenviar el paquete por linea de salida de esa fila
+
+Podemos pensar que *dirección de un host* es un número con dos partes, <dirección de red, número de máquina>, donde:
+- La *dirección de red* sirve para identificar una red
+- El *número de máquina* sirve para identificar una máquina dentro de la red
+- Por ejemplo direcciones de 8 bits, red de 4 máquinas viene dada por las direcciones: 11010000, 11010001m 11010010 y 11010011 (dirección de red es 110100)
+- IP respeta esta convención pero con direcciones de 32 bits
+
+Podemos pensar que los enrutadores que están conectados a hosts de una misma red tambien forman parte de esa red. O sea que tienen el mismo valor en la parte de dirección de red (cuentan como máquinas tambien).
+Todo host de destino va a tener un enrutador con igual dirección de red y hay que usar ese enrutador de destino para llegar al host de destino
+
+Dada la dirección de host de destino, para encontrar enrutador de destino apropiado se debe buscar el enrutador de destino cuya dirección concuerde con la mayor cantidad de bits desde la izquierda con la dirección de host de destino.
+
+Por ejemplo, en el ejemplo anterior suponemos que tenemos enrutadores de destino de direcciones: 10010000, 110000001, 11110010 y 11010011. Suponemos que nos llega un paquete dirigido al host de destino 11010010. El enrutador de destino que concuerda en más bits con ese host de destino es 11010011 y ese es el que se va a considerar para llegar al host de destino
+
+**Servicio orientado a la conexión:**
+- Alentado por las compañias telefonicas
+- Todos los paquetes se mandan por la misma ruta
+- *Trabajo a realizar antes de mandar paquetes:*
+- 	Hay que configurar una ruta del host de origen al de destino
+- 	Esto se llama crear una conexión
+- 	*circuito virtual (CV)* = conexión
+- Cada paquete lleva un *identificador* que indica a cual CV pertenece
+- Cuando no se necesita enviar más paquetes se *libera la conexión*. Al hacer eo, también se termina el CV
+
+Se elige una ruta de la máquina de origen a la de destino. Esta ruta se almacena en tablas dentro de los enrutadores
+
+#### Enrutamiento jerárquico
+
+Cuando crece mucho el tamaño de las subredes, también lo hacen las tablas de enrutamiento.
+Estas tablas consumen memoria del enrutador, necesitan más tiempo de CPU para examinarlas en base a que tan grandes son
+
+
+¿Cómo hacer para que las tablas de enrutamiento no crecan demasiado cuando crece mucho el tamaño de la subred?
+La solución a esto se llama *enrutamiento jerárquico:*
+- Los enrutadores se dividen en *regiones*
+- Un enrutador sabe cómo enrutar paquetes a destinos de su región
+- Tambien sabe cómo enrutar a otras regiones
+- Pero no sabe nada de la estructura interna de las regiones en las que no está
+
+El precio a pagar del enrutamiento jerárquico es una longitud de ruta mayor, de esta forma no podemos aspirar a encontrar la mejor ruta
+
+Las tablas de enrutamiento jerárquico se presentan por tener una columna para el host destino, una para la linea por la que se va a enviar el paquete y una para la cantidad de "hops" que se necesitan para llegar. De esta forma tenemos entradas para todos los enrutadores locales, y entradas para las demás regiones en las que no está el enrutador
+
+Aun asi en las redes enormes, una jerarquía de dos niveles es insuficiente; la solución para esto es agrupar las regiones en clústeres, los clústeres en zonas, las zonas en grupos, etc.
+
+#### Arquitectura de un enrutador
+
+**Las funciones claves de un enrutador son:**
+- Ejecutar algoritmos de enrutamiento/protocolos (RIP, OSPF, BGP)
+- Enviar paquetes de enlaces de ingreso a enlaces de salida
+
+<img width="683" height="324" alt="imagen" src="https://github.com/user-attachments/assets/205551e7-6e38-4587-a2da-b10c7446d40c" />
+
+<img width="703" height="435" alt="imagen" src="https://github.com/user-attachments/assets/8cc7a9df-74d5-4916-a32a-7cbb0175eaf5" />
+
+<img width="689" height="519" alt="imagen" src="https://github.com/user-attachments/assets/10385b1c-b3a6-42ee-b05c-5a4dbb23297c" />
+
+
+#### Algoritmos de enrutamiento
+
+Queremos evitar los siguintes efectos indeseados:
+- Algoritmos enrutadores que puedan quedar inactivos
+- Los caminos pueden ser innecesariamente largos
+- Se pueden sobrecargar algunas de las líneas de comunicación y los enrutadores asociados a ellas
+
+  La causa de dichos problemas es que la capa de red elige mal las rutas para enviar paquetes.
+  Para escoger bien las rutas para enviar los paquetes se deben usar *algoritmos de enrutamiento* eficientes. Estos algoritmos se ejecutan en los enrutadores de la subder, son responsables de llenar y actualizar las tablas de enrutamiento
+
+Antes de ver los algoritmos de enrutamiento vamos a ver como representar una subred como un grafo:
+- Vamos a tener el Grafo G = (N,E) donde N = conjunto de enrutadores y E = conjunto de enlaces. Los arcos tienen etiquetas para el costo de atravesarlos
+- Los costos de los arcos podrian calcularse como función de varios parámetros como la distancia, ancho de banda, tráfico medio, costo de comunicación, longitud media de las colas, retardo medio y otros factores. Para calcular el costo de un camino (x1 , x2, x3 , ... , xn) simplemente debemos sumar los costos de los caminos intermedios, en este caso costo(x1,x2,..,xn) = costo(x1,x2) + costo(x2,x3) + ... + costo (xn-1,xn)
+
+**Algoritmo de enrutamiento de caminos más cortos:**
+Para elegir una ruta entre un par de enrutadores, encontrar en el grafo una de las *rutas mas cortas* entre ellos. Algoritmos de cálculo de la ruta mas corta entre dos nodos como el de *Dijkstra* (1959), donde:
+- Dado ung rafo conexo con costos en los enlaces, y nodo n en el grafo, obtiene *árbol de caminos más cortos* desde n hacia todos los demás nodos
+- El árbol de caminos más cortos se representa como un *mapeo* donde para cada nodo del grafo de la subred asigna a su padre (en el árbol de caminos más cortos)
+- Repasar los detalles del algoritmo de Dijkstra visto en algoritmos 2
+
+**Procedimiento para calcular tablas de reenvío en redes de datagramas usando algoritmo de Dijtstra:**
+1. Construir grafo de la subred con costos
+2. Ingresar grafo de la subred con costos en los enrutadores
+3. En cada enrutador construir tabla de enrutamiento, para lo cual:
+- 	Ejecutar algoritmo Dijkstra en el enrutador
+- 	A partir del árbol de caminos más cortos con raíz en el enrutador obtenido generar la tabla de reenvío del enrutador
+
+#### Algoritmo de Inundación
+
+La idea de inundación dice que para enviar un paquete de un origen $u$ a un destino $v$ los caminos usados son aquellos que respetan las siguientes reglas:
+- $u$ manda el mensaje por todas las líneas de salida
+- Cada paquete que llega a un enrutador distinto de $v$ se reenvpia por cada una de las lpineas excepto aquella por la que llegó
+
+Hay algunos problemas con la idea anterior:
+- La inundación genera grandes cantidades de paquetes duplicados, a menos que se tomen algunas medidas para limitar el proceso
+- Árbol de envío de paquetes. Cada arco representa un paquete que se envia
+- Árbol de envío de paquetes es infinito con infinitos duplicados. O sea, se generan infinitas rutas. La causa es la presencia de ciclos en el grafo de la subred
+
+Por eso, ahce falta limitar un poco el proceso de inundación dado en la idea anterior para resolver el problema. La solución es que cada enrutador recuerda *los paquetes difundidos* previamente por 'el para decidir si acepta un paquete
+  
+
+**Refinamiento de la solución de registro de paquetes difundidos:**
+- El enrutador de origen pone *número de secuencia en cada paquete que recibe de sus host (así se distingue entre paquetes distintos del mismo enrutador de origen)*
+- Un enrutador recuerda para cada enrutador de origen los números de secuencia recibidos
+- Si llega un paquete a un enrutador con par <enrutador de origen, número de secuencia> recibido antes, no se lo reenvía
+
+En la implementación para cada enrutador se usa una *tabla de registro de paquetes difundidos*.
+Con esto podemos limitar que las listas enlazadas crezcan sin limites. ¿Como? Bueno vamos a agregar una columna llamada contador que indica el mayor número de secuencia tal que llegaron paquetes con todos los números de secuencia anteriores desde ese enrutador de origen.
+
+Tambien existe **inundación con contador de saltos:** el cual integra un contador de saltos en el encabezado de cada paquete, que disminuye con cada salto y el paquete se descarta cuando el contador llega a 0.
+**¿Como se determina el contador de saltos?**
+Lo dieal es inicializar el contador de saltos a la *longitud de la ruta entre el origen y el destino*. Si el emisor desconoce el tamaño de la ruta, puede inicializar el contador en el peor caso, es decir, el *diametro total de la subred*
+
+Y por ultimo **Inundación selectiva:** Es una idea para la inundación bastante práctica en donde:
+- Los enrutadores no envían cada paquete de entrada por todas las lineas, sino solo por aquellas que van aproximadamente en la dirección correcta.
+- El enrutador necesita almacenar información para poder aplicar inundación selectiva, especificamente:
+- 	Se necesita saber en que dirección va cada linea
+- 	Se necesita saber en qué dirección está el destino
