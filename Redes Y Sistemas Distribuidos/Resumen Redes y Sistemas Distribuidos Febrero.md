@@ -2641,3 +2641,74 @@ El elegir paquetes al azar hace más probable que los host emisores más rápido
 
 El método RED se usa en internet cuando los hosts no pueden recibir señales explicitas de congestión. Tanenbaum dice que la mayoría de los host de internet no reciben mensajes explicitos de congestión de los enrutadores
 
+
+## La capa de Red IP y NAT
+
+Protocolo de CR *IP (protocolo de internet)*
+Su propósito:
+- Explicar formato de datagramas
+- Definición de direcciones IP
+- Definición de redes
+- Definición y uso de tablas de reenvío
+- Manejo de fragmentación de paquetes
+
+**Razones para estudiar IP:**
+1. Para entender cómo se hacen asignaciones de direcciones de red a máquinas en una red local, a instituciones varias. Para entender cómo designar o identificar a las redes
+2. Para comprender cómo se hace el renvío de paquetes en internet
+3. Para comprender cómo se hace la fragmentación y reensamblado de paquetes
+4. IP da la base conceptual para entender otros protocolos de capa de red en internet
+
+IP tiene dos versiones:
+- IPv4: trabaja con direcciones IP de 32 bits
+- IPv6: trabaja con direcciones IP de 128 bits
+- Los formatos de datagrama de la dos versiones son diferentes
+
+La capa de red del internet tiene las siguientes metas:
+1. *Datagramas IPv4* para poder comprender cómo los enrutadores/hosts hacen el procesamiento de paquetes
+2. Direcciones IPv4
+3. Conceptos fundamentales en los que nos basamos
+4. Asignación de redes a organizaciones
+5. Tablas de enrutamiento. Uso de enfoque CIDR
+6. Control de tamaño de tablas de enrutamiento. Uso de enfoque de agregación de prefijos
+7. Racionamiento de uso de direcciones IPv4. Uso del enfoque NAT
+
+#### Datagramas IP
+
+*datagrama IP* = encabezdo + texto
+*encabezado* = parte fija de 20 bytes + parte opcional
+Un encabezado tiene varios campos. Cada tipo de información que necesito va en uno o más campos. La parte opcional tiene longitud variable
+
+Entre las partes obligatorias estan:
+- Campo *IHL* (4b). Se maneja igual que el mismo campo en TCP, longitud del encabezado en palabras de 32b o 5 cuando no hay opciones.
+- Campo *longitud total:* 2B de encabezado + datps $\le$ 65535 B
+- Campo *tipo de servicio:* Los ultimos 2 bits se usan para información de notificación de congestión. Los 6 primeros bits se usan para indicar la clase de servicio
+- Campo *protocolo* (8b): dice a cuál proceso de transporte entregar el paquete
+- Campo *identificación:* se usa para que el host de destino determine a qué paquete un fragmento pertenece
+- Campo *tiempo de vida:* se usa para limitar el tiempo de vida de un paquete. Debe decrementarse en cada salto. Cuando llega a cero el paquete es descartado y se manda un paquete de advertencia al host de origen. Esto evita que los paquetes anden dando vueltas demasiado tiempo
+- Campo *suma de verificación:* se usa para detectar errores en el encabezado cuando el paquete viaja a lo largo de la red. Deve recalcularse en cada salto, porque el campo tiempo de vida siempre cambia. Es solo sobre el encabezado porque en capa de transporte se chequea el segmento entero con otro campo checksum.
+- En un datagrama IP tambien estan los campos *direcciones de origen y de destino*, cada una tiene 32 b e indican el número de red y el número de máquina. Como consecuencia de esto se usan npumeros IP diferentes para distinguir las máquinas de una red, además las direcciones IP son jerárquicas
+
+#### Direcciones IP
+
+Cada host y enrutador en la internet tienen una *dirección IP* tal que la dirección mas baja es 0.0.0.0 y la mas alta 255.255.255.255.
+**Una máquina puede tener más de una IP**, ya que cada máquina tiene una IP por cada red a la que está conectada
+
+Una *interfaz* es la conexión entre el host/enrutador y el enlace físico. Un enrutador tiene muchas interfaces, una por cada línea de salida. Un host tiene una o dos interfaces:
+- con Ethernet cableada
+- Con red inalambrica 802.11 (Wi-Fi)
+Cada interfaz tiene asociada una dirección IP
+
+Las inteerfaces están conectadas entre sí por medio de **conmutadores y estaciones base**
+
+
+#### Conceptos fundamentales en los que nos basamos
+
+Una red corresponde a un bloque contiguo del espacio de direcciones IP llamado *prefijo*.
+Los prefijos se escriben dando la dirección IP más baja en el bloque y la cantidad de bits usadas para la dirección de la red.
+Por ejemplo en el prefijo 128.208.0.0/24 la dirección IP más baja en el bloque es 128.208.0.0, la porción de la red es de 24 bits y hay 2^8 máquinas en la red
+
+En el libro de *Kurose* se define una subred como un conjunto de interfaces de dispositivos con la misma parte de red de la dirección IP.
+Otra definición seria máquinas que se pueden alcanzar físicamente entre sí *sin la necesidad de un enrutador interviniente*
+
+La **"Receta"** para determinar las subredes es:
+Desacoplar cada interfaz de su host o enrutador, creando islas de redes aisladas. Cada red aislada se llama una *subred*. Las subredes se indican usando prefijos
