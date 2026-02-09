@@ -2524,3 +2524,120 @@ Entonces para actualizar la tabla de enrutamiento de E se va a seguir la secuenc
 Lo malo del Algoritmo de Enrutamiento de Vector de Distancia, es que reacciona con rapidez a las buenas noticias, pero con lentitud ante las malas
 
 Esto se debe a que si tengo por ejemplo N nodos, y todos los estan operativos y **ALCANZABLES** entonces como en cada paso todos comparten información, en a lo sumo N saltos todos sabran la topologia de la red y los caminos. El problema viene cuando hay un nodo inalcanzable o inoperativo, ya que como los nodos solo hablan con los vecinos directos (a distancia de 1 salto) siempre pretenderan que hay algun vecino lejano que sabra como llegar al nodo inalcanzable, haciendo que nunca se detecte el error
+
+
+## Control de Congestión en la capa de red
+
+
+La cola en un búfer que precede a un enlace tiene capacidad finita.
+¿Que pasa con un paquete cuando llega a una línea de salida con buffer lleno?
+El paquete que llega a un búfer lleno se pierde. Los paquetes perdidos deben ser retransmitidos por el enrutador previo o el host emisor.
+
+Si comienzan a llegar muchos paquetes por algunas líneas de entrada y todas necesitan la misma línea de salida, se irán acumulando los paquetes en una cola. Si no hay suficiente memoria para almacenar todos los paquetes, muchos de ellos se perderán
+
+
+Si bien vimos control de congestión en TCP, estos algoritmos tienen problemas:
+- El host destino demora demasiado en enterarse de la congestión (solo por expiración de temporizador de retransmisiones o 3 ack duplicados)
+- Los hosts solo se enteran de pérdidas de paquetes, no pueden controlar qué paquetes perder y cuáles no
+
+Tenemos varias razones para estudiar el control de congestión en la capa de red:
+- Para resolver los problemas de los protocolos de control de congestión de TCP mencionados
+- Para entender las medidas que pueden tomar los enrutadores para detectar la congestión y colaborar con la capa de transporte para ayudar a controlar mejor la congestión
+
+Hay 2 tipos de soluciones que son las primeras que se nos ocurren:
+- Aumentar los recursos
+- Disminuir la carga en la subred (nos concentramos en esto)
+
+Formas de disminuir la carga en la subred:
+- **Regulación del tráfico:** hacer que hosts responsables de la congestión se enteren más rápido (que con protocolos de TCP) de la congestión y reduzcan su tasa de transferencia
+- **Desprendimiento de carga:** enrutadores descartan paquetes inteligentemente antes que se saturen los buferes
+
+
+#### Identificación de la Congestión
+
+¿Como puede hacer un enrutador para darse cuenta si tiene algún puerto de salida congestionado?
+Para ello cada enrutador monitorea la demora de la cola de línea de salida.
+Se asocia a cada línea d = *demora reciente de cola de esta línea*
+Tomar periodicamente una muestra de la *longitud de cola instantanea de la línea*
+Actualizar d periodicamente usando: $d_{nvo} = a \space d_{ant} + (1-a) * s$ donde $a$ determina la rapidez con que el enrutador olvida la historia reciente
+
+Siempre que $d$ rebasa un umbral, la línea de salida entra en un *estado de advertencia*.
+Cada paquete nuevo que llega se revisa para ver si su línea de salida está en estado de advertencia. Si es así, se realiza alguna acción
+
+
+#### Regulación de Tráfico
+
+La **regulación de tráfico** es cuando los emisores ajustan sus transmisiones para enviar un tráfico que la red pueda soportar.
+La congestión se da en los enrutadores (y no en los hosts).
+¿Como se puede enterar un host de que hay congestión?
+Bueno pues, se le avisa de la congestión
+Una vez que un enrutador tiene una línea de salida en estadod e advertencia puede avisar a los hosts responsables de los paquetes que llegan a esa línea congestionada
+
+**Método de paquetes reguladores:**
+1. Usar *paquetes reguladores* si la línea de salida esta en estado de advertencia. El enrutador regresa un *paquete regulador (PR)* al host de origen, proporcionándole el destino encontrado en el paquete
+2. Para que el paquete original no genere más PR más adelante en la ruta, en el paquete original se activa un bit del encabezado y despúes se reenvía
+3. El PR le pide al host de origen que reduzca en un porcentaje X el tráfico enviado al destino especificado
+4. El host ignora los PR que se refieran a ese destino por un intervalo fijo
+5. Una vez que haya expirado ese tiempo, el host escucha más PR durante un intervalo I. Si llega alguno, el host reduce el flujo aún más y comienza a ignorar nuevamente los PR. Si no llega ningun PR durante I, el host incrementa el flujo
+
+Lo malo del método de paquetes reguladores es que a altas velocidades o distancias grandes, el envío de un paquete regulador a los hosts de origen no funciona bien porque la reacción es muy lenta
+
+La solución es el *Método de paquetes reguladores de salto por salto*. Hacer que el paquete regulador ejerza su efecto en cada salto que da, de modo que:
+- Cuando el paquete regulador llega a un enrutador F, se le obliga a F a reducir el flujo al siguiente enrutador D (F deberá destinar más buferes al flujo)
+- Luego el paquete regulador llega al enrutador E anterior a F e indica a E que reduzca el flujo a F. Esto impone una mayor carga a los buferes de E, pero da un alivio inmediato a F. Y se sigue así sucesivamente
+
+
+**Método de bit de advertencia**. Señalar el estado de advertencia activando un bit especial en el encabezado del paquete. Cuando el paquete llega a su destino, la entidad transportadora copia el bit en la siguiente confirmación de recepción que se regresa al origen. A continuación el origen reduce el trafico. Mientras el enrutador está en estadod e advertencia, continua activando el bit de advertencia, lo que significa que el origen continua obteniendo confirmaciones de reepción con dicho bit activado.
+El origen monitorea la fracción de confirmacipnes de recepción con el bit activado y ajusta su tasa de transmisión de manera acorde. En tanto los bits de advertencia continuan fluyendo, el origen continua disminuyendo su tasa de transmisión.
+Cuando la tasa de transmisión disminuye lo suficiente, el origen incrementa su tasa de transmisión. Debido a que cada enrutador a lo largo de la ruta puede activar el bit de advertencia, el tráfico se incrementa solo cuando no había enrutadores con problemas
+
+Una implementación de bit de advertencia usada por TCP es *ECN (Explicit Congestion Notification):*
+- Se usa en TCP/IP
+- Se marcan 2 bits en el encabezado IP con distintos fines
+- 	00: transporte no capaz en ECN
+- 	10: transporte capaz de ECN, ECT(0)
+- 	01: transporte capaz de ECN, ECT(1)
+- 	11: congestión encontrada, CE
+- Si ambos extremos soportan ECN mandan sus paquetes con ECT(0) y ECT(1) respectivamente
+- Si el paquete atraviesa una cola congestionada y el enrutador soporta ECN, se cambia código en el paquete CE para avisar al receptor de la congestión
+- El uso de ECN en conexión TCP es opcional
+- Para usar ECN, debe ser negociado al establecer la conexión TCP incluyendo opciones adecuadas en segmentos SYN y SYN-ACK
+- Se usan dos banderas en encabezado TCP para soportar ECN:
+- 	ECE(ECN echo): se usa para mandar indicación de congestión al emisor
+- 	CWR (ventana de congestión reducida): es usada para confirmar que la indicación ECE fue recibida
+
+**Secuencia de ejecución de ECN típica:**
+1. Se negocia ECN en conexión TCP
+2. Emisor manda paquete IP P con ECT(0)
+3. P llega a enrutador congestionado que soporta ECN y enrutador marca P con CE
+4. Receptor recibe P con CE y manda segmento Q(con ACK P) de vuelta usando bandera ECE prendida
+5. Emisor recibe Q con ECE prendido, entonces emisor reduce la ventana de congestión
+6. Emisor manda siguiente segmento al otro extremo usando la bandera CWR prendida para confirmar recepción de aviso de congestión
+Se continúa transmitiendo segmentos con ECE prendido hasta recibirse un segmento con CWR prendido
+
+#### Desprendimiento de Carga
+
+En el esquema anterior cuando se satura una línea de salida de un enrutador, se pierden paquetes indiscriminadamente. Esto claramente es un problema a solucionar ya que no todos los paquetes tienen la misma importancia.
+
+Una solución seria descartar los paquetes inteligentemente antes de que se ocupe todo el espacio del búfer cuando hay estado de advertencia en una línea de salida
+
+Algunos criterios para escoger qué paquetes descartar:
+- **Según el tipo de aplicación que se está usando:**
+- 	Estrategia Vino: descartar primero los paquetes más nuevos
+- 	Estrategia Leche: descartar primero los paquetes mas viejos
+- **Según la importancia de los paquetes:**
+- 	Marcar los paquetes con clases de prioridades
+- 	Los enrutadores primero se desprenden de paquetes de la clase más baja, luego los de la siguiente clase, etc.
+
+Se suele usar desprendimiento de carga junto con reducción de tráfico. La respuesta a paquetes perdidos por desprendimiento de carga es que el origen disminuya su tasa de transferencia.
+Si expira el temporizador de retransmisiones, el emisor lo toma como pérdida de paquete. Vemos ahora una implementación de esta solución
+
+**Implementación del Algoritmo de detección temprana aleatoria (RED)** para detectar cuándo comenzar a descartar paquetes, los enrutadores mantienen un *promedio móvil de sus longitudes de cola*. Cuando este promedio de una cola C sobrepasa el umbral, una pequeña fracción de los paquetes son descartados al azar. Con cada uno de esos paquetes:
+1. El enrutador *elige un paquete al azar* de C
+2. Se descarta el paquete seleccionado
+3. El origen notará falta de ACK y la capa de transporte disminuirá la velocidad de transmisión.
+
+El elegir paquetes al azar hace más probable que los host emisores más rápidos pierdan un paquete, lo noten, y reduzcan su tasa de transferencia.
+
+El método RED se usa en internet cuando los hosts no pueden recibir señales explicitas de congestión. Tanenbaum dice que la mayoría de los host de internet no reciben mensajes explicitos de congestión de los enrutadores
+
