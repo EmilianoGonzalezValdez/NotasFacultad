@@ -2745,6 +2745,55 @@ Para ello el enrutamiento es jerárquico y solo se representan redes de organism
 Cada entrada de la tabla de enrutamiento se extiende para darle una máscara de 32 bits. *Tabla de enrutamiento* para todas las redes tiene entradas: (dirección IP inicio subred, máscara, línea de salida)
 
 
+**Uso de la tabla de enrutamiento cuando llega un paquete:**
+1. Extrar dirección de destino IP
+2. Luego analizar la tabla entrada por entrada, hacer AND de la máscara de la entrada con la dirección de destino y comparar el resultado con la dirección IP de inicio de la subread de la entrada
+3. Si coinciden entradas múltiples se usa la máscara más larga (la red más pequeña)
 
 
+#### Control de tamaño de tablas de enrutamiento
 
+Hasta aquí se ponen los prefijos de todas las subredes en tablas de reenvío, lo cual hace que las tablas de reenvío crezcan demasiado
+
+Para evitar que las tablas de reenvío crezcan demasiado, se combinan varios prefijos en un prefijo único más grande (conocido como superred). A esto se le llama *agregación de prefijos*
+
+**A distintas regiones geográficas se asignan distintos espacios de direcciones. Esto se puede aprovechar en la agregación de prefijos:**
+La idea seria combinar prefijos de varias redes que están en una misma región geográfica en un prefijo para un enrutador que está en otra región alejada.
+
+
+Cuando se usa agregación de prefijos, éste es un proceso automático. La agregación de prefijos es fuertemente usada en el internet y puede reducir el tamaño de las tablas de los enrutadores en alrededor de 200.000 prefijos.
+
+**Esta idea de agregación de prefijos no interfiere con redes más chicas que no fueron agregadas  que caen en bloques agregados**. Esto debido a que los paquetes son enviados en la dirección de la ruta más específica o el prefijo más largo a cazar (longest matching prefix). El trabajar de este modo provee flexibiidad
+
+
+Ejemplo de agregación de prefijos:
+- 192.168.1.0/24
+- 192.168.2.0/24
+- 192.168.3.0/24
+
+Debemos busacar la mayor cantidad de bits iguales en las 3 direcciones desde la izquierda hacia la derecha. En este caso, si pasamos a binario vamos a ver que los primeros 22 bits coinciden. Por lo cual para representar la nueva agregación se usa la dirección: 192.162.0.0/22
+
+
+#### Racionamiento de uso de direcciones IPv4
+
+En la situación en la que un provedor de servicios de internet (PSI) tiene una red de c bits (de dirección); esto quiere decir que se le dan $2^{32-c}$ números IP para máquinas. Con el esquema actual los clientes no pueden tener más de $2^{32-c}$ máquinas usando el servicio del PSI en un momento dado.
+
+¿Como podemos aumentar la cantidad de máquinas que usan el servicio del PSI bien por arriba de las $2^{32-c}$ a pesar de tener una red de c bits?.
+Resolverlo aumentaría drásticamente la cantidad de máquinas que pueden acceder a internet IPv4
+
+
+La solución viene con la *traducción de dirección de red (NAT)*.
+Asignar un solo N° de IP a cada organización para el tráfico de internet.
+1. Dentro de la organización cada computadora tiene una dirección IP única que se usa para el tráfico interno. (O sea, estos números IP no se usan en internet - solo adentro de la organización y pueden repetirse en distintas organizaciones)
+2. Cuando un paquete sale de la organización y va al PSI, se presenta una traducción de dirección (de la dirección de la computadora en la organización a la dirección IP usada por la organización en internet)
+
+**Implementación:** Para hacer posible este esquema los 3 rangos de direcciones IP se han declarado como privados. Las organizaciones pueden usarlos internamente cuando deseen. La única regla es que ningún paquete que contiene estas direcciones pueda aparecer en la internet. Los 3 rangos reservados son:
+- 10.0.0.0 -10.255.255.255/8 (16,777,216 hosts)
+- 172.16.0.0 - 172.31.255.255/12 (1,048,576 hosts)
+- 192.168.0.0 - 192.168.255.255/16 (65,536 hosts)
+
+Supongamos que en una organización cada máquina tiene una dirección 10.x.y.z.
+Cuando un paquete sale de las instalaciones, este pasa a través de una *caja NAT* que convierte la cirección interna de origen de IP a la dirección IP de la organización.
+
+Cada *mensaje TCP saliente* contiene puertos de origen y de destino que sirven para identificar los procesos que usan la conexión en ambos extremos.
+¿Que pasa con el uso de puertos cuando un proceso quiere establecer una conexión TCP con un proceso remoto?. Este se asocia a un puerto TCP sin usar en su máquina conocido como *puerto de origen* (indica dónde enviar mensajes entrantes de esta conexión). El proceso proporciona también un *puerto de destino* para decir a quién dar los mensajes en el lado remoto
