@@ -2797,3 +2797,145 @@ Cuando un paquete sale de las instalaciones, este pasa a través de una *caja NA
 
 Cada *mensaje TCP saliente* contiene puertos de origen y de destino que sirven para identificar los procesos que usan la conexión en ambos extremos.
 ¿Que pasa con el uso de puertos cuando un proceso quiere establecer una conexión TCP con un proceso remoto?. Este se asocia a un puerto TCP sin usar en su máquina conocido como *puerto de origen* (indica dónde enviar mensajes entrantes de esta conexión). El proceso proporciona también un *puerto de destino* para decir a quién dar los mensajes en el lado remoto
+
+Con esto se genera un problema, cuando la respuesta vuelve, por ejemplo de un servidor web, se dirige naturalmente a la dirección IP de la compañia, ¿como sabe ahora la caja NAT con qué dirección se reemplaza?
+Una idea que no siempre funciona seria guardar la asociación en la caja NAT del número IP al puerto de origen que viene en el mensaje TCP/UDP dentro del paquete. Estas asociaciones se pueden guardar en una tabla en la caja NAT. Esto no suele funcionar puesto que podría ocurrir que dos conexiones de las máquinas 10.0.0.1 y 10.0.0.2 usaran el puerto de origen 5000 por ejemplo. Luego el puerto de origen no sirve para identificar el N° de IP.
+
+La solución adoptada en la práctica es distinguir entre el N° de puerto usado para identificar la máquina (o sea IPs en la red interna) y el N° de puerto usado por TCP/UDP para identificar la conexión. Cuando llega un paquete con puerto de origen, se busca en la tabla del IP del nodo y el N° del ouerto que se usa para la conexión.
+
+*Tabla de traducción de la caja NAT:*
+- Los indices en la tabla son números de puerto para identificar la máquina
+- Una entrada de la tabla contiene: (número de puerto para identificar la conexión, dirección IP)
+
+
+**Tratamiento de un paquete que llega a la caja NAT desde el ISP:**
+- El puerto de origen en el encabezado TCP se extrae y usa como un índice en la tabla de traducción de la caja NAT. Desde la entrada localizada, la dirección IP interna y el puerto TCP se extraen e insertan en el paquete. Entonces el pquete se pasa al enrutador de la compañia para su entrega normal usando la dirección 10.x.y.z
+
+**Tratamiento de un paquete saliente que entra en la caja NAT:**
+- La dirección de origen 10.x.y.z se remplaza por la verdadera dirección IP de la compañia y el campo puerto de origen TCP se reemplaza por un índice en la tabla de traducción de la caja NAT
+
+**Criticas a NAT:**
+- Viola el modelo de IP que dice que cada dirección IP identifica una sola máquina globalmente
+- Si la caja NAT se cae y se pierde su tabla de traducción, todas sus conexiones TCP se destruyen
+- Atrasa la adopción de IPv6
+
+*Nat 444:*
+- Los proveedores de servicio de internet (ISP) tambíen pueden tener una NAT. Esto hace que las direcciónes IPv4 puedan racionarse más aun y durar aun más tiempo
+- El espacio de direcciones IP reservado para NAT 444 es 100.64.0.0/10
+
+El espacio de direcciones de 32-bits ya ha sido agotado en varias regiones del mundo, por lo que hay que empezar a considerar un espacio de direcciones mucho mas grande
+
+Un problema con IPv4 es que algunos campos del encabezado hacen que el procesamiento de datagramas en los enrutadores lleve tiempo.
+
+#### IPv6
+
+**Requisitos:**
+- Que el formato de encabezado ayude a aumentar la velocidad de procesamiento y reenvío
+- Cambios en el encabezado para facilitar la calidad de servicio
+
+Hace falta que el procesamiento de encabezados sea más rápido, porque las redes cada vez son más rápidas, en cambio la velocidad de los procesadores se está estabilizando. Entonces para compensarlo hay que agilizar el procesamiento de los datagramas
+
+**Formato de datagrama IPv6:**
+- *Encabezado de longitud fija* de 40 bytes para procesamiento más ráoido de datagramas
+- *Capacidad de direccionamiento expandida:* direcciones de 128 bits
+- *Etiquetado de flujos:* se etiquetan paquetes que pertenecen a un mismo flujo para los cuales el emisor requiere manejo especial
+- 	**Consecuencia del etiquetado de flujos:**
+- 	Cuando un paquete con una etiqueta de flujo de cero aparece, los enrutadores pueden ver tablas internas para ver a qué tipo de tratamiento especial requiere
+- *Etiqueta de flujo:* (20 b) para identificar datagramas en el mismo "flujo".
+- La *prioridad* tiene dos usos: para dar prioridad a ciertos datagramas dentro de un flujo o para dar prioridad a datagramas de ciertas aplicaciones sobre datagramas de otras aplicaciones
+- *Longitud de carga útil:* (16 b) número de bytes en el datagrama IPv6 luego del encabezado (de 40 B)
+- *Limites de Saltos:* (8 b) el contenido de este campo se decrementa en 1 por cada enrutador que entrega el datagrama. Si el contador alcanza 0, el datagrama se descarta
+- *Próximo encabezado:* (8 b) significa cúal de los 6 encabezados de extensión de opciones actuales le sigue al encabezado. Si este encabezado es el último encabezado IP, el campo dice a cuál protocolo de transporte entregar el datagrama. Los encabezados de opciones también tienen este campo
+
+**Direcciones IPv6:**
+- Son escritas como 8 grupos de 4 dígitos hexadecimales
+- Para separar los grupos se usa ":"
+- Para optimizarlos los ceros a la izquierda de cada grupo pueden ser omitidos. Grupos con 16 bits iguales a 0 pueden remplazarse con dos ":"
+
+**Otros cambios de IPv6 en realción a IPv4:**
+- No se permite fragmentación ni re-ensamblado en enrutadores intermedios. Esto solo puede hacerse por el origen y el destino
+- *Suma de Verificación:* removido para reducir el tiempo de procesamiento en cada salto, ya que trabajar con este campo era costoso en IPv4
+- *Opciones:* están permitidas, pero fuera del encabezado, indicado por el campo de próximo encabezado
+
+**¿Que se puede hacer si un datagrama es demasiado grande para pasar por una línea de salida de un enrutador?**
+Un enrutador descarta paquetes que son demasiado grandes para la línea de salida y manda al emisor un mensaje de paquete demasiado grande. Luego el emisor puede reenviar los datos usando datagramas IP más chicos
+
+Una dirección IPv6 la podemos dividir en:
+- *Identificador de red:* identifica la red principal en la que se encuentra el dispositivo
+- *Identificador de subred:* ayuda a dividir la red principal en subredes mas pequeñas
+- *Identificador de interfaz:* identifica de manera única al dispositivo dentro de la subred
+
+**Esquema lógico de una red IPv6:**
+- *Nivel de red global:*
+- 	El ISP asigna un prefijo global a una organización
+- *Nivel de red interna:*
+- 	La organización asigna subredes dentro de ese espacio
+- *Nivel de subred:*
+- 	Son subredes divididas a partir del prefijo interno
+- 	Pueden usarse para departamentos
+
+Una organización recibe un *prefijo global*. El mismo también puede ser de /48. Un prefijo global de /48 puede ser dividido en subredes más pequeñas de /64 para uso interno
+
+En IPv6 no se usan prefijos para enlaces entre enrutadores. En lugar de eso se usan *direcciones link-local*. Las cuales:
+- Todas comienzan con el prefijo fe80::/10
+- Los primeros 10 bits son: 1111111010
+- El resto puede completarse para crear una dirección única dentro del enlace.
+
+Además, si dos dispositivos están conectados al mismo enrutador, pueden comunicarse entre sí usando direcciones link local. Las direcciones link local se configuran automáticamente. Los 64 bits menos signifiactivos suelen derivarse de la dirección MAC de la interfaz de red usando el método EUI-64
+
+Los *enrutadores de un ISP* manejan prefijos globales asignados a sus cplientes y otras redes conectadas.
+Los *enrutadores de una organización* (nivel interno y subred) manejan un prefijo global asignado por el ISP (por ejemplo 2001:db8:1::/48), y lo dividen en subprefijos mas pequeños (por ejemplo 2001:db8:1:1::/64).
+Sus tablas incluyen rutas para estos subprefijos.
+Los enrutadores distribuyen el trafico entre subredes internas(de /64)
+Estos enrutadores tienen rutas hacia el Gteway del ISP representadas por el prefijo global
+
+Las *direcciones ULA* están diseñadas para proporcionar conectividad privada dentro de una organización. Una dirección ULA siempre comienza con FC o FD en los bits mas significativos. Estas direcciones no pueden salir hacia la internet ni ser vistas fuera de la red interna, además son únicas dentro de la red local. Se usan para redes locales aisladas que no necesitan conectar la internet. También se pueden usar como respaldo de las direcciones globales. Si la conexión a internet falla, ULA permite que la conexión interna siga funcionando
+
+Por ejemplo: supongamos que tienes un prefijo ULA generado automaticamente como FD00:1234:5678::/48. Puedes dividirlo en redes internas:
+- subred A: FD00:1234:5678:1::/64
+- subred B: FD00:1234:5678:2::/64
+
+Un mismo dispositivo puede tener una direción ULA para comunicación interna y dirección global unicast para acceso externo
+Los dispositivos usan automaticamente la dirección adecuada según el tipo de comunicación. Los recursos internos pueden estar protegidos y aislados mediante direcciones ULA.
+
+**Asignación de redes globales en IPv6:**
+- *IANA (Internet Assigned Numbers Authority):* asigna bloques enormes de direcciones IPv6 a los registros regionales
+- *RIR (Registros Regionales de Inetrnet):* distribuyen bloques mas pequeños a los ISP, tipicamente de /32
+- *ISPs:* dividen estos bloques y asignan prefijos más pequeños a sus clientes
+- *Organizaciones:* divide el prefijo recibido en subredes
+
+En IPv6 las tablas de reenvío son diferentes que en IPv4. En IPv6 se usan los siguientes valores en una fila de la tabla de reenvío:
+- *El prefijo de destino*
+- *la interfaz de salida*
+- La *dirección del siguiente salto hacia el destino* que puede ser un enrutador adyacente
+- *Métrica:* medida del costo asociado con la ruta usada para elegir la mejor ruta disponible si hay mas de una
+Se pueden usar prefijos global, link-local, ULA, etc. en una misma interfaz
+
+En IPv6 las subredes suelen usar prefijos estándar de /64 lo que simplifica las búsquedas en las tablas de enrutamiento.
+Los prefijos globales, regionales y locales están organizados jerparquicamente. Eso permite una mayor agregación de rutas, reduciendo la cantidad total de entradas en las tablas.
+Las búsquedas en las tablas de reenvío suelen ser bastante eficientes y pueden lograrse en orden logarítmico del tamaño de la tabla en muchas implementaciones modernas.
+Los routers de alto rendimiento usan memoria TCAM (Ternary Content Addressable Memory) que permite realizar busquedas en paralelo en múltiples entradas de la tabla, alcanzando velocidades aún mayores.
+
+#### Subredes (Tanenbaum)
+*Uso de subredes:* permitir una red que sea dividida envarias partes para uso interno pero que todavia actúe como una red simple para el mundo externo. Cada subred puede ser una LAN que tiene un enrutador. Los enrutadores de una subred conectados a un *enrutador principal*. Fuera de la red, una subred no es visible
+
+Una subred típica de un campus universitario podría tener un enrutador principal conectado a un ISP o a una red regiónal, y numerosas Ethernet dispersas en diferentes departamentos. Cada una de las Ethernet tiene su propio enrutador conectado al enrutador principal, posiblemente mediante una LAN de red dorsal.
+
+Cuando un paquete entra en el enrutador principal,¿Cómo sabe a cual subred pasarlo?
+Una solución seria tener una tabla en el enrutador principal que indique cuál enrutador usar para cada host. Para ellos e requeriria una tabla muy grande en el enrutador principal y mucho mantenimiento manual conforme se argegan, movieran o eliminaran hosts.
+
+En otra solución, algunos bits se eliminan del N° de host para crear un número de subred. Por ejemplo, si la universidad tiene 35 departamentos, se usan 6 bits para el número de subred y 10 bits para el número de host, lo que permite hasta 64 Ethernets, cada una con a o mas 1022 hosts
+
+Ahora, ¿Como expresamos las subredes?
+Para ello el enrutador principal usa una *máscara de subred* que indique la división entre el número de red + número de subred y el host. Las máscaras de subred también se pueden escribir en notación decimal con puntos, o agregando a la dirección IP una diagonal seguida del número de bits usado para los números de red y subred.
+
+Fuera de la red, la subred no es visible, por lo que la asignación de una subred nueva no requiere comunicación con el ICANN (Corporación de Internet para la Asignación de Nombres y Números) ni la modificación de bases de datos extremas.
+
+¿Como serían las tablas de enrutamiento para el enrutador principal?
+Se tienen entradas con forma de: (dirección IP inicio subred, máscara).
+Cuando un paquete llega al enrutador principal, el enrutador hace un AND booleano de la dirección de destino con la máscara de subred para deshacerse del número de host y buscar la dirección resultante en sus tablas.
+
+**OBSERVACIÓN:** El origen de una subred denota el tamaño máximo de hosts que puede albergar. Por ejemplo, supongamos que inicia en 130.50.8.0, que en binario es 10000010.00110010.00001000.000000000. Esta red puede crecer hasta 2^11 host = 2048, y dicha mascara es 255.255.248.0
+
+Moraleja: la cantidad máxima de hosts se da por la cantidad de 0 a la derecha del ultimo 1 de la dirección de origen yendo de izquierda a derecha
+
