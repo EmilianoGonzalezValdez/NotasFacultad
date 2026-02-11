@@ -1661,7 +1661,7 @@ Los nodos de archivo almacenan el árbol de Merkle-Patricia, pero no necesitan d
 
 Igual que los nodos completos, los nodos de archivo procesan cada bloque recibido, ejecutando las transacciones incluidas en él y calculando el nuevo estado global.
 A diferencia de los nodos completos, los nodos de archivo no descartan los estados anteriores.
-Al calcular el nuevo estado global, guardan también los cambios incrementales(deltas) que se producen en el estado para poder reconstruir cualquier estado hístorico
+Al calcular el nuevo estado global, guardan también los cambios incrementales(deltas) que se producen en el estado para poder reconstruir cualquier estado histórico
 
 
 ## Decisiones de Diseño de Aplicaciones Distribuídas para Redes Blockchain
@@ -3051,3 +3051,98 @@ Cuando un paquete llega al enrutador principal, el enrutador hace un AND boolean
 
 Moraleja: la cantidad máxima de hosts se da por la cantidad de 0 a la derecha del ultimo 1 de la dirección de origen yendo de izquierda a derecha
 
+
+
+
+## Capa de Red - OSPF
+
+
+#### Sistemas autónomos
+
+Un *sistema autónomo* (SA) consiste de un grupo de enrutadores bajo el mismo control administrativo. A menudo los enrutadores de un proveedor de servicios de internet (PSI) y los enlaces que los interconectan constituyen un SA. A veces un PSI divide su red en varios SA. Los enrutadores dentro de un SA corren el mismo algoritmo de enrutamiendo llamado *protocolo de enrutamiento intra-SA*
+
+*Internet* es un conjunto de SAs. En internet los SA están numerados, cada uno con un número que lo identifica
+
+¿Por qué se necesita definir un protocolo intra-SA especial para internet?. Razones:
+- Los protocolos de enrutamiento estudiados no son compatibles con IP por la forma de las tablas de enrutamiento que se usaban.
+- Los protocolos de enrutamiento anteriores no son adecuados cuando un SA es demasiado grande (se hace pesado consultar y actualizar las tablas de enrutamiento)
+- El modelo de grafo para los protocolos de enrutamiento vistos no es adecuado cuando se trabaja con IP (los destinos son subredes con prefijo en lugar de enrutadores)
+- A veces hay más de un camino más corto a un destino y no se saca provecho de esta situación para balancear la carga que tiene un enrutador
+
+
+Para ello en 1988 se definió *OSPF (Open Shortest Path First):*
+- Es un *protocolo de puerta de enlace interior (IGP)* - OSPF trabaja dentro de un SA
+- Ahora la mayoría de vendedores de enrutadores lo apoyan
+- Supera los problemas anteriores
+- OSPF considera una adaptación del método de *enrutamiento de estado de enlace*
+
+**¿Por qué estudiar OSPF?**
+Porque OSPF introduce mejoras interesantes al protocolo de enrutamiento de estado de enlace:
+- Es compatible con IP
+- En OSPF el modelo de grafo asociado a una SA es bastante más flexible que el usado para los protocolos de enrutamiento anteriores al considerar redes de distintos tipos 
+- Para permitir SA grandes OSPF organiza un SA como una jerarquía de niveles
+- Con OSPF para un destino se puede considerar más de una línea de salida (cuando hay más de un camino óptimo) para balancear la carga en la red 
+Estas mejoras introducen problemas nuevos para diseñar un algoritmo de enrutamiento 
+
+**Aprenderemos:**
+1. Organización de los sistemas autónomos en OSPF. Para entender cómo se organiza un SA autónomo jerárquicamente y cómo esto da lugar a distintos tipos de enrutadores
+2. Estructura de redes soportadas por OSPF. Para entender tipos de redes soportadas por OSPF y cómo se combinan entre si
+3. Distintos tipos de avisos de estado de enlace. Para entender cómo la estructura jerárquica de un SA fuerza a ocultar la información, lo que da a lugar a distintos tipos de avisos de estado de enlace
+4. Adaptación del algoritmo de estado de enlace en OSPF
+
+#### Organización de los sistemas autónomos en OSPF
+
+¿Cómo conviene organizar un SA muy grande?
+Para ello vamos a considerar un SA como una red jerárquica. Ya analizamos anteriormente los costos en que se incurre si no se hace esto
+
+
+**Organización de una SA en OSPF:**
+- OPSF divide los SAs en *áreas* numeradas
+- *Un área puede contener varias redes adentro de ella*
+- Cada enrutador está configurado para conocer qué otros enrutadores están en su área
+- Las áreas no se traslapan
+
+**Tipos de áreas en un SA:**
+- Hay  un área que es la red dorsal y tiene el número es 0
+- Hay áreas que se conectan a la red dorsal. *Se puede entrar desde un área en el SA a cualquier otra área en el SA mediante la red dorsal*
+- La topología de la red dorsal no es visible desde fuera de esta
+
+**Clasificación de los enrutadores de un SA:**
+- *Enrutadores internos:* yacen completamente dentro de un área
+- *Enrutadores dorsales:* enrutadores en un área dorsal
+- *Enrutadores de borde de área (EBA)*, son aprte de una red dorsal y a la vez de una o más áreas
+- *ENrutador de borde de SA (EBSA):* inyecta en el área rutas a destinos externos en otros SA. Ya lo veremos con cuidado cuando estudiemos BGP
+
+
+
+#### Estructura de redes soportadas por OSPF
+
+
+La forma de estructurar un área es considerando los tipos de redes soportadas por OSPF. Se puede decir que un área permite acceder a un conjunto de LANs, cada una de ellas dada por un prefijo
+
+
+
+Una red de multi acceso se representa como un nodo para la red en sí. Los arcos desde ese nodo de la red a los enrutadores tienen peso 0
+
+**Tipos de conexiones y redes que soporta OSPF:**
+1. Las líneas punto a punto entre dos enrutadores
+2. Redes de multiacceso con difusión
+3. Redes de multiacceso con muchos enrutadores, cada uno de los cuales se puede comunicar directamente con los otros
+
+
+Para reflejar la red de arriba por medio de un grafo dirigido:
+- Los enrutadores se representan con nodos
+- A cada arco se le asigna un costo o retardo
+- Una conexión punto-punto entre dos enrutadores se representa por un par de arcos, uno en cada dirección. Sus pesos pueden ser diferentes
+
+
+#### Distintos tipos de avisos de estado de enlace 
+
+Un tipo de *aviso de estado de enlace (AEE)* contiene el costo de un enrutador a todos sus vecinos, este tipo de paquetes fue visto en el protocolo de estado de enlace.
+Como un SA es jerárquico, un área no puede conocer la topología de otra área A, pero sí información resumida de A. Dicha *información resumida de área* es otro tipo de aviso de estado de enlace.
+Los EBA *resumen* información de enrutamiento aprendida de un área para hacerla disponible en sus AEE que envían a las otras áreas
+
+
+¿Cómo definir la información resumida de un área no dorsal?
+Un EBA E recibe avisos de estado de enlace de todos los enrutadores de una de sus áreas A y con esa información determina el costo de alcanzar cada LAN de A.
+La información resumida de A contiene el costo de alcanzar cada LAN de A. Este paquete es puesto por el EBA E en la red dorsal para que llegue a las demás áreas
