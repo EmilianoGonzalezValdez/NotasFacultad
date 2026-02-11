@@ -231,10 +231,6 @@ En este sentido podemos organizar la arquitectura en 2 componentes:
 	- *Servicios entre sí:* comunicación para coordinar acciones y compartir datos
 
 
-#### Arquitectura de microservicios
-
-
-
 # La Nube
 
 La *nube* permite el acceso remota  un conjunto de **recursos informáticos** incluyendo almacenamiento, procesamiento de datos y aplicaciones a través de una **red de servidores** interconectados.
@@ -880,7 +876,7 @@ El propósito de la capa física es transportar un stream de datos de una máqui
 ## Arquitectura de microservicios
 
 Los **requisitos Funcionales** de esta arquitectura son:
-- *Provisión de servicios* especializados: proporcionar funciones únicas y biend efinidas
+- *Provisión de servicios* especializados: proporcionar funciones únicas y bien definidas
 - *Comunicación entre servicios:* para cumplir con tareas más complejas
 - *Consumo de servicios:* los clientes o aplicaciones deben poder solicitar y recibir servicios de manera eficiente
 
@@ -1228,10 +1224,10 @@ PHP es gratuito y fácil de aprender y se ejecuta eficientemente.
 
 **Definición de encabezados de respuesta HTTP:**
 - Hay que usar la función header()
-- Se deben fijar encabezados antes de la etiqueta <html aparezca
-
+- Se deben fijar encabezados antes de la etiqueta </html>  aparezca
 
 **Definición de Cookies:**
+
 - Setcokkie() define cookie para ser enviada junto con el resto de los encabezados HTTP
 - Esta función debe usarce antes de generar cualquier salida, o sea antes que la etiqueta.
 - Un cookie se crea con la función setcookie(name, value, expire, path, domain, secure, httponly)
