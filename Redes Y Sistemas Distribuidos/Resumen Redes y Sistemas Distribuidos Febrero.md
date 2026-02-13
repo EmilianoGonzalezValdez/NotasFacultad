@@ -3237,4 +3237,69 @@ En conclusión, OSPF es valioso porque ayuda a balancear la carga.
 "Recordar que para las tablas de re-envío se usa CIDR"
 
 
+## Capa de red Interredes
+
+Tener diferentes redes implica tener diferentes protocolos. Por ello existen enrutadores que pueden conectar dos redes de distinta tecnología llamados *enrutadores multiprotocolo (puertas de enlace)*. Para enviar paquetes de una red a otra con diferente tecnología las puertas de enlace traducen o convierten paquetes de un protocolo a otro, aunque hay otra solución, que seria construir una capa arriba de las diferentes redes que oculte las diferencias entre las distintas capas redes. Esta ultima idea fue la que dio lugar a TCP/IP de forma tal que IP provee un formato de paquete universal que todos los enrutadores multiprotocolo reconocen y puede ser pasado a través de casi toda la red
+
+
+**Problemas que surgen al pasar de una red a otra de tecnología distinta:**
+- Paquetes de una red de circuitos virtuales deben transitar a una red sin conexiones
+- Con frecuencia se necesitarán *conversiones de protocolo*
+- Se necesitan *conversiones de direcciones*
+- *Diferentes tamaños máximos de paquetes* usados por las diferentes redes
+
+
+#### Conceptos de enrutamiento de interredes
+
+*Grafo de la interred:*
+- Los nodos son enrutadores multiprotocolo; un lado entre dos enrutadores multiprotocolo significa que esos enrutadores están conectados vía una subred.
+Una vez construido el grafo de la interred, pueden aplicarse algoritmos de enrutamiento al grupo de enrutadores multiprotocolo.
+
+
+**Organización del enrutamiento en 2 niveles:**
+- En cada red se utiliza un *protocolo de puerta de enlace interior (IGP)*
+- Entre las redes se usa un *protocolo de puerta de enlace exterior (EGP)*
+La red puede usar diferentes protocolos IGP, pero debe usarse el mismo protocolo EGP.
+
+En internet el EGP se llama BGP (Border Gateway Protocol). Porque cada red es operada independientemente de las otras se le llama *Sistema autonomo* donde un provedor de internet puede tener uno o más SA.
+La internet con BGP busca caminos formados por la lista de nombres de sistemas autonómos y destino que es prefijo.
+Por eso la internet con BGP no trabaja con un grafo de la interred como los anteriores, ya que en ese grafo no se nombran SA , o prefijos y solo se nombran puertas de enlace.
+Pero pensar en términos de grafos sirve para teorizar o formalizar y se puede acomodar la estructura de acuerdo a las necesidades
+
+#### Fragmentación de paquetes
+
+Cada red impone un tamaño máximo a sus paquetes (las cargas útiles máximas suelen ir desde los 48 bytes con las celdas ATM hasta los 65515 bytes para paquetes IP)
+
+¿Que pasa si un paquete grande P quiere viajar a través de una red cuyo tamaño máximo de paquete es bastante más pequeño que P?.
+Bueno, en este caso las puertas de enlace dividen los paquetes en *fragmentos*, enviando cada fragmento como paquete de interred individual, aunque las redes luego tienen el problema de unir nuevamente los fragmentos
+
+Existen 2 estrategias opuestas para recombinar los fragmentos y recuperar el paquete original:
+- *Hacer transparente la fragmentación causada por una red de "paquete pequeño"* (a las demás redes subsiguientes por las que debe pasar el paquete para llegar a su destino final).
+- 	Con este método la red de paquete pequeño tiene las puertas de enlace que interactúan con otras redes.
+- 	Cuando un paquete de tamaño excesivo llega a una puerta de enlace, esta lo divide en fragmentos.
+- 	Todos los fragmentos se dirigen a la misma puerta de enlace de salida, donde se recombinan las piezas.
+- 	Las redes ATM (de circuitos virtuales) tienen hardware especial para esta estrategia
+- *Abstenerse de recombinar los fragmentos en las puertas de enlace intermedias*.
+- 	Una vez que se ha fragmentado un paquete, cada fragmento se trata como si fuera un paquete original. Todos los paquetes pasan por la puerta de enlace de salida.
+- 	La recombinación ocurre en el host de destino.
+- 	IP funciona de este modo
+
+Desventajas de la fragmentación transparente:
+- La puerta de enlace de salida debe saber cuándo ha recibido todas las piezas por lo que debe incluirse un *campo de conteo* o un *bit de fin de paquete* en cada paquete
+- Todos los paquetes deben salir por la misma puerta de enlace; esto puede bajar un poco el desempeño.
+- Hay una sobrecarga para reensamblar y volver a fragmentar repetidamente un paquete grande que pasa por varias redes de paquete pequeño
+
+Desventajas de la fragmentación no transparente:
+- Requiere que todos los host sean capaces de hacer el reensamble
+- Al fragmentarse un paquete grande, aumenta la sobrecarga total, pues cada fragmento debe tener un encabezado
+
+
+**Esquema de numeración de fragmentos:**
+- El protocolo de interred define un *tamaño de fragmento elemental*. Al fragmentarse un paquete todas las partes iguales al tamaño de fragmento elemental, excepto la última que puede ser más corta
+- Para saber a qué paquete pertenece un fragmento se numera el paquete original
+- Para referirme a un fragmento puedo poner en el encabezado el desplazamiento del bit o byte inicial en el paquete original
+- Para saber si vienen más fragmentos se debe poner un bit que indica si el fragmento es el último del paquete original
+
+
+
 
