@@ -3313,6 +3313,36 @@ El campo de *identificación* es necesario para que el host de destino determine
 
 #### Entunelamiento
 
+Supongamos que tenemos un host de origen h1 y de destino h2 están en la misma clase de red, pero hay una red diferente en medio. ¿Cómo hacer para mandar un paquete diferente de h1 a h2?. Para ello se usa *entunelamiento*, con lo cual los paquetes son encapsulados en la red del medio usando un encabezado de ésta. (Es como si guardaras el paquete de h1 dentro de un paquete de la red del medio para mandarlo por ésta)
+
+#### Información de rutas manejada por protocolos de puerta de enlace exterior (PPEE)
+
+Es necesario estudiar los protocolos de puerta de enlace exterior (PPEE) porque:
+- Las tablas de reenvío deben permitir mandar mensajes entre máquinas concetadas a SA diferentes. El PPEE permite agregar información a ser usada con ese fin a las tablas de reenvió de los enrutadores.
+- El enrutamiento de PPEE se preocupa de establecer las rutas a usar (que pasan por diferentes SA) para permitir que se comuniquen máquinas pertenecientes a distintos SA
+
+Hay que tener en cuenta que PPEE es diferente a un protocolo intra-SA debido a que para el enrutamiento intra-SA encontrar un camino óptimo es imposible en la practica. ¿Por qué?.
+Debido a que cada SA corre su propio protocolo interno y usa cualquier esquema para asignar métricas a los caminos. Por lo tanto es imposible calcular costos de caminos significativos para caminos que cruzan varios SA
+
+Debido a que no se puede manejar información de caminos óptimos, el enrutamiento inter-SA nos va a permitir avisar alcanzibilidad de prefijos desde un SA, y considerar caminos formados por SAs para ir de un origen a un destino
 
 
+#### Requisitos para los PPEE y tareas de EBSA
 
+Para el enrutamiento es necesario encontrar álgun camino de SAs para el destino deseado que sea libre de ciclos. Además, los caminos deben respetar las políticas de los SA a lo largo del camino.(Las politicas son reglas que refieren a preferencias de enrutamiento y a limitaciones de enrutamiento)
+
+Los PPEE suelen implementarse sobre *enrutadores de borde de sistema autónomos (EBSA)*. Estos EBSA se encargan de:
+- Hacer una elección de varias rutas a un destino.
+- Elegir la mejor ruta de acuerdo con sus propias políticas locales y esta va a ser la ruta que avisa
+- Avisa a sus vecinos el camino exacto que está usando para cada destino
+
+#### Formas en que se pueden relacionar los SA
+
+**Relación proveedor-consumidor:** Supongamos que tenemos un PSI cliente o (PSI consumidor) y un PSI proveedor. El PSI cliente paga al PSI proveedor para entregar paquetes a otros destinos y recibir paquetes enviados de otros destinos.
+- Tipos de rutas que publica el PSI proveedor: El PSI proveedor debe dar publicidad de rutas a todos los destino en internet al PSI cliente sobre el enlace que los conecta, así el PSI cliente va a tener rutas para enviar paquetes para todos lados
+- Tipos de rutas que publica el PSI consumidor: El PSI cliente debe publicar rutas a los destinos en su red al PSI proveedor. Esto permite al PSI proveedor enviar tráfico al PSI cliente solo para esas direcciones
+
+**Relación de compañerismo:** los PSI compañeros no se cobran por mandarse mensajes entre sus destinos.
+- Tipos de rutas que publica un PSI a sus compañeros: Los SA compañeros mandan publicidad de enrutamiento de uno al otro para los destinos que residen en sus redes. El compañero no es transitivo
+
+*Multihoming* significa que un PSI está conectado con varios PSI. Esta técnica es usada para mejorar la confiabilidad, por si el camino por uno de los PSI falla
