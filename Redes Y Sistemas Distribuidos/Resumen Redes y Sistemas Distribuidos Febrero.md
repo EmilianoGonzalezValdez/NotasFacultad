@@ -3301,5 +3301,18 @@ Desventajas de la fragmentación no transparente:
 - Para saber si vienen más fragmentos se debe poner un bit que indica si el fragmento es el último del paquete original
 
 
+#### Fragmentación en IP
+Los enlaces de red tienen *MTU (tamaño máximo de transferencia)*  que corresponde a la trama de nivel de capa de enlace más larga posible. Diferentes tipos de enlace tienen diferentes MTU.
+Los datagramas IP grandes son *fragmentados* dentro de la red. Un datagrama pasa a ser varios datagramas menores. Ellos son "reensamblados" solamente en el destino final. Los bits de encabezados IP son usados para identificar y ordenar fragmentos relacionados.
+
+El campo de *identificación* es necesario para que el host de destino determine a qué datagrama pertenece un fragmento recién llegado. Todos los fragmentos de un datagrama contienen el mismo valor en el campo de identificación.
+ El *DF* de un bit significa si el paquete debe ser fragmentado o no, cuando esta fijado en 1 implica una orden de no fragmentar.
+ *MF* es un bit que significa "más fragmentos" y sirve para identificar el final de un datagrama, ya que todos los fragmentos excepto el último tienen establecido este bit, que es necesario para saber cuándo han llegado todos los fragmentos de un datagrama.
+ El *desplazamiento del fragmento* indica en qué parte del datagrama actual va este fragmento. Todos los fragmentos excepto el último del datagrama deben tener un múltiplo de 8 bytes que es la unidad de fragmentación elemental. Dado que se proporcionan 13 bits, puede haber un máximo de 8192 fragmentos por datagrama
+
+
+#### Entunelamiento
+
+
 
 
