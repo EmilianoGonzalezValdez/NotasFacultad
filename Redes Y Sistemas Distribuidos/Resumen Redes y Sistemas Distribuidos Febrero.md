@@ -3502,3 +3502,80 @@ Solución:
 - El enrutador identifíca el puerto de salida del enrutador para esa mejor ruta
 3. Ingresar el puerto del prefijo en la tabla de reenvío
 La tabla de reenvío se **sincroniza continuamente** con la RIB para reflejar cambios en la topología o en las rutas
+
+
+# Capa de enlace de Datos
+
+## Generalidades de la capa de enlace de datos
+
+**Limitaciones de los canales de comunicación:**
+- Cometen errores ocasionales
+- Tienen una tasa de datos finita
+- Hay retardo de propagación
+
+**Meta necesaria:**
+- Lograr una comunicación confiable y eficiente entre dos máquinas adyacentes, o sea conectadas por un canal de comunicaciones
+¿Cómo cumplir este requisito?
+
+Para ello se debe definir una capa debajo de la capa de red que se encargue de esto. Dicha capa se llama *Capa de Enlace de Datos (CED)*. Un protocolo de CED hace que las líneas de comunicación parezcan perfectas o al menos bastante buenas
+
+**Funciones de la CED:**
+- *Comunicación confiable:* que las tramas envíadas lleguen. Se usan protocolos de tubería o parada y espera
+- *Control de flujo:* evitar que el emisor rápido sature al receptor lento
+- *Entramado:* en el canal de difusión solo hay un stream de bits. Usualmente se usa un patrón especial de bits para detectar el inicio y fin de cada trama llamado bandera
+- *Detección y corrección de errores:* estudiada la teoria con Penazzi en Matematica Discreta 2
+- *Manejo de colisiones:* ocurren en canales de difusión usados por varias máquinas. Cuando dos máquinas intentan transmitir tramas al mismo tiempo ocurre una colisión
+
+¿Por qué estudiar la capa de enlace de datos?
+- Saber sobre la CED ayuda a comprender el funcionamiento de las LAN, las cuales están en todos lados.
+- Hay que diseñar, configurar y administrar esas redes LAN.
+- Para comprender los protocolos que resuelven los problemas de diseño de las LAN. Para control de flujo, control de colisiones, control de errores 
+
+**Aprenderemos:**
+1. Tramas de CED y su manejo
+2. Fundamentos de comunicación de tramas en CED
+3. Necesidad de canales de difusión
+4. Necesidad de control de colisiones
+
+#### Tramas de CED y su manejo
+
+**Informaciones que debería contener una trama de capa de enlace de datos:**
+- Encabezado: suele conteenr direcciones del origen y de destino; a veces la longitud de la trama, etc.
+- Campo de carga útil (el contenido que se quiere enviar)
+- Un terminador final (para control de errores)
+
+#### Fundamentos de comunicación de tramas en CED
+
+**Se trabaja con:**
+- Confirmaciones de recepción de tramas
+- Temporización de reenvío
+- Retransmisiones de tramas (perdidas o dañadas)
+- Uso de números de secuencia en las tramas (para identificar tramas duplicadas)
+- Llevar a caballito para aprovechar mejor el canal de comunicaciones
+- Uso de protocolos como parada y espera o de tubería
+
+La forma de actuar de la CED se puede resumir en los siguientes pasos:
+- La CED toma de la CR paquetes y los encapsula en *tramas*
+- Las tramas tienen una longitud máxima impuesta
+- Cada paquete de la CR se divide en tramas
+- En la CR de la máquina de origen hay un proceso que entrega bits a la CED para transmitirlos a la máquina de destino
+- El trabajo de la CED es transmitir los bits de la máquina de destino para que puedan ser entregados a su CR
+
+**Flujo de los enrutadores:**
+1. Al llegar una trama al enrutador: el hardware verifica si está libre de errores
+2. La CED comprueba si esta es la trama esperada y de ser asi, entrega el paquete dentro de la trama al software de enrutamiento
+3. El software de enrutamiento elije la línea de salida adecuada y entrega el paquete a la CED para enviarlo
+
+Aún así, ¿Cómo podemos asegurar que una trama se entregue?
+Para ello, si una trama no se entregó, entonces el emisor la reenvía.
+
+Para su implementación se toman las mismas medidas que en las capas anteriores con los ACK:
+- Regresar *tramas de control* con confirmaciones de recepción positivas o negativas de las tramas que llegan.
+- Método que usa *temporizador de retransmisiones* en la CED
+
+De la misma forma para solucionar el caso donde se pierda una confirmación de recepción y se envíe la trama de nuevo y esta llega 2 veces; la solución vuelve a ser agregar *números de secuencia* a las tramas
+
+Para transmitir datos entre dos máquinas y en ambas direcciones eficientemente se recurre al *piggybacking*.
+
+En otras palabras, los problemas de esta capa relacionados a la comunicación con tramas, se resuelven de la misma manera que vimos estas soluciones en las capas anteriores
+
