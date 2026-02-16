@@ -3579,3 +3579,31 @@ Para transmitir datos entre dos máquinas y en ambas direcciones eficientemente 
 
 En otras palabras, los problemas de esta capa relacionados a la comunicación con tramas, se resuelven de la misma manera que vimos estas soluciones en las capas anteriores
 
+
+#### Necesidad de canales de difusión
+
+Es costoso e incómodo hacer que todo par de máquinas de una organización están conectadas directamente entre sí por dos canales (dedicados exclusivamente para ellas). Si hay n máquinas daría n * (n-1) conexiones
+
+El problema es encontrar una alternativa más económica para conectar varias máquinas entre sí.
+La solución es usar *canales de difusión*. En un canal de difusión están conectadas varias máquinas que quieren transmitir tramas por el canal. Si una máquina envía un mensaje, todas las demás lo reciben.
+Esta es una alternativa mucho más económica. Pero según veremos los canales de difusión introducen algunos problemas nuevos de diseño
+
+**Tipos de canales de difusión:**
+- *Inalambricos:* En su forma más simple las máquinas se comunican entre sí sin uso de cables
+- *Cableados:* Las máquinas se comunican entre sí por medio de cables
+
+#### Necesidad del control de colisiones
+
+Si dos tramas se transmiten en forma simultánea en un canal de difusión: se traslapan en el tiempo y la señal resultante se altera. Este evento se llama **colisión**
+
+¿Cómo evitar/disminuir las colisiones?
+
+Para ello vamos a definir una subcapa de la capa de enlace de datos que se encargue del control de colisiones. Esta subcapa de la CED se llama *subcapa de control de acceso al medio (SCAM)*. La subcapa MAC (intuyo que se refiere a SCAM) es una subcapa inferior de la CED
+
+¿Por qué estudiar la SCAM?
+- Para comprender cómo se organizan, diseñan y funcionan las LAN cableadas e inalámbricas
+- Para entender cómo los distintos tipos de LAN hacen control de colisiones. Para esto se usan *protocolos de control de colisiones*
+
+En una *red de difusión* el asunto clave es cómo determinar quén puede usar el canal cuando hay competencia por él.
+*Protocolos de acceso múltiple* PAM: se usan para determinar quién sigue en un canal de difusión
+
