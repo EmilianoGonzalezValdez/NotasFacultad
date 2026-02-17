@@ -3871,3 +3871,240 @@ En **100BASE-T** (100BASE-TX y 100BASE-T4):
 - Los cables 100baseFX deben conectarse a conmutadores. Los concentradores no están permitidos con 100Base-FX
 
 
+## Redes inalámbricas
+
+**Tipos de redes inalábricas:**
+- *Redes ad hoc:*
+	- No hay estaciones base
+ 	- Los nodos solo pueden transmitir a otros nodos dentro de su alcance
+ 	- Los nodos se organizan entre ellos en una red: rutas entre ellos
+ 
+- *Redes basadas en infraestructura:*
+	- Las estaciones base (AP) conectan los móviles a una red cableada
+ - Los móviles cambian de AP
+ - Distintas AP operan en rangos de frecuencia diferentes
+
+##### Problemas de la comunicación inalámbrica
+
+Los nodos inalámbricos usualmente no pueden transmitir y recibir al mismo tiempo. La potencia generada por el emisot es mucho más alta que el rango de sensibilidad del receptor. A menos que se implementen aislaciones o técnicas avanzadas (difíciles en dispositivos pequeños) se satura el circuito receptor
+
+No se puede aplicar un protocolo como el de Ethernet. Porque no se puede comparar lo que se transmite con lo que se escucha para detectar colisiones.
+En lugar de CSMA/CD (Acceso múltiple con Detección de Portadora y Detección de Colisiones) (Ethernet) se usa CSMA/CA (Acceso múltiple con Detección de Portadora y Evitación de colisiones) (WiFi 802.11)
+
+
+**Problema de la estación oculta:**
+- La estación C transmite a la estación B
+- Si A detecta el canal no escuchara nada y concluirá erróneamente que ahora puede comenzar a transmitir a B, si lo hace, ¡colisión!
+
+<img width="412" height="280" alt="imagen" src="https://github.com/user-attachments/assets/04fefecc-7642-45c6-b658-b39d3f838ebd" />
+
+
+**Problema de la estación expuesta:**
+- Supongamos que B está transmitiendo a A. C desea enviar a D por lo que escucha el canal.
+- Cuando escucha una transmisión concluye erróneamente que no debería transmitir a nadie porque escucha la transmisión de B-
+- Pero no hay problema si C transmite a D, porque no va a interferir con la habilidad de A de recibir de B (si puede interferir con A enviando a B, cosa que no pasa en nuestro ejemplo)
+ 
+
+   <img width="625" height="257" alt="imagen" src="https://github.com/user-attachments/assets/161206f2-c5a9-4b39-9cab-4237b7b0e374" />
+
+
+**Protocolo de subcapa MAC 802.11:**
+
+802.11 soporta dos modos para atacar los problemas anteriores:
+- *DFC (Función de coordinación distribuida)* la cual es para redes ad hoc
+- *PCF (Función de coordinación puntual)*, esta es para redes basadas en infraestructura. utiliza la AP para controlar toda la actividad en su celda
+
+
+##### DCF
+
+<img width="759" height="242" alt="imagen" src="https://github.com/user-attachments/assets/909c9a4f-29fd-46a5-a00f-f5db9edadbfa" />
+
+En la imagén podemos ver el protocolo CSMA/CA de 802.11 para redes ad hoc **DCF** donde:
+- A desea envíar a B
+- C es una estación que está dentro del alcance de A
+- D esta dentro del alcance de B pero no dentro del de A
+
+1. A decide enviar datos a B. A le envia una trama *RTS* a B en la que le solicita permiso para enviarle una trama
+2. Cuando B recibe esta solicitud, podría decidir otorgarle el permiso, en cuyo caso le regresa una trama *CTS*
+3. Al recibir la CTS A envía su trama y comienza su temporizador de ACK. Si el temporizador de ACK de A termina antes de que el ACK regrese, todo el protocolo se ejecuta de nuevo
+4. Al recibir correctamente la trama de datos, B responde con una trama de ACK
+
+**Comportamiento de la estaciones C y D:**
+- C recibe la trama RTS y desiste de transmitir cualquier cosa hasta que el intercambio esté completo
+- A partir de la información en RTS C estima cuánto tardará la secuencia, incluyendo el ACK final e impone para si misma un canal virtual ocupado *NAV (vector de asignación de red)*
+- D escucha el CTS y también impone un canal NAV para si misma
+
+En general las tramas de control se transmiten a menor tasa de transferencia que las tramas de datos (menos probable que ocurran errores de transmisión)
+
+El tiempo entre tramas puede ser:
+- *DIFS:* DCF
+- *SIFS* 
+
+
+*Colisiones:* Dos nodos pueden detectar un enlace ocioso y tratar de enviar un RTS al mismo tiempo, causando que esos RTS colisionen. Los emisores asumen que ocurrió colisión porque no reciben el CTS luego de un cierto intervalo de tiempo.
+
+*Manejo de la colisión:* Cada emisor espera una cantidad de tiempo aleatoria antes de tratar de nuevo. Esta cantidad de tiempo es definida por el algoritmo de retroceso exponencial binario
+
+*Estación oculta:* El CTS probablemente va a ser escuchado por una estación oculta (establece el NAV). Esto dice a los nodos dentro del rango del receptor que no deberían enviar nada por un tiempo incluido en el RTS y CTS. Luego de ese tiempo más un pequeño intervalo el canal puede ser asumido disponible otra vez y otro nodo es libre de intentar enviar
+
+DCF  no resuelve el problema de estación expuesta
+
+##### PCF
+
+¿Cuál es la responsabilidad de un AP?
+- Un AP es responsable de *enviar y recibir datos* desde y hacia hosts inalámbricos que están asociados con el AP
+- Un AP va a ser responsable para *coordinar la transmisión* de varios hosts inalámbricos asociados
+- El orden de transmisión se controla por la AP, luego *no ocurren colisiones*
+
+**Requisitos para los canales en que operan las AP:**
+- Cada AP opera en un canal en un rango de frecuencias apropieado
+- Cada AP va a estar en un canal diferente que sus vecinos
+
+**Relación que hay entre hosts y APs:**
+- Cada nodo está asociado con un AP. O sea el host está dentro de la distancia de comunicación de la AP y el host usa la AP para enviar datos entre él y el resto del mundo
+
+Para enterarse una AP cuales hosts desea enviar:
+- La AP sondea los nodos, preguntandoles si tienen tramas para enviar
+
+
+Componente fundamental: Conjunto de Servicio Básico (o Basic Service Set, BSS)
+
+Un *servicio de distribución (SD)* conecta las AP entre sí.
+- SD puede ser un conmutador, una red cableada, o una red inalámbrica
+- El SD opera en la CED y no depende de protocolos de nivel más alto
+
+*Conjunto de servicios básicos (BSS)*
+- Consiste de un npumero de nodos ejecutando el mismo protocolo MAC y compitiendo por el acceso al mismo medio inalámbrico.
+- Puede estar aislado o conectado a un SD a través de un AP
+
+*Conjunto de servicios extendido (ESS):* esta compuesto por 2 o más BSS interconectados por el SD
+
+*Servicio de integración*
+- Para integrar la arquitectura IEEE 802.11 con una LAN cableada, se usa un *portal*
+	- La lógica del portal es implementada en un puente o enrutador, que es parte de la LAN cableada y que es conectado al SD
+
+En PCF:
+- Cada host necesita asociarse con una AP antes de poder enviar o recibir datos de la capa de red.
+- El SD necesita identificar los nodos de destino. Los nodos deben mantener una asociación con una AP dentro del BSS actual
+
+**3 servicios relacionados de asociación:**
+- *Asociación:* establece asociación inicial entre nodo y AP
+- *Reasociación:* para transferir una asociación a otro AP (handoff)
+- *Desasociación:* notificación por nodo o AP que una asociación existente terminó
+El estandar 802.11 no especifica un algoritmo para elegir con cual de las AP disponibles reasociarse
+
+¿Cómo hacen las AP para saber qué estaciones quieren enviar?
+Para eso está el **sondeo:** En *PCF* la AP sondea las demás estaciones, preguntándoles si tienen tramas para enviar.
+- El orden de transmisión se controla por completo por la AP y no ocurren colisiones
+- 802.11 prescribe el *mecanismo para sondeo*, pero no la frecuencia del sondeo, el orden del sondeo, ni el hecho de que las estaciones necesiten obtener un servicio igual
+
+**Funcionamiento del mecanismo de sondeo:**
+- El AP toma control del medio y bloquea todo el tráfico mientras realiza sondeos y recibe respuestas
+- El AP puede realizar sondeos en round-robin a todas las estaciones configuradas para sondeo.
+- Cuando se hace un sondeo, el nodo sondeado puede responder
+	- Si el AP recibe respuestas, emite otro sondeo
+ - Si no se recibe respuesta durante el tiempo esperado para ella, el AP realiza un sondeo
+
+**Para configurar las estaciones para sondeo:**
+- El AP invita a los nuevos nodos a suscribirse al *servicio de sondeo*.
+	- Una vez que un nodo se inscribe para el *servicio de sondeo* a cierta tasa, se le garantiza de manera efectiva cierta fracción de ancho de banda y se hace posible proporcionar garantías de calidad de servicio
+
+El estandar 802.11 no especifica un algoritmo para elegir con cual de las AP disponibles asociarse.
+Pueden pasar 2 cosas debido a esto:
+1. Un nodo puede no estar asociado a ningun AP y necesita asociarse a alguna
+2. Un nodo puede pasar a estar insatisfecho con su AP y quiere cambiar
+	- ¿Cuál puede ser la causa de la insatisfacción?
+ - La señal del AP actual se ha debilitado debido a que el nodo se alejó de ella
+ - La red puede estar muy cargada (mucho trafico)
+ - Podría ser que hay otra AP que tiene señal más fuerte con el nodo
+
+¿Como hace un host para asociarse a la AP más conveniente?
+
+*Método de escaneo activo* iniciado por el host:
+1. El nodo manda una *trama de prueba*
+2. Todos los AP que están en alcance responden con una *trama de respuesta a la prueba*
+3. El nodo elige uno de los AP y envía a tal AP una *trama de pedido de asociación*
+4. El AP responde con una *trama de respuesta de asociación*
+	- El nuevo AP notifica al AP anterior del cambio
+
+
+Aun cuando no se haya debilitado la señal de la AP con la que un host está conectada, puede convenir cambiar de AP. Ya que otra AP puede estar más desocupada por ejemplo
+
+¿Cómo obtiene una estación información para decidir si le conviene re-asociarse y cómo es el proceso de re-asociación?
+
+*Método de escaneo pasivo* iniciado por el AP:
+1. La AP difunde una *trama guía* periódicamente para advertir de capacidades del AP. Esta trama contiene parámetros de sistema, como identificador del AP, la hora, cuánto falta para la próxima trama guía, etc.
+2. Basado en la información anterior el nodo escoge un nuevo AP y envía una *trama de pedido de asociación* al nuevo AP
+3. El AP responde con una *trama de respuesta de asociación*
+
+Con 802.11 el tiempo se alterna entre:
+- *Período sin contentios (PCF):*
+	- Implementada en AP, quien coordina el acceso al medio
+ - Nodos transmitén sólo si lo pide el AP
+ - El AP tiene una lista de nodos "privilegiados"
+ - Los nodos se registran para estar en la lista
+- *Período de contention (DCF):*
+	- Implementado en todos los nodos
+ - Los nodos compiten por el medio
+
+El AP inicia el período sin contención transmitiendo una *trama Beacon*
+- Este Beacon contiene información sobre la capacidad de PCF del AP y la duración del período libre de contención
+- Antes de transmitir el Beacon, el AP espera un intervalo de tiempo llamado PIFS (PCF Interframe Space)
+	- PIFS es más corto que el DIFS (Distributed Interframe Space) utilizado en DCF, lo que le da prioridad al AP para acceder al medio e iniciar el período libre de contención
+
+**Polling (sondeo)** por el AP:
+- Durante el período sin contención el AP controla qué estación puede transmitir usando un esquema de sondeo
+- El AP mantiene una lista de las estaciones que pueden ser sondeadas
+- El AP envía una trama de "CF-Poll" (Contention-Free-Poll) a una estación especifica. Esta trama otorga permiso a la estación para transmitir
+
+*Transmisión de la Estación Polleada:* Cuando una estación recibe una trama CF-Poll dirigida a ella:
+- Si la estación tiene datos para enviar, puede transmitir sus datos inmediatamente después de un corto intervalo de tiempo llamado SIFS (Short Interframe Space). Opcionalmente, puede incluir un ACK si está respondiendo a una transmisión anterior del AP
+- Si la estación no tiene datos para enviar, puede responder con una trama nula o simplemente no responder dentro del tiempo asignado
+
+*Control del AP y Secuencia de Comunicación:*
+- Después de que la estación polleada transmite (o si no tiene nada que transmitir), el AP puede realizar una de las siguiente acciones:
+	- Si el AP tiene datos para enviar a la misma estación, puede incluir los datos en la trama CF-Poll
+ - El AP puede enviar una trama CF-Poll a otra estación en su lista de polling
+ - Si el período sin contención ha llegado a su fin o el AP no tiene más estaciones para sondear o datos para enviar, transmite una trama "CF-End" para indicar el final del período libre de contención
+ - Después de esto, el emdio vuelve al modo contención (CP) utilizando DCF
+
+#### Espacio entre tramas
+
+En el estándar 802.11 (Wi-Fi), los intervalos SIFS, PIFS y DIFS son períodos de tiempo que las estaciones deben esperar antes de transmitir tramas
+Estos intervalos son cruciales para la coordinación del acceso al medio inalámbrico y para evitar colisiones, especialmente en el modo de contención (DCF)
+Funcionan como mecanismos de prioridad, donde intervalos más cortos significan mayor prioridad para acceder al canal
+
+SIFS (*intervalo entre tramas en el mismo diálogo*) de 28 us
+- Se puede usar para enviar tramas: ACK, CTS, trama de datos, transmitir el próximo fragmento de ráfaga de fragmentos
+- Solo una estación puede responder a intervalo SIFS
+PIFS (*intervalo entre diálogos diferentes*) de 78 us
+- El periodo libre de contención en el que se usa PCF se divide en diálogos
+- Pra división entre esos diálogos se usa un intervalo PIFS
+DIFS (*intervalo luego de período PCF*) de 128 us
+- Intervalo entre tramas asumido por nodos que ejecutan DCF (CSMA/CA)
+
+Dentro de un diálogo se usan intervalos *SIFS (short interframe space):*
+- Se utiliza para asegurar que las tramas de alta prioridad, que forman parte de una secuencia de intercambio, puedan transmitirse con la mínima demora. Esto permite una comunicación eficiente y confiable durante una transacción en curso
+- Hacen falta los SIFs para cosas como calcular suma de verificación, entramado de la proxima trama.
+- Hay solo una estación que puede responder luego de un intervalo SIFS
+- Si falla en hacer uso de su chance y ocurre un tiempo PIFS, el AP puede mandar una trama
+- **Uso común:**
+	- ACK: Después de recibir una trama de datos exitosamente, la estación receptora espera un SIFS antes de enviar la trama ACK ára confirmar la recepción. Esto asegura que el ACK tenga prioridad y la estación transmisora sepa rápidamente si su trama llegó correctamente
+ - CTS: En el mecanismo RTS/CTS, la estación receptora responde a una trama RTS con una trama CTS después de un SIFS, indicando a la estación transmisora que puede comenzar a enviar sus datos
+ - Fragmentación: Cuando una trama grande se fragmenta, los fragmentos consecutivos se envían con un intervalo SIFS entre ellos. Esto asegura que la ráfaga de fragmentos no sea interrumpida por otras estaciones
+
+Entre dos diálogos diferentes se usa un *PIFS* (dentro de PCF), PCF intergrame space:
+- El PIFS se utiliza en el modo acceso controlado por el punto de acceso (AP) llamado PCF. El AP, que actúa como coordinador, utiliza el PIFS para ganar prioridad sobre las estaciones que operan en modo de contención (DCF)
+- El AP espera un PIFS antes de transmitir una trama Beacon que inicia el periodo libre de contención.
+- Al ser más corto que el DIFS, el AP tiene prioridad para comenzar el período donde controla el acceso al medio mediante sondeo
+
+El AP puede hacer sondeo en forma de round-robin a todas las estaciones configuradas para polling:
+- Cuando se emite un sondeo, la estación afectada responde usando un SIFS
+- Si el AP recibe una respuesta a un poll, puede hacer otro poll usando PIFS. Si no se recibe respuesta al poll, el AP puede ahcer poll
+
+Luego de un período de PCF, viene un DCF (con CSMA/CA), cuyas conversaciones se rigen por un *DIFS* (DCF interframe space):
+- El DIFS se utiliza en el modo de acceso fundamental y distribuido de 802.11 llamado DCF. Una estación que desea transmitir en el modo de contención debe asegurarse de que el medio inalámbrico ha estado inactivo durante al menos un período DIFS antes de intentar transmitir.
+- **Uso comun:**
+	- Acceso inicial al medio: cuando una estación tiene datos para enviar y el medio está inactivo, debe esperar un intervalo DIFS. Si el medio permanece inactivo durante este tiempo, la estación puede intentar transmitir
+ - Después de una transmisión exitosa: Después de que una estación (que no está respondiendo con un ACK o CTS) termina de transmitir, cualquier otra estación que desee transmitir debe esperar un intervalo DIFS para asegurar un tiempo de silencio adecuado en el medio
+ - Mecanismo de Backoff: Si una estación detecta que el medio está ocupado mientras espera el DIFS, o si ocurre una colisión, la estación entre en un período de "backoff" aleatorio después de que el medio se vuelve inactivo durante un DIFS. Este backoff ayuda a reducir la probabilidad de colisiones futuras 
