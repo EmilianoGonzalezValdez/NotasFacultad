@@ -3741,3 +3741,133 @@ En el caso de que diseñaramos una red de mayor velocidad, ¿Qué cambios necesi
 
 Conclusión a tener en cuenta para el diseño de una red local cableada:
 - A medida que aumente la velocidad de la red, la longitud mínima de la trama debe aumentar o la longitud máxima del cable debe disminuir, de manera proporcional
+
+##### Algoritmo de retroceso exponencial binario
+
+**Objetivo:** Comprender el algoritmo que determina en Ethernet el tiempo de espera del emisor cuando ocurre una colisión.
+
+Para ello vamos a suponer que tras una colisión el tiempo se divide en *ranuras* cuya longitud es igual al tiempo de propagación de ida y vuelta en el peor caso en el cable (2*t). El tiempo de ranura es 512 tiempos de bit o 5,12 useg
+
+La idea es que cuando ocurre una colisión las estaciones afectadas por la colisión eligen cada una aleatoriamente una cierta cantidad de ranuras a esperar
+
+Si S es un conjunto formado por estaciones que colisionaron entre si, puede suceder que ocurran múltiples colisiones consecutivas de estaciones de S.
+Para el manejo de colisiones consecutivas de estaciones de S hay dos opciones:
+1. que el intervalo donde se elige aleatoriamente (una cantidad de ranuras a esperar) sea fijo
+2. que el intervalo donde se elige aleatoriamente sea de tamaño variable (es decir que el tamaño cambie con cada nueva colisión de estaciones de S)
+
+Permitir que el intervalo sea de tamaño variable tiene una gran **ventaja:**
+- Se puede acelerar la resolución de la colisión inicial de las estaciones de S.
+
+Para acelerar la resolución de la colisión de las estaciones de S:
+- Con cada nueva colisión de estaciones de S se puede agrandar el intervalo donde se elige aleatoriamente
+- Esta es la idea del algoritmo de retroceso exponencial binario
+
+*Algoritmo de retroceso exponencial binario:*
+- Tras la primera colisión cada estación espera de 0 a 1 tiempos de ranura antes de intentarlo de nuevo. Si dos estaciones entran en colisión, y ambas escogen el mismo npumero aleatorio, habrá una nueva colisión
+- Después de la segunda colisión cada una escoge 0, 1, 2 o 3 al azar y espera ese npumero de tiempos de ranura
+- Si ocurre una tercera colisión, entonces para la siguiente vez el npumero de ranuras a esperar se escogerá al azar en el intervalo 0 a 7
+- Tras i colisiones se escoge un npumero aleatorio entre 0 y $\exp(2,i)-1$ y se sata ese número de ranuras
+- Tras haberse alcanzado 10 colisiones el intervalo de aleatorización se congela en un máximo de 1023 ranuras
+- Tras 16 colisiones el controlador tira la toalla y avisa de un fracaso a la computadora. La recuperación posterior es responsabilidad de las capas superiores.
+
+**Evaluación:**
+- El algoritmo asegura un retardo pequeño cuando unas cuantas estaciones entran en colisión
+- El algoritmo asegura que la colisión se resuelva en un intervalo razonable cuando hay colisiones entre muchas estaciones
+
+**Formato de trama de Ethernet:**
+- Preámbulo de 8 bytes, cada uno es 10101010
+- *Direcciones:*
+	- Se usan direcciones de 6 bytes
+	- Se escriben como 6 pares de dígitos hexadecimales separados por "-" (Ejemplo 1A-23-F9-CD-06-9B)
+	- El bit de orden mayor de la dirección de destino es 0 para las direcciones ordinarias y de 1 para las direcciones de grupo
+	- Una trama que consiste únicamente de bits 1 en el campo de destino se acepta en todas las estaciones de la red (Broadcasting)
+- *Campo Tipo:*
+	- Uso de múltiples protocolos de capa de red a la vez en la misma máquina
+ 	- El kernel debe saber a cual entregarle la info de la trama que llegó
+  	- El campo de tipo indica al receptor a qué proceso entregarle la trama
+ 
+- *Longitud de trama mínima:*
+	- Las tramas deben tener al menos 64 bytes de largo, de la dirección de destino a la suma de verificación
+ 	- Cuando la porción de datos de una trama es menor a 46 bytes se usa el *campo de relleno* (para alcanzar los 64B)
+ 
+- *Suma de verificación:*
+	- Tiene 32 bits de largo
+ - Se usa el método de detección de errores llamado código polinomial
+
+Cuando IEEE estandarizó la Ethernet hizo los siguientes cambios al formato DIX:
+- Reducir el preámbulo a 7 bytes y usar el último byte para un *delimitador de inicio de trama*
+- Cambiar el campo de Tipo po un *campo de longitud*
+- Poner un pequeño encabezado a los datos para dar información de tipo
+
+#### Comprender cómo funciona la Ethernet conmutada
+
+A medida que se agregan más y más estaciones a Ethernet, aumenta el tráfico. En algun momento la LAN se saturará.
+¿Comó evitar este fenómeno dentro de Ethernet?
+Una idea seria tener varios dominios de colisiones y aumentar significativamente la velocidad para mandar de una máquina de un dominio de colisiones a una máquina en otro dominio de colisiones. Hacer todo esto de modo que la estación no se entere
+
+De esta forma se llega a la solución usando una *Ethernet Conmutada* donde:
+- Un *conmutador (switch)* contiene una matriz de conmutación de alta velocidad y de 4 a 32 *tarjetas de línea*
+- Cada tarjeta de línea contiene de 1 a 8 *conectores*
+- Hay matrices de conmutación que funcionan a más de 1 Gbps
+
+Los conmutadores se encargan del almacenamiento y reenvío de tramas de Ethernet.
+Los hosts no son conscientes de la presencia de conmutadores.
+Los conmutadores no necesitan ser administrados, estos aprenden por si solos sin necesidad de configuración
+
+Si dos máquinas conectadas a la misma tarjeta de conexión transmiten tramas al mismo tiempo:
+- Si todos los puertos de la tarjeta forman una LAN local dentro de la tarjeta, las colisiones en esta LAN en tarjeta se detectan y manejan igual que en una red CSMA/CD. Las tarjetas pueden estar transmitiendo en paralelo
+- Si cada puerto de entrada se almacena en un *búfer*, todos los puertos de entrada reciben y transmiten tramas al mismo tiempo, para una operación en paralelo dúplex. Cada puerto es un dominio de colisión independiente.
+
+Cada conmutador tiene una *tabla de conmutador:*
+- <dirección MAC del host, interfaz para alcanzar el host, estampilla de tiempo>
+
+Un conmutador *aprende* cuáles hosts pueden ser alcanzados a través de cuales interfaces:
+- Cuando el conmutador recibe una trama registra el par emisor/localizzación en la tabla del conmutador
+
+##### Filtrado y reenvío de tramas
+
+**Reenvío de una trama recibida por el conmutador:**
+1. Registrar enlace de ingreso, dirección MAC del host emisor de la trama
+2. **Identificación de la interfaz del destino:**
+	- Se busca en la tabla del conmutador la dirección MAC del destino
+3. Si se encuentra la entrada para el destino:
+	- Si el destino está en el segmento por el cual vino la trama
+ 		- descartar la trama
+	- Si no enviar trama en la interfaz indicada por la entrada
+- Si no se encuentra una entrada para el destino, **inundar** (enviar en todas las interfaces excepto aquella por la que llegó la trama)
+
+Aqui asumimos que cada tarjeta constituye un dominio de colisiones.
+
+**Ventajas de usar conmutadores:**
+- Con un conmutador se pueden enviar tantos datos por segundo como la capacidad de la matriz de conmutación de alta velocidad
+- Además, como el conmutador tiene varios búferes (al menos uno por tarjeta, sino más), entonces van a tenerse muchas menos colisiones que si en lugar de un conmutador se tuviera un concentrador
+
+#### Comprender la Ethernet rápida, gigabit Ethernet
+
+Debido al incremento de la capacidad de almacenamiento y en el poder de procesamiento, los PC actuales pueden manejar gráficos de gran calidad y aplicaciones multimedia complejas.
+
+Las consecuencias son que:
+- Cuando estos ficheros son compartidos en una red, las transferencias de un cliente a otro producen un gran uso de los recursos de la red.
+- A 10 Mbps, pueden ocurrir grandes demoras cuando se envían ficheros grandes a través de la red.
+
+Para evitar esas demoras:
+- Tener mayor velocidad en las redes
+
+*Fast Ethernet o (803.2u)* es el nombre de una serie de estándares de IEEE de redes Ethernet de 100 Mbps 
+
+En **100BASE-T** (100BASE-TX y 100BASE-T4):
+- Se usan pares de cobre trenzado
+- Hay 2 tipos de dispositivos de interconexión: concentradores y conmutadores
+- Se usan las reglas estándar: el formato de las tramas, CSMA/CD y el algoritmo de retroceso exponencial binario
+- En 100BASE-TX se usan dos pares de cable trenzado de categorpia 5 por estación, uno para enviar y otro para recibir
+
+**100BASE-TX** es uno de los más usados, en este:
+- Se usan dos pared de cable trenzado de categoría 5 por estación, uno para enviar y otro para recibir
+- Los cables pueden manejar velocidades de reloj de 125 MHz
+
+**100BASE-FX:**
+- Tiene 2 líneas de fibra óptica, una para la recepción (RX) y la otra para transmitir (TX)
+- La distancia entre una estación y el conmutador es de hasta 2km
+- Los cables 100baseFX deben conectarse a conmutadores. Los concentradores no están permitidos con 100Base-FX
+
+
