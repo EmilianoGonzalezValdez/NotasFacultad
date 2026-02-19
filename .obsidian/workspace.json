@@ -20,8 +20,21 @@
               "icon": "lucide-file",
               "title": "Resumen Redes y Sistemas Distribuidos Febrero"
             }
+          },
+          {
+            "id": "91f21d9101731bf5",
+            "type": "leaf",
+            "state": {
+              "type": "excalidraw",
+              "state": {
+                "file": "Excalidraw/Drawing 2026-02-19 15.05.40.excalidraw.md"
+              },
+              "icon": "excalidraw-icon",
+              "title": "Drawing 2026-02-19 15.05.40.excalidraw"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -78,8 +91,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "0c4eb1eef7c5a5d9",
@@ -186,10 +198,13 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "ddbfe52a09b991ff",
+  "active": "91f21d9101731bf5",
   "lastOpenFiles": [
-    "Untitled.md",
+    "Excalidraw/Drawing 2026-02-19 15.05.07.excalidraw.md",
+    "Excalidraw/Drawing 2026-02-19 15.05.40.excalidraw.md",
     "Redes Y Sistemas Distribuidos/Resumen Redes y Sistemas Distribuidos Febrero.md",
+    "Excalidraw",
+    "Untitled.md",
     "Redes Y Sistemas Distribuidos/Temas/Redes De Dispositivos.md",
     "Redes Y Sistemas Distribuidos/Redes y SIstemas Distribuidos.md",
     "Redes Y Sistemas Distribuidos/Media/Fuentes/redes_de_computadoras-freelibros-org.pdf",

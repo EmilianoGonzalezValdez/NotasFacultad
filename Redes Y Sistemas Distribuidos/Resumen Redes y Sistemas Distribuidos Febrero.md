@@ -2826,7 +2826,7 @@ La **"Receta"** para determinar las subredes es:
 Desacoplar cada interfaz de su host o enrutador, creando islas de redes aisladas. Cada red aislada se llama una *subred*. Las subredes se indican usando prefijos
 
 
-#### Asignación de redes a prganizaciones
+#### Asignación de redes a organizaciones
 
 **Efecto sobre el reenvío de paquetes de tener una tabla de reenvío grande:**
 - Los enrutadores deben buscar en la tabla de reenvío grande para enviar cada paquete, la eficiencia de esta búsqueda es afectada
@@ -3504,9 +3504,9 @@ Solución:
 La tabla de reenvío se **sincroniza continuamente** con la RIB para reflejar cambios en la topología o en las rutas
 
 
-# Capa de enlace de Datos
+## Capa de enlace de Datos
 
-## Generalidades de la capa de enlace de datos
+#### Generalidades de la capa de enlace de datos
 
 **Limitaciones de los canales de comunicación:**
 - Cometen errores ocasionales
