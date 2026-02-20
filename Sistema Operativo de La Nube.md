@@ -1,0 +1,1 @@
+antes de ver los detalles de la pila de protocolos en la nube es necesario ver conceptos importantes sobre el cómputo en la nube, facilitando así la comprensión de algunas capas

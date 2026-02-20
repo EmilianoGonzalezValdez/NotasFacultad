@@ -1,0 +1,1 @@
+Para las redes blockchain usaremos un modelo de capas de referencia. La organización en capas es bastante diferente que en las redes de computadoras. Ademas la capa de aplicación resuelve problemas adicionales típicos de las redes blockchain

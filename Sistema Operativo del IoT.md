@@ -1,0 +1,6 @@
+*Diferencias de los protocolos de IoT con os protocolos de internet:*
+- Muchos dispositivos IoT son de baja potencia y tienen recursos limitados. Por lo tanto los protocolos para IoT están diseñados para ser ligeros y eficientes en el uso de energía y recursos. Mientras que los dispositivos conectados a internet generalmente tienen recursos relativamente abundantes en términos de energía, capacidad de procesamiento y memoria
+- La IoT se enfoca en la comunicación entre dispositivos IoT heterogéneos en entornos específicos. La internet está diseñada para la comunicación entre computadoras y servidores, facilitando el intercambio de información a gran escala y el acceso a servicios en linea
+- Se necesitan protocolos para escalar a una gran cantidad de dispositivos IoT, gestionando transmisiones de datos recuentes y a menudo en tiempo real. Mientras que los protocolos de internet permiten escalar a muchas maquinas y gestionar grandes volúmenes de tráfico de datos, pero solo para computadoras y servidores y no para dispositivos IoT
+
+Para la internet de las cosas veremos un *modelos e capas de referencia* con las mismas capas que las de redes de computadoras, pero se añaden dos capas mas, además las capas con el mismo nombre resuelven problemas adicionales típicos de internet de las cosas
