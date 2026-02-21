@@ -1,0 +1,10 @@
+El procesamiento y flujo de rutas en BGP sigue un ciclo estructurado que involucra varias tablas internas y operaciones clave para recibir, seleccionar, almacenar y anunciar rutas
+**Etapas principales:**
+1. *Recepción de rutas y almacenamiento en Adj-RIB-In:* cuando un enrutador BGP recibe un mensaje UPDATE de un vecino, las rutas anunciadas se almacenan e la tabla adj-RIB-In correspondiente a ese vecino.
+- 	Cada vecino tiene su propia Adj-RIB-In, que contiene todas las rutas recibidas de ese vecino, organizadas por prefijo y con sus atributos BGP
+- 	Esta tabla funciona como una "bandeja de entrada" donde se guarda la información recibida sin modificar antes de aplicar políticas o selección
+2. *Aplicación de políticas de entrada y selección de la mejor ruta:* Las rutas en Adj-RIB-In pasan por políticas de entrada, que pueden filtrar rutas no deseadas o modificar atributos. Luego, el proceso BGP ejecuta el algoritmo de selección de la mejor ruta, que compara todas las rutas recibidas para un mismo prefijo desde todos los vecinos. Solo la ruta mejor seleccionada para cada prefijo se mantiene para uso posterior.
+
+3. *Almacenamiento en Loc-RIB:* La ruta seleccionada se almacena en la Loc-RIB, que contiene las mejores rutas BGP conocidas por el router. La Loc-RIB representa la visión local del router sobre las rutas óptimas, y es la base para anuncios y para la instalación en la tabla de enrutamiento del sistema (RIB)
+4. *Aplicación de políticas de salida y preparación de Adj-RIB-Out:* A partir de las rutas en Loc-RIB, el enrutador aplica las políticas de salida para cada vecino, que pueden modificar atributos o filtrat rutas que no se desean anunciar. Las rutas resultantes se almacenan en la Adj-RIB-Out para cada vecino, que contiene las rutas que efectivamente se van a anunciar a ese vecino
+5. *Anuncio de rutas a vecinos:* finalmente, el contenido de la Adj-RIB-Out se usa para enviar mensajes UPDATE a cada vecino, anunciando las rutas que el enrutador ha decidido compartir

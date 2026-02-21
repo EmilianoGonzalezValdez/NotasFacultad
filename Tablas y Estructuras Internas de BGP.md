@@ -1,0 +1,10 @@
+Las **tablas y estructuras internas** que usa BGP para gestionar rutas son:
+- *Adj-RIB-In:* es la tabla donde el enrutador almacena todas las rutas recibidas de cada vecino BGP. Actúa como la "bandeja de entrada" de rutas, almacenando la información recibida sin modificar antes de aplicar políticas o selección. Hay una Adj-RIB-In por vecino y dentro de cada una se organizan las rutas por prefijo, junto con sus atributos BGP. Se actualiza dinámicamente con cada mensaje UPDATE recibido, esto permite reflejar cambios en la topología o políticas de los vecinos
+- *Loc-RIB:* contiene las mejores rutas seleccionadas para cada prefijo tras aplicar el algoritmo de selección BGP y políticas de entrada sobre las rutas almacenadas en las Adj-RIB-In. La Loc-RIB representa la visión local del router sobre las mejores rutas BGP disponibles y es la base para anuncios y para la instalación en la tabla RIB. El proceso BGP compara las múltiples rutas recibidas para un prefijo desde las Adj-RIB-In, éste se divide en:
+- 	Aplica filtros y modifica atributos según politicas de entrada
+- 	A continuación se selecciona la mejor ruta según diversos criterios
+- 	Finalmente la ruta seleccionada se almacena en la Loc-RIB
+- *Adj-RIB-Out:* contiene las rutas que el enrutador va a anunciar a cada vecino BGP. Esta tabla controla qué rutas se envían a cada vecino mediante mensajes UPDATE. Hay una **preparación de rutas para anuncio:**
+- 	Se construye a partir de la Loc-RIB aplicando políticas de salida. Las mismas pueden modificar atributos de la ruta, filtrar rutas para que no se anuncien a ciertos vecinos, controlar qué rutas anuncian a qué vecinos
+- 	Puede haber diferencias en las rutas anunciadas a distintos vecinos, incluso para el mismo prefijo
+- *RIB (Routing Information Base):* contiene las rutas activas usadas para el reenvío de paquetes. Solo las rutas seleccionadas en la Loc-RIB que son mejores que las rutas existentes en la RIB se instalan en la RIB para ser usadas en el reenvío de paquetes. Las rutas de Loc-RIB se comparan con otras rutas en la RIB para decidir cuál ruta se instala para el encaminamiento

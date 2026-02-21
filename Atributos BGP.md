@@ -1,0 +1,15 @@
+Otros atributos BGP influyen en las políticas y la selección de rutas a un prefijo. Estos son:
+- *LOCAL_PREF:* es un valor usado para controlar la preferencia de la ruta dentro del sistema autónomo
+- *MED:* influye en la preferencia entre múltiples puntos de entrada a un AS.
+- 	MED influye en cómo los AS vecinos envían el tráfico hacia tu AS cuando existen múltiples puntos de entrada/salida.
+- 	Indica a los AS vecinos vuál es el mejor punto de entrada para alcanzar un prefijo dentro de tu AS.
+- 	Minimiza la altencia o costos al preferir enlaces más cercanos o de mayor capacidad.
+- 	La idea es que se va a elegir la ruta con el MED más bajo. Solo se compara entre las rutas del mismo AS vecino
+- *COMMUNUTY (comunidad:)* es un atributo opcional que actúa como una etiqueta para agrupar rutas y aplicar políticas dinámicas.
+- 	**Proposito:** agrupar prefijos con características comunes, y automatizar políticas: aplicar acciones como filtrado, modificación de atributos o control de propagación basado en etiquetas
+- 	**Formato:** valor de 32b representado como SA:valor
+- 	**Ejemplos:** NO_EXPORT (0xFFFFFF01): No anunciar la ruta fuera del AS local. NO_ADVERTISE (0xFFFFFF02): No anunciar a ningún vecino. INTERNET (0xFFFFFF00): Anunciar la ruta públicamente.
+- 	**Casos de uso:**
+- 		filtrado selectivo: un provedor puede usar comunidades para que los clientes controlen qué rutas se anuncian a otros sistemas autónomos
+- 		priorización: asignar LOCAL_REF alto a rutas con una comunidad específica
+- 		Marcar rutas para preferir enlaces de bajo costo

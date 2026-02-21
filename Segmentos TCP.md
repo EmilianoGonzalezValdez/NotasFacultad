@@ -1,0 +1,12 @@
+Los segmentos sin datos se usan para acks y *mensajes de control*. Se componen por:
+- *puerto de origen* y *puerto de destino:* ambos de 16 b. La dirección de un puerto más la dirección IP del host forman un punto terminal único de 48 b. Los puntos terminales de origen y destino en conjunto identifican la conexión
+- *Número de secuencia:* es número de byte en el flujo de bytes transmitido y corresponde al primer byte den el segmento. Tiene 32 b de lingitud
+- *Número de confirmación de recepción:* indica el siguiente byte esperado del flujo de bytes a transmitir. Tiene 32 b de longitud
+- *ACK:* se establece en 1 para indicar que el n° de confirmación de recepción es valido. Si el ACK = 0, entonces el segmento no contiene una confirmación de recepción
+- *longitud del encabezado:* N° de palabras de 32 bits en el encabezado TCP, suelen ser 20 bytes, que son 5 5 palabras de 32 b
+- El campo *opciones* es de longitud variable
+- *URG:* indica que el segmento contiene datos urgentes que deben procesarse de inmediato
+- *PSH:* sirve para pedir al receptor que procese y entrege los datos inmediatamente al nivel superior, en lugar de esperar a completar el buffer. Esto se usa en escenarios donde la inmediatez es clave
+- *RST:* se utiliza para reiniciar una conexión. Se puede enviar por ejemplo cuando hay un error critico en la conexión
+- *Urgent pointer:* complementa el indicador URG. Su proposito es especificar la ubicación del último byte de datos urgentes dentro del segmento
+- *CWR (congestion window reduced) y ECE (explicit congestion notification):* relacionados con el manejo de congestión en la red. CWR indica que el transmisor ha reducido su ventana de congestión. ECE señala que el receptor ha detectado congestión a través de notificaciones explicitas
