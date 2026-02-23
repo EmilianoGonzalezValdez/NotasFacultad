@@ -9,7 +9,7 @@ Para lograr entender un tipo de red de dispositivos es necesario entender difere
 - Entender su **propósito**
 - Entender cómo está organizada la red en cuanto a sus tipos de nodos y cómo se conectan entre si
 - Entender el **sistema operativo de la red**:
-	- Un sistema operativo de la red se usa para gestionar el uso de los recursos de la res y la comunicación entre los nodos 
+	- Un sistema operativo de la red se usa para gestionar el uso de los recursos de la red y la comunicación entre los nodos 
 - Entender los **protocolos** más importantes que componen el sistema operativo de la red
 	- Estos protocolos, entre otras cosas, definen *formatos de mensajes y reglas de comunicación* entre los nodos participantes 
 	- Cada protocolo además resuelve un conjunto de *problemas* como veremos mas adelante 
