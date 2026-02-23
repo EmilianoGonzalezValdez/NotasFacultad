@@ -1,1 +1,1 @@
-En esta capa se usan protocolos que facilitan la interoperabilidad y la comunicación entre diferentes redes blockchain. Facilita la creaciónd e redes interconectadas y aborda problemas como la escalabilidad y la dicha interoperabilidad. Algunos ejemplos son *Polkadot* o *Cosmos*
+En esta capa se usan protocolos que facilitan la interoperabilidad y la comunicación entre diferentes redes blockchain. Facilita la creación de redes interconectadas y aborda problemas como la escalabilidad y la dicha interoperabilidad. Algunos ejemplos son *Polkadot* o *Cosmos*

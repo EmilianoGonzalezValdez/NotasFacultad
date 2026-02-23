@@ -14,7 +14,7 @@ Tenemos varias alternativas de servicios en la nube:
 	- El proveedor se encarga de todas las actualizaciones, mantenimiento y seguridad del software
 
 Para mejorar la infraestructura de la nube tenemos 2 opciones regulares:
-- [x] **Virtualización:**
+-  **Virtualización:**
 	- La virtualización permite dividir un servidor físico en varias máquinas virtuales donde cada una es capaz de ejecutar si propio sistema operativo y aplicaciones
 	- *Hipervisor:* software especializado que permite que múltiples instancias se ejecuten en un solo servidor físico
 	- Tanto el sistema operativo invitado y el software de aplicación ejecutado en servidor virtual no son conscientes del proceso de virtualización

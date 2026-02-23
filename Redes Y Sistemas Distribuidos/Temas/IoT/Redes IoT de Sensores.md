@@ -1,6 +1,6 @@
 Una red IoT de sensores generalmente incluye diversos dispositivos de monitoreo y comunicación para recopilar, procesar y transmitir datos. Estas redes suelen incluir los siguientes tipos de dispositivos:
 - *Sensores:* Son dispositivos que recopilan datos específicos
-- *Gateways IoT:* SOn dispositivos que actúan como intermediarios entre los sensores y la nube, recopilando y transmitiendo datos 
+- *Gateways IoT:* Son dispositivos que actúan como intermediarios entre los sensores y la nube, recopilando y transmitiendo datos 
 - *Servidores en la nube:* Almacenamiento y procesamiento de datos, análisis y ejecución de algoritmos
 - *Dispositivos de usuario:* Celulares, tablets, computadoras usadas ara monitorear y controlar la red de sensores 
 

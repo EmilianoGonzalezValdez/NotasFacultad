@@ -1,5 +1,5 @@
-La capa de red gestiona el direccionamiento y el enrutamiento de los dados entre diferentes redes. Sus problemas son:
-- *Enrutameinto:* en redes con dispositivos móviles y topologías cambiantes
+La capa de red gestiona el direccionamiento y el enrutamiento de los nodos dados entre diferentes redes. Sus problemas son:
+- *Enrutamiento:* en redes con dispositivos móviles y topologías cambiantes
 - *Escalabilidad:* gestión eficiente de un gran número de dispositivos
 - *Movilidad en redes inalámbricas:* soporte para dispositivos que se mueven fuera y dentro de la red
 

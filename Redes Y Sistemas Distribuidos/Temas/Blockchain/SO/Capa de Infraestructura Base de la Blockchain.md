@@ -1,1 +1,1 @@
-La capa de infraestructura base proporciona la infraestructura subyacente para la creación y operación de blockchains. INcluye componentes físicos y de red como internet (TCP/IP, HTTP, SSL, etc.) o enrutadores
+La capa de infraestructura base proporciona la infraestructura subyacente para la creación y operación de blockchains. Incluye componentes físicos y de red como internet (TCP/IP, HTTP, SSL, etc.) o enrutadores
