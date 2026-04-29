@@ -4,19 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "6840d392b32b0cdf",
+        "id": "df2a1c803d48a546",
         "type": "tabs",
         "children": [
           {
-            "id": "46208121ca39bdf7",
+            "id": "9a4de7b54147cb97",
             "type": "leaf",
             "state": {
-              "type": "excalidraw",
+              "type": "markdown",
               "state": {
-                "file": "Redes Y Sistemas Distribuidos/Mapa Conceptual Redes y Sistemas Distribuidos.md"
+                "file": "Lenguajes post-parcial 2.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "excalidraw-icon",
-              "title": "Mapa Conceptual Redes y Sistemas Distribuidos"
+              "icon": "lucide-file",
+              "title": "Lenguajes post-parcial 2"
             }
           }
         ]
@@ -76,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "0c4eb1eef7c5a5d9",
@@ -183,10 +186,13 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "46208121ca39bdf7",
+  "active": "9a4de7b54147cb97",
   "lastOpenFiles": [
-    "Excalidraw/Drawing 2026-02-19 15.05.07.excalidraw.md",
+    "Lenguajes post-parcial 2.md",
+    "Lenguajes Formales y Computabilidad",
+    "Modelos y Simulaciòn",
     "Redes Y Sistemas Distribuidos/Mapa Conceptual Redes y Sistemas Distribuidos.md",
+    "Excalidraw/Drawing 2026-02-19 15.05.07.excalidraw.md",
     "Redes Y Sistemas Distribuidos/Temas/Blockchain/Ethereum.md",
     "Redes Y Sistemas Distribuidos/Temas/Blockchain/Bitcoin.md",
     "Redes Y Sistemas Distribuidos/Temas/Blockchain/SO/Capa de Desarrollo de la Blockchain.md",
@@ -209,8 +215,6 @@
     "Redes Y Sistemas Distribuidos/Temas/IoT/Sistemas CPS.md",
     "Redes Y Sistemas Distribuidos/Temas/IoT/Redes IoT de Sensores.md",
     "Redes Y Sistemas Distribuidos/Temas/IoT/Estructura del IoT.md",
-    "Redes Y Sistemas Distribuidos/Temas/IoT/La IoT.md",
-    "Redes Y Sistemas Distribuidos/Temas/La Nube/SO/Capa de Contenedores de La Nube.md",
     "Redes Y Sistemas Distribuidos/Temas/La Internet/SO/Capa Física",
     "Redes Y Sistemas Distribuidos/Temas/La Internet/SO/Capa de Enlace de Datos",
     "Redes Y Sistemas Distribuidos/Temas/La Internet/SO/Capa de Red",
@@ -219,8 +223,6 @@
     "Redes Y Sistemas Distribuidos/Temas/La Nube/SO",
     "Redes Y Sistemas Distribuidos/Temas/La Internet/SO",
     "Redes Y Sistemas Distribuidos/Temas/La Internet/Untitled.canvas",
-    "Redes Y Sistemas Distribuidos/Temas/IoT/SO",
-    "Redes Y Sistemas Distribuidos/Temas/Blockchain/SO",
-    "Redes Y Sistemas Distribuidos/Temas/Blockchain"
+    "Redes Y Sistemas Distribuidos/Temas/IoT/SO"
   ]
 }
