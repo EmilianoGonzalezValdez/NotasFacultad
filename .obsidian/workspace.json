@@ -4,21 +4,47 @@
     "type": "split",
     "children": [
       {
-        "id": "df2a1c803d48a546",
+        "id": "b66bd7f157bfe91f",
         "type": "tabs",
         "children": [
           {
-            "id": "9a4de7b54147cb97",
+            "id": "55d0ece2def128e0",
+            "type": "leaf",
+            "state": {
+              "type": "excalidraw",
+              "state": {
+                "file": "Modelos y Simulaciòn/Modelos y SImulación.md"
+              },
+              "icon": "excalidraw-icon",
+              "title": "Modelos y SImulación"
+            }
+          },
+          {
+            "id": "52b8300a1a5160fd",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Lenguajes post-parcial 2.md",
+                "file": "Modelos y Simulaciòn/Notas Teóricas/Técnica de Bootstrap.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Lenguajes post-parcial 2"
+              "title": "Técnica de Bootstrap"
+            }
+          },
+          {
+            "id": "bab50f08bc334f11",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Modelos y Simulaciòn/Notas Teóricas/Análisis Estadístico de Datos Simulados .md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Análisis Estadístico de Datos Simulados"
             }
           }
         ]
@@ -71,15 +97,14 @@
               "type": "bookmarks",
               "state": {},
               "icon": "lucide-bookmark",
-              "title": "Bookmarks"
+              "title": "Marcadores"
             }
           }
         ]
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "0c4eb1eef7c5a5d9",
@@ -182,17 +207,39 @@
       "templates:Insertar plantilla": false,
       "command-palette:Abrir paleta de comandos": false,
       "bases:Crear nueva base": false,
-      "obsidian-excalidraw-plugin:New drawing": false,
-      "obsidian-git:Open Git source control": false
+      "obsidian-git:Open Git source control": false,
+      "obsidian-excalidraw-plugin:Nuevo Bosquejo": false
     }
   },
-  "active": "9a4de7b54147cb97",
+  "active": "fe28a374871f6212",
   "lastOpenFiles": [
+    "Modelos y Simulaciòn/Modelos/practico6Sims/Ej3.py~",
+    "Modelos y Simulaciòn/Modelos/practico6Sims/Ej3.py",
+    "Modelos y Simulaciòn/Modelos/practico6Sims/Ej2.py~",
+    "Modelos y Simulaciòn/Modelos/practico6Sims/Ej2.py",
+    "Modelos y Simulaciòn/Modelos/practico6Sims/Ej1.py~",
+    "Modelos y Simulaciòn/Modelos/practico6Sims/Ej1.py",
+    "Modelos y Simulaciòn/Modelos/practico6Sims",
+    "Modelos y Simulaciòn/Notas Teóricas/Técnica de Bootstrap.md",
+    "Modelos y Simulaciòn/Notas Teóricas/Gestión del tamaño de la muestra y algoritmos recursivos.md",
+    "Modelos y Simulaciòn/Modelos y SImulación.md",
+    "Modelos y Simulaciòn/Notas Teóricas/Análisis Estadístico de Datos Simulados .md",
+    "Modelos y Simulaciòn/Notas Teóricas/Estimación de parámetros.md",
+    "Modelos y Simulaciòn/Notas Teóricas/Selección de la distribución.md",
+    "Modelos y Simulaciòn/Notas Teóricas/Estimación por intervalos de confianza.md",
+    "Ingeniería del Software.md",
+    "Redes Y Sistemas Distribuidos/Mapa Conceptual Redes y Sistemas Distribuidos.md",
+    "Dudas.md",
     "Lenguajes post-parcial 2.md",
+    "Modelos y Simulaciòn/Notas Teóricas/Generación de variables aleatorias continuas.md",
+    "Modelos y Simulaciòn/Notas Teóricas/Método de Aceptación y Rechazo.md",
+    "IngenieriaDelSoftware/Teorico/Prioridades.md",
+    "IngenieriaDelSoftware/Teorico/Mapa conceptual de Ingeniería del Software.md",
+    "Excalidraw/Drawing 2026-02-19 15.05.07.excalidraw.md",
+    "Modelos y Simulaciòn/Notas Teóricas/Bootstrap.md",
+    "Modelos y Simulaciòn/Notas Teóricas",
     "Lenguajes Formales y Computabilidad",
     "Modelos y Simulaciòn",
-    "Redes Y Sistemas Distribuidos/Mapa Conceptual Redes y Sistemas Distribuidos.md",
-    "Excalidraw/Drawing 2026-02-19 15.05.07.excalidraw.md",
     "Redes Y Sistemas Distribuidos/Temas/Blockchain/Ethereum.md",
     "Redes Y Sistemas Distribuidos/Temas/Blockchain/Bitcoin.md",
     "Redes Y Sistemas Distribuidos/Temas/Blockchain/SO/Capa de Desarrollo de la Blockchain.md",
@@ -201,28 +248,7 @@
     "Redes Y Sistemas Distribuidos/Temas/Blockchain/SO/Capa de comunicación entre Redes Blockchain.md",
     "Redes Y Sistemas Distribuidos/Temas/Blockchain/SO/Capa de Protocolo Base de la Blockchain.md",
     "Redes Y Sistemas Distribuidos/Temas/Blockchain/Estructura de la Blockchain.md",
-    "Redes Y Sistemas Distribuidos/Temas/Blockchain/SO/Capa de Infraestructura Base de la Blockchain.md",
-    "Redes Y Sistemas Distribuidos/Temas/Blockchain/Sistema Operativo de la Blockchain.md",
-    "Redes Y Sistemas Distribuidos/Temas/Blockchain/Redes Blockchain.md",
-    "Redes Y Sistemas Distribuidos/Temas/IoT/SO/Capa de Gestión y Orquestación del IoT.md",
-    "Redes Y Sistemas Distribuidos/Temas/IoT/SO/Capa de Procesamiento y Almacenamiento del IoT.md",
-    "Redes Y Sistemas Distribuidos/Temas/IoT/SO/Capa de Aplicación del IoT.md",
-    "Redes Y Sistemas Distribuidos/Temas/IoT/SO/Capa de Transporte del IoT.md",
-    "Redes Y Sistemas Distribuidos/Temas/IoT/SO/Capa de Red del IoT.md",
-    "Redes Y Sistemas Distribuidos/Temas/IoT/SO/Capa de Enlace de Datos del IoT.md",
-    "Redes Y Sistemas Distribuidos/Temas/IoT/SO/Capa Física del IoT.md",
-    "Redes Y Sistemas Distribuidos/Temas/IoT/Sistema Operativo del IoT.md",
-    "Redes Y Sistemas Distribuidos/Temas/IoT/Sistemas CPS.md",
-    "Redes Y Sistemas Distribuidos/Temas/IoT/Redes IoT de Sensores.md",
-    "Redes Y Sistemas Distribuidos/Temas/IoT/Estructura del IoT.md",
     "Redes Y Sistemas Distribuidos/Temas/La Internet/SO/Capa Física",
-    "Redes Y Sistemas Distribuidos/Temas/La Internet/SO/Capa de Enlace de Datos",
-    "Redes Y Sistemas Distribuidos/Temas/La Internet/SO/Capa de Red",
-    "Redes Y Sistemas Distribuidos/Temas/La Internet/SO/Capa de Transporte",
-    "Redes Y Sistemas Distribuidos/Temas/La Internet/SO/Capa de Aplicación",
-    "Redes Y Sistemas Distribuidos/Temas/La Nube/SO",
-    "Redes Y Sistemas Distribuidos/Temas/La Internet/SO",
-    "Redes Y Sistemas Distribuidos/Temas/La Internet/Untitled.canvas",
-    "Redes Y Sistemas Distribuidos/Temas/IoT/SO"
+    "Redes Y Sistemas Distribuidos/Temas/La Internet/Untitled.canvas"
   ]
 }

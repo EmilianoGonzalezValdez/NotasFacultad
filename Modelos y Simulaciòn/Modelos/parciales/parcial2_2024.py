@@ -14,9 +14,7 @@ def algo_x(p):
 
 def ejercicio2():
     U = random.random()
-    if U < 2 / 3:
-        return ((3 * U) / 2) ** (3 / 2)
-    else:
+    if U < 2 / 3: return ((3 * U) / 2) ** (3 / 2) else:
         return (3 * U) - 1
 
 
