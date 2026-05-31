@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "b66bd7f157bfe91f",
+        "id": "660cc7d50766b31b",
         "type": "tabs",
         "children": [
           {
-            "id": "55d0ece2def128e0",
+            "id": "edf5cd108741fcf7",
             "type": "leaf",
             "state": {
               "type": "excalidraw",
@@ -17,34 +17,6 @@
               },
               "icon": "excalidraw-icon",
               "title": "Modelos y SImulación"
-            }
-          },
-          {
-            "id": "52b8300a1a5160fd",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Modelos y Simulaciòn/Notas Teóricas/Técnica de Bootstrap.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Técnica de Bootstrap"
-            }
-          },
-          {
-            "id": "bab50f08bc334f11",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Modelos y Simulaciòn/Notas Teóricas/Análisis Estadístico de Datos Simulados .md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Análisis Estadístico de Datos Simulados"
             }
           }
         ]
@@ -213,6 +185,12 @@
   },
   "active": "fe28a374871f6212",
   "lastOpenFiles": [
+    "Modelos y Simulaciòn/Modelos/practico6Sims/Ej7.py~",
+    "Modelos y Simulaciòn/Modelos/practico6Sims/Ej7.py",
+    "Modelos y Simulaciòn/Notas Teóricas/Análisis Estadístico de Datos Simulados .md",
+    "Modelos y Simulaciòn/Notas Teóricas/Técnica de Bootstrap.md",
+    "Modelos y Simulaciòn/Notas Teóricas/Método de Aceptación y Rechazo.md",
+    "Modelos y Simulaciòn/Modelos y SImulación.md",
     "Modelos y Simulaciòn/Modelos/practico6Sims/Ej3.py~",
     "Modelos y Simulaciòn/Modelos/practico6Sims/Ej3.py",
     "Modelos y Simulaciòn/Modelos/practico6Sims/Ej2.py~",
@@ -220,10 +198,7 @@
     "Modelos y Simulaciòn/Modelos/practico6Sims/Ej1.py~",
     "Modelos y Simulaciòn/Modelos/practico6Sims/Ej1.py",
     "Modelos y Simulaciòn/Modelos/practico6Sims",
-    "Modelos y Simulaciòn/Notas Teóricas/Técnica de Bootstrap.md",
     "Modelos y Simulaciòn/Notas Teóricas/Gestión del tamaño de la muestra y algoritmos recursivos.md",
-    "Modelos y Simulaciòn/Modelos y SImulación.md",
-    "Modelos y Simulaciòn/Notas Teóricas/Análisis Estadístico de Datos Simulados .md",
     "Modelos y Simulaciòn/Notas Teóricas/Estimación de parámetros.md",
     "Modelos y Simulaciòn/Notas Teóricas/Selección de la distribución.md",
     "Modelos y Simulaciòn/Notas Teóricas/Estimación por intervalos de confianza.md",
@@ -232,14 +207,12 @@
     "Dudas.md",
     "Lenguajes post-parcial 2.md",
     "Modelos y Simulaciòn/Notas Teóricas/Generación de variables aleatorias continuas.md",
-    "Modelos y Simulaciòn/Notas Teóricas/Método de Aceptación y Rechazo.md",
     "IngenieriaDelSoftware/Teorico/Prioridades.md",
     "IngenieriaDelSoftware/Teorico/Mapa conceptual de Ingeniería del Software.md",
     "Excalidraw/Drawing 2026-02-19 15.05.07.excalidraw.md",
     "Modelos y Simulaciòn/Notas Teóricas/Bootstrap.md",
     "Modelos y Simulaciòn/Notas Teóricas",
     "Lenguajes Formales y Computabilidad",
-    "Modelos y Simulaciòn",
     "Redes Y Sistemas Distribuidos/Temas/Blockchain/Ethereum.md",
     "Redes Y Sistemas Distribuidos/Temas/Blockchain/Bitcoin.md",
     "Redes Y Sistemas Distribuidos/Temas/Blockchain/SO/Capa de Desarrollo de la Blockchain.md",
@@ -248,7 +221,6 @@
     "Redes Y Sistemas Distribuidos/Temas/Blockchain/SO/Capa de comunicación entre Redes Blockchain.md",
     "Redes Y Sistemas Distribuidos/Temas/Blockchain/SO/Capa de Protocolo Base de la Blockchain.md",
     "Redes Y Sistemas Distribuidos/Temas/Blockchain/Estructura de la Blockchain.md",
-    "Redes Y Sistemas Distribuidos/Temas/La Internet/SO/Capa Física",
     "Redes Y Sistemas Distribuidos/Temas/La Internet/Untitled.canvas"
   ]
 }
