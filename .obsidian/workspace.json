@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "2b8c1dc9588b99a4",
+        "id": "e0cb51080d43fbdc",
         "type": "tabs",
         "children": [
           {
-            "id": "d451280490a15595",
+            "id": "43cdf0cf5bc25d36",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "Modelos y Simulaciòn/Notas Teóricas/Lenguajes post-parcial 2.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "Nueva pestaña"
+              "title": "Lenguajes post-parcial 2"
             }
           }
         ]
@@ -181,22 +185,27 @@
       "obsidian-excalidraw-plugin:Nuevo Bosquejo": false
     }
   },
-  "active": "d451280490a15595",
+  "active": "fe28a374871f6212",
   "lastOpenFiles": [
+    "Modelos y Simulaciòn/Notas Teóricas/Lenguajes post-parcial 2.md",
+    "Modelos y Simulaciòn/Modelos y SImulación.md",
+    "Modelos y Simulaciòn/Técnicas de Validación Estadística.md",
+    "Modelos y Simulaciòn/Notas Teóricas/Pruebas de Bondad de Ajuste.md",
+    "Modelos y Simulaciòn/Notas Teóricas/Test Chi-Cuadrado de Pearson.md",
+    "Modelos y Simulaciòn/Notas Teóricas/Test de Kolmogorov-Smirnov.md",
+    "Técnica de Kosmogorov-Smirnov.md",
+    "Modelos y Simulaciòn/Notas Teóricas/Análisis Estadístico de Datos Simulados .md",
     "Matematica discreta II/Temas/Demonstracion Teorema auxiliar Edmund-Karp.md",
     "IngenieriaDelSoftware/Laboratorio/TH/Gonzalez-Valdez.Emiliano.Alcance.md",
     "IngenieriaDelSoftware/Teorico/Mapa conceptual de Ingeniería del Software.md",
     "Redes Y Sistemas Distribuidos/Mapa Conceptual Redes y Sistemas Distribuidos.md",
     "Modelos y Simulaciòn/Notas Teóricas/Selección de la distribución.md",
-    "Modelos y Simulaciòn/Modelos y SImulación.md",
-    "Modelos y Simulaciòn/Notas Teóricas/Análisis Estadístico de Datos Simulados .md",
     "Funciones $/Sigma$-computables y Operador $/Psi$ 1.md",
     "Funciones $/Sigma$-computables y Operador $/Psi$.md",
     "Ingeniería del Software.md",
     "Lenguajes Formales y Computabilidad/Notas Teoricas/Enumerabilidad y Decisión de Conjuntos.md",
     "Lenguajes Formales y Computabilidad/Notas Teoricas/Sintaxis del Lenguaje.md",
     "Lenguajes Formales y Computabilidad/Notas Teoricas/El Primer Manantial de Macros.md",
-    "Lenguajes post-parcial 2.md",
     "Lenguajes Formales y Computabilidad/Notas Teoricas/Funciones Computables.md",
     "Lenguajes Formales y Computabilidad/Notas Teoricas/Paradigma de Neumann (Imperativo).md",
     "Lenguajes Formales y Computabilidad/Notas Teoricas/Semántica y Función Sucesora.md",
@@ -214,11 +223,6 @@
     "Modelos y Simulaciòn/Modelos/practico6Sims/Ej2.py~",
     "Modelos y Simulaciòn/Modelos/practico6Sims/Ej2.py",
     "Modelos y Simulaciòn/Modelos/practico6Sims/Ej1.py~",
-    "Modelos y Simulaciòn/Notas Teóricas/Gestión del tamaño de la muestra y algoritmos recursivos.md",
-    "Modelos y Simulaciòn/Notas Teóricas/Estimación de parámetros.md",
-    "Modelos y Simulaciòn/Notas Teóricas/Estimación por intervalos de confianza.md",
-    "Dudas.md",
-    "Modelos y Simulaciòn/Notas Teóricas/Generación de variables aleatorias continuas.md",
     "Redes Y Sistemas Distribuidos/Temas/La Internet/Untitled.canvas"
   ]
 }
