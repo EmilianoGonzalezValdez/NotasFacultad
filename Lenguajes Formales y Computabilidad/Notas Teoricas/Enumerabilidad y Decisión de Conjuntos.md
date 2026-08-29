@@ -23,7 +23,7 @@ Dicho programa debe detenerse **siempre** (es decir, para todas las entradas pos
 
 #### Macro de Pertenencia a Conjuntos
 
-Una aplicación directa de este concepto en la ingeniería de programas es la existencia del macro de salto condicional basado en conjuntos. Si $S$ es un conjunto $\Sigma$-computable, el **Primer Manantial de Macros** garantiza que podemos usar la instrucción: $$[IF \ (V1, \dots, Vn, W1, \dots, Wm) \in S \ GOTO \ A1]$$ Este macro evaluará la pertenencia de los contenidos de las variables actuales al conjunto $S$ y direccionará el flujo del programa al label $A1$ si la respuesta es afirmativa.
+Una aplicación directa de este concepto en la ingeniería de programas es la existencia del macro de salto condicional basado en conjuntos. Si $S$ es un conjunto $\Sigma$-computable, el **Primer Manantial de Macros** garantiza que podemos usar la instrucción: $$[IF \ (V1, \dots, Vn, W1, \dots, Wm) \in S \ GOTO \ A1]$$ Este macro evaluará la pertenencia de los contenidos de las variables actuales al conjunto $S$ y diseccionará el flujo del programa al label $A1$ si la respuesta es afirmativa.
 
 > [!danger] Error común: Dominio vs. Computabilidad Es fundamental no confundir un conjunto que es el **dominio** de una función computable con un conjunto **computable**. Un conjunto puede ser el dominio de un programa (el programa se detiene solo si el elemento está en el conjunto), pero si para los elementos de afuera el programa entra en bucle infinito en lugar de devolver "0", el conjunto **no es computable**, sino meramente enumerable.
 
